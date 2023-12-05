@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 
-// NOTE: We will use localStorage to store open/collapsed state of sidebar
-import { useLocalStorage } from "usehooks-ts";
+// BACKLOG: Use localStorage to store open/collapsed state of sidebar
+// import { useLocalStorage } from "usehooks-ts";
 import { NavItem } from "./nav-item";
 
 interface SidebarProps {

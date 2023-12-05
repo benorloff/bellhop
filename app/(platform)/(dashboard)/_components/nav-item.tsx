@@ -1,14 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { 
     Layout,
     Laptop,
     Tag
  } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
 export const NavItem = () => {
     const router = useRouter();
+    const pathname = usePathname();
 
     // We should move these routes to Sidebar and map through nav items there
 
@@ -37,10 +41,18 @@ export const NavItem = () => {
     return (
         <div>
             {routes.map((route, i) => (
-                <div className="flex items-center py-4" key={i}>
+                <Button 
+                    key={route.href}
+                    size="sm"
+                    onClick={() => onClick(route.href)}
+                    className={cn(
+                        "w-full font-normal justify-start pl-10 mb-1",
+                        pathname === route.href && "bg-sky-500/10 text-sky-700"
+                    )}
+                >
                     {route.icon}
                     {route.label}
-                </div>
+                </Button>
             ))}
         </div>
     )
