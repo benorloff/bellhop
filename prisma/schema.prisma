@@ -19,7 +19,7 @@ model Site {
   name           String
   url            String
   photo          String?
-  userId         BigInt
+  userId         String
   subscriptionId BigInt?
   slug           String        @unique
   Subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
