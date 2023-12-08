@@ -30,7 +30,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 slug,
                 url,
                 userId,
-            };
+            }
         })
     } catch (error) {
         return {
