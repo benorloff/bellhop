@@ -7,25 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model User {
-  id         BigInt    @id @default(autoincrement())
-  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
-  username   String    @unique
-  firstName  String
-  lastName   String
-  email      String    @unique
-  password   String
-  stripeId   BigInt
-  accounts   Account[]
-  sites      Site[]
-  tickets    Ticket[]
-  profilePic String
-}
-
 model Subscription {
   id       BigInt @id @default(autoincrement())
-  //should this be connected to User model? or its own subscription model?
   userId   BigInt
   stripeId BigInt
   sites    Site[]
@@ -34,33 +17,23 @@ model Subscription {
 model Site {
   id             BigInt        @id @default(autoincrement())
   name           String
-  slug           String        @unique
   url            String
   photo          String?
-  user           User          @relation(fields: [userId], references: [id])
   userId         BigInt
-  tickets        Ticket[]
-  Subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
   subscriptionId BigInt?
-}
-
-model Account {
-  id                BigInt @id @default(autoincrement())
-  author            User   @relation(fields: [authorId], references: [id])
-  authorId          BigInt
-  provider          String
-  providerAccountId BigInt
+  slug           String        @unique
+  Subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  tickets        Ticket[]
 }
 
 model Ticket {
   id              BigInt   @id @default(autoincrement())
   status          String
-  author          User     @relation(fields: [authorId], references: [id])
   authorId        BigInt
   attachments     String
   description     String
   priority        BigInt
   submission_date DateTime
-  site            Site     @relation(fields: [siteId], references: [id])
   siteId          BigInt
+  site            Site     @relation(fields: [siteId], references: [id])
 }

@@ -1,21 +1,45 @@
 "use server";
 
-import { z } from "zod";
+import { auth } from "@clerk/nextjs";
+import { revalidatePath } from "next/cache";
 
 import { db } from "@/lib/db";
+import { createSafeAction } from "@/lib/create-safe-action";
 
-const CreateSite = z.object({
-    name: z.string(),
-});
+import { InputType, ReturnType } from "./types";
+import { CreateSite } from "./schema";
 
-export async function create(formData: FormData) {
-    const { name } = CreateSite.parse({
-        name: formData.get("name"),
-    });
 
-    await db.site.create({
-        data: {
-            name,
+const handler = async (data: InputType): Promise<ReturnType> => {
+    const { userId, orgId } = auth();
+
+    if (!userId || !orgId) {
+        return {
+            error: "Unauthorized",
+        };
+    };
+
+    const { name, slug, url } = data;
+
+    let site;
+
+    try {
+        site = await db.site.create({
+            data: {
+                name,
+                slug,
+                url,
+                userId,
+            };
+        })
+    } catch (error) {
+        return {
+            error: "Failed to create site."
         }
-    });
+    }
+
+    revalidatePath(`/site/${site.slug}`);
+    return { data: site };
 };
+
+export const createSite = createSafeAction(CreateSite, handler);
