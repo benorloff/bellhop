@@ -34,13 +34,14 @@ model Subscription {
 model Site {
   id             BigInt        @id @default(autoincrement())
   name           String
+  slug           String        @unique
   url            String
-  photo          String
+  photo          String?
   user           User          @relation(fields: [userId], references: [id])
   userId         BigInt
   tickets        Ticket[]
   Subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
-  subscriptionId BigInt
+  subscriptionId BigInt?
 }
 
 model Account {
