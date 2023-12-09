@@ -1,7 +1,9 @@
+import { SiteList } from "./_components/site-list";
+
 const SitesPage = () => {
     return ( 
         <div>
-            Sites Page!
+            <SiteList />
         </div>
      );
 }
