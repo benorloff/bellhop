@@ -7,33 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Subscription {
-  id       BigInt @id @default(autoincrement())
-  userId   BigInt
-  stripeId BigInt
-  sites    Site[]
-}
+// model Subscription {
+//   id       String @id @default(uuid())
+//   //should this be connected to User model? or its own subscription model?
+//   userId   String
+//   stripeId String
+//   sites    Site[]
+// }
 
 model Site {
-  id             BigInt        @id @default(autoincrement())
-  name           String
-  url            String
-  photo          String?
-  userId         String
-  subscriptionId BigInt?
-  slug           String        @unique
-  Subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
-  tickets        Ticket[]
+  id     String  @id @default(uuid())
+  name   String
+  slug   String  @unique
+  url    String
+  photo  String?
+  userId String
+  orgId  String
 }
 
-model Ticket {
-  id              BigInt   @id @default(autoincrement())
-  status          String
-  authorId        BigInt
-  attachments     String
-  description     String
-  priority        BigInt
-  submission_date DateTime
-  siteId          BigInt
-  site            Site     @relation(fields: [siteId], references: [id])
-}
+// model Ticket {
+//   id              String   @id @default(uuid())
+//   status          String
+//   userId          String
+//   attachments     String
+//   description     String
+//   priority        String
+//   submission_date DateTime
+//   site            Site     @relation(fields: [siteId], references: [id])
+//   siteId          String
+// }
