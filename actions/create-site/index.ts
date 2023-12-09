@@ -30,9 +30,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 slug,
                 url,
                 userId,
+                orgId,
             }
         })
     } catch (error) {
+        console.log(error);
         return {
             error: "Failed to create site."
         }

@@ -1,7 +1,12 @@
+import { SiteList } from "./_components/site-list";
+
 const OrganizationIdPage = () => {
     return (
         <div>
-            Organization Page
+            <div className="text-lg">
+                Organization Page
+            </div>
+            <SiteList />
         </div>
     )
 };
