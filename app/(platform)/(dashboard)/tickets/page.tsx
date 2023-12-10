@@ -7,9 +7,9 @@ const TicketsPage = () => {
     return ( 
         <div>
             <div id="title" className="text-3xl">Support tickets</div>
-            <Suspense fallback={<TicketList.Skeleton />}>
+            {/* <Suspense fallback={<Loading />}> */}
             <TicketList />
-            </Suspense>
+            {/* </Suspense> */}
         </div>
      );
 }

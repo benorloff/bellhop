@@ -3,25 +3,25 @@ import axios from 'axios';
 import Link from 'next/link';
 import { Ticket } from '@/types/index'
 
-const apiKey = process.env.FRESHDESK_KEY;
-const freshdeskApiUrl = 'https://bellhop.freshdesk.com/api/v2/tickets';
-
-
 
 const TicketList = () => {
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
+    const apiKey = process.env.NEXT_PUBLIC_FRESHDESK_KEY;
+    const ticketURL = process.env.NEXT_PUBLIC_FRESHDESK_API_URL;
+  
+  
+  
     const fetchData = async () => {
       try {
         console.log(apiKey)
-        const response = await axios.get(freshdeskApiUrl, {
+        const response = await axios.get(`${ticketURL}`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Basic ${btoa(`${apiKey}:x`)}`, // Using basic authentication
           },
         });
-console.log(apiKey)
         setTickets(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
