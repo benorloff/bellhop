@@ -1,4 +1,3 @@
-"use client"
 import TicketList from "../_components/ticket-list";
 import { Suspense } from "react";
 

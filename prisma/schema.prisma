@@ -7,32 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model Subscription {
-//   id       String @id @default(uuid())
-//   //should this be connected to User model? or its own subscription model?
-//   userId   String
-//   stripeId String
-//   sites    Site[]
-// }
-
 model Site {
   id     String  @id @default(uuid())
   name   String
-  slug   String  @unique
   url    String
   photo  String?
   userId String
+  slug   String  @unique
   orgId  String
 }
-
-// model Ticket {
-//   id              String   @id @default(uuid())
-//   status          String
-//   userId          String
-//   attachments     String
-//   description     String
-//   priority        String
-//   submission_date DateTime
-//   site            Site     @relation(fields: [siteId], references: [id])
-//   siteId          String
-// }

@@ -1,37 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Link from 'next/link';
 import { Ticket } from '@/types/index'
 
+const apiKey = process.env.NEXT_PUBLIC_FRESHDESK_KEY;
+const ticketURL = process.env.NEXT_PUBLIC_FRESHDESK_API_URL;
 
-const TicketList = () => {
-  const [tickets, setTickets] = useState([]);
+async function getData() {
+  const response = await fetch(`${ticketURL}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${btoa(`${apiKey}:x`)}`, 
+    },
+  })
+ 
+  if (!response.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error('Failed to fetch data')
+  }
+ 
+  return response.json()
+}
 
-  useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_FRESHDESK_KEY;
-    const ticketURL = process.env.NEXT_PUBLIC_FRESHDESK_API_URL;
-  
-  
-  
-    const fetchData = async () => {
-      try {
-        console.log(apiKey)
-        const response = await axios.get(`${ticketURL}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(`${apiKey}:x`)}`, // Using basic authentication
-          },
-        });
-        setTickets(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return (
+export default async function TicketList() {
+  const data = await getData()
+ 
+  return  (
     <div>
       <table className="w-full border-collapse mt-8">
         <thead>
@@ -42,7 +34,7 @@ const TicketList = () => {
           </tr>
         </thead>
         <tbody>
-          {tickets.map((ticket: Ticket) => (
+          {data.map((ticket: Ticket) => (
             <tr key={ticket.id}>
               <td className="border p-2">{ticket.status}</td>
               <td className="border p-2"> 
@@ -57,6 +49,4 @@ const TicketList = () => {
       </table>
     </div>
   );
-};
-
-export default TicketList;
+}
