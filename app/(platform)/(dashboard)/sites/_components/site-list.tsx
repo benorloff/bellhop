@@ -29,7 +29,7 @@ export const SiteList = async () => {
                 {sites.map((site) => (
                     <Link
                         key={site.id}
-                        href={`/organization/${orgSlug}/${site.slug}`}
+                        href={`/organization/${orgSlug}/${site.id}`}
                         className="group relative bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm h-full w-full p-4 overflow-hidden"
                     >
                         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition"/>
