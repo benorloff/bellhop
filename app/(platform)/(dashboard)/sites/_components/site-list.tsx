@@ -22,9 +22,6 @@ export const SiteList = async () => {
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center font-semibold text-lg">
-                Sites
-            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 {sites.map((site) => (
                     <Link
