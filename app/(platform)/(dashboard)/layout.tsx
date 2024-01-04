@@ -5,7 +5,7 @@ const DashboardLayout = ({ children }: {
     children: React.ReactNode;
 }) => {
     return (
-        <div className="h-full">
+        <div className="h-full bg-[#F8F8F8]">
             <Navbar />
             <main className="pt-20 md:pt-24 px-4 max-w-6xl 2xl:max-w-screen-xl mx-auto">
                 <div className="flex gap-7">

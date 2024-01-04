@@ -25,24 +25,24 @@ export default async function TicketList() {
  
   return  (
     <div>
-      <table className="w-full border-collapse mt-8">
+      <table className="w-full border-collapse mt-8 border-none">
         <thead>
           <tr>
-            <th className="border p-2">Status</th>
-            <th className="border p-2">Ticket</th>
-            <th className="border p-2">Last Updated</th>
+            <th className="p-2">Status</th>
+            <th className="p-2">Ticket</th>
+            <th className="p-2">Last Updated</th>
           </tr>
         </thead>
         <tbody>
           {data.map((ticket: Ticket) => (
-            <tr key={ticket.id}>
-              <td className="border p-2">{ticket.status}</td>
-              <td className="border p-2"> 
+            <tr key={ticket.id} className='rounded-sm bg-[#FFFFFF]'>
+              <td className="p-2">{ticket.status}</td>
+              <td className="p-2"> 
                 {/* Use Link component for navigation to the single ticket page */}
                 <Link href={`/tickets/${ticket.id}`}>
                   {ticket.subject}
                 </Link></td>
-              <td className="border p-2">{new Date(ticket.updated_at).toLocaleString()}</td>
+              <td className="p-2">{new Date(ticket.updated_at).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
