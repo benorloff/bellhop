@@ -35,7 +35,7 @@ export default async function TicketList() {
         </thead>
         <tbody>
           {data.map((ticket: Ticket) => (
-            <tr key={ticket.id} className='rounded-sm bg-[#FFFFFF]'>
+            <tr key={ticket.id} className='rounded-lg bg-[#FFFFFF] py-2'>
               <td className="p-2">{ticket.status}</td>
               <td className="p-2"> 
                 {/* Use Link component for navigation to the single ticket page */}
