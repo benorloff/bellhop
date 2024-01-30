@@ -33,7 +33,7 @@ const MigrationPage = () => {
 
     return ( 
         <div>
-            <p>Migration Page</p>
+            <div className="text-3xl mb-8">Migration Page</div>
             <form action={onSubmit} className="space-y-4">
                 <div className="space-y-4">
                     <FormInput 
