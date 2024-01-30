@@ -17,11 +17,12 @@ export const CreateTicket = z.object({
         required_error: "Subject is required",
         invalid_type_error: "Subject must be a string",
     }),
-    // Should we store ticket type enums?
+    // Should we create ticket type enums?
     type: z.string({
         required_error: "Type is required",
         invalid_type_error: "Type must be a string",
     }),
+    // 2 - Open, 3 - Pending, 4 - Resolved, 5 - Closed
     status: z.number({
         required_error: "Status is required",
         invalid_type_error: "Status must be a number",
@@ -32,6 +33,7 @@ export const CreateTicket = z.object({
     }).lte(5, {
         message: "Status must be at most 5"
     }),
+    // 1 - Low, 2 - Medium, 3 - High, 4 - Urgent
     priority: z.number({
         required_error: "Priority is required",
         invalid_type_error: "Priority must be a number",
@@ -46,6 +48,7 @@ export const CreateTicket = z.object({
         required_error: "Description is required",
         invalid_type_error: "Description must be a string",
     }),
+    // 1 - Email, 2 - Portal, 3 - Phone, 7 - Chat, 9 - Feedback Widget, 10 - Outbound Email
     source: z.number({
         required_error: "Source is required",
         invalid_type_error: "Source must be a number",
