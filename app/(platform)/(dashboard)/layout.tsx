@@ -5,17 +5,15 @@ const DashboardLayout = ({ children }: {
     children: React.ReactNode;
 }) => {
     return (
-        <div className="h-full bg-[#F8F8F8]">
+        <>
             <Navbar />
-            <main className="pt-20 md:pt-24 px-4 max-w-6xl 2xl:max-w-screen-xl mx-auto">
-                <div className="flex gap-7">
-                    <div className="w-48 shrink-0 hidden md:block">
-                        <Sidebar />
-                    </div>
+            <div className="flex h-full pt-14">
+                <Sidebar />
+                <div className="flex-1 ml-48 p-10">
                     {children}
                 </div>
-            </main>
-        </div>
+            </div>
+        </>
     )
 };
 
