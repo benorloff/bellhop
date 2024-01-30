@@ -27,9 +27,9 @@ export const SiteList = async () => {
                     <Link
                         key={site.id}
                         href={`/organization/${orgSlug}/${site.id}`}
-                        className="group relative bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm h-full w-full p-4 overflow-hidden"
+                        className="group relative bg-no-repeat bg-center bg-cover bg-white shadow rounded-sm h-full w-full p-4 overflow-hidden"
                     >
-                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition"/>
+                        <div className="absolute inset-0 group-hover:bg-black/10 transition"/>
                         {/* TODO: Change this image to site image */}
                         <Image 
                             src="/placeholder-150x150.svg"
@@ -37,10 +37,10 @@ export const SiteList = async () => {
                             width="75"
                             height="25"
                         />
-                        <p className="relative font-semibold text-white">
+                        <p className="relative font-semibold">
                             {site.name}
                         </p>
-                        <p className="relative text-white">
+                        <p className="relative">
                             {site.url}
                         </p>
                     </Link>

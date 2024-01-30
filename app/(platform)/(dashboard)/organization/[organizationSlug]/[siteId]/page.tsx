@@ -33,7 +33,7 @@ const SiteIdPage = async ({
                 <div>Settings</div>
             </div>
             <div className="flex flex-row flex-wrap gap-8">
-                <div className="flex flex-col basis-full lg:basis-2/3 gap-8">
+                <div className="flex flex-col basis-full lg:basis-7/12 gap-8">
                     <div className="bg-white rounded-sm p-4 shadow">
                         <div className="text-xl mb-4">Tickets</div>
                         {/* Ticket List component goes here. */}
