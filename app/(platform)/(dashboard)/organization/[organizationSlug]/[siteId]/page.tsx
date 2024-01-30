@@ -32,14 +32,14 @@ const SiteIdPage = async ({
                 <div>Team</div>
                 <div>Settings</div>
             </div>
-            <div className="flex flex-row flex-wrap">
-                <div className="flex flex-col basis-full lg:basis-2/3">
+            <div className="flex flex-row flex-wrap justify-between gap-8">
+                <div className="flex flex-col basis-full lg:basis-2/3 gap-8">
                     <div className="border border-black rounded-sm p-4">
                         <div className="text-xl mb-4">Tickets</div>
                         {/* Ticket List component goes here. */}
                     </div>
                 </div>
-                <div className="flex flex-col basis-full lg:basis-1/3">
+                <div className="flex flex-col grow basis-auto gap-8">
                     <div className="border border-black rounded-sm p-4">
                         <div className="text-xl mb-4">Team</div>
                     </div>
