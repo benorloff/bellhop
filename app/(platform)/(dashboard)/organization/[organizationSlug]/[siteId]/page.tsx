@@ -32,6 +32,22 @@ const SiteIdPage = async ({
                 <p>Org ID: {site?.orgId}</p>
                 <p>User ID: {site?.userId}</p>
             </div>
+            <div className="flex flex-row flex-wrap">
+                <div className="flex flex-col basis-full lg:basis-2/3">
+                    <div className="border border-black rounded-sm p-4">
+                        <div className="text-xl mb-4">Tickets</div>
+                        {/* Ticket List component goes here. */}
+                    </div>
+                </div>
+                <div className="flex flex-col basis-full lg:basis-1/3">
+                    <div className="border border-black rounded-sm p-4">
+                        <div className="text-xl mb-4">Users</div>
+                    </div>
+                    <div className="border border-black rounded-sm p-4">
+                        <div className="text-xl mb-4">IP Address</div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
