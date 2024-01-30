@@ -9,7 +9,7 @@ const DashboardLayout = ({ children }: {
             <Navbar />
             <div className="flex h-full pt-14">
                 <Sidebar />
-                <div className="flex-1 ml-48 p-10">
+                <div className="flex-1 ml-48 p-10 bg-[#F6F6F6]">
                     {children}
                 </div>
             </div>
