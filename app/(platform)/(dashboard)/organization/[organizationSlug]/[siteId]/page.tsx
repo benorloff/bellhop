@@ -36,8 +36,6 @@ const SiteIdPage = async ({
 
     const tickets = await getSiteTickets();
     
-    console.log(tickets.results, '<-- tickets')
-
     return (
         <div>
             <div className="mb-8">
@@ -57,10 +55,10 @@ const SiteIdPage = async ({
                         <div className="text-xl mb-4">Tickets</div>
                         {/* Ticket List component goes here. */}
                         {tickets.results.map((ticket: any) => (
-                            <div key={ticket.id} className="flex flex-row justify-between rounded-lg bg-[#FFFFFF] py-2">
-                                <div>{ticket.status}</div>
-                                <div>{ticket.subject}</div>
-                                <div>{new Date(ticket.updated_at).toLocaleString()}</div>
+                            <div key={ticket.id} className="flex flex-row gap-4 justify-between rounded-lg bg-[#FFFFFF] py-2">
+                                <div className="shrink">{ticket.status}</div>
+                                <div className="grow">{ticket.subject}</div>
+                                <div className="shrink">{new Date(ticket.updated_at).toLocaleString()}</div>
                             </div>
                         ))}
                     </div>
