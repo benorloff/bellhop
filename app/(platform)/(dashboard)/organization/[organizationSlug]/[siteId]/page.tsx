@@ -19,6 +19,25 @@ const SiteIdPage = async ({
         },
     });
 
+    const getSiteTickets = async () => {
+        const response = await fetch(`https://bellhop.freshdesk.com/api/v2/search/tickets?query="custom_string:'${site?.id}'"`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        };
+
+        return response.json();
+    };
+
+    const tickets = await getSiteTickets();
+    
+    console.log(tickets.results, '<-- tickets')
+
     return (
         <div>
             <div className="mb-8">
@@ -37,6 +56,13 @@ const SiteIdPage = async ({
                     <div className="bg-white rounded-sm p-4 shadow">
                         <div className="text-xl mb-4">Tickets</div>
                         {/* Ticket List component goes here. */}
+                        {tickets.results.map((ticket: any) => (
+                            <div key={ticket.id} className="flex flex-row justify-between rounded-lg bg-[#FFFFFF] py-2">
+                                <div>{ticket.status}</div>
+                                <div>{ticket.subject}</div>
+                                <div>{new Date(ticket.updated_at).toLocaleString()}</div>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="flex flex-col grow basis-auto gap-8">
