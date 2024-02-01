@@ -55,7 +55,6 @@ export const CreateTicket = z.object({
     }).int({
         message: "Source must be an integer"
     }),
-    custom_fields: z.object({
-        site_id: z.string(),
-    })
+    // TODO: Custom Fields for user_id, org_id, and site_id
+    // See https://support.freshdesk.com/en/support/solutions/articles/216548
 });
