@@ -2,9 +2,18 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+    Card, 
+    CardContent, 
+    CardFooter, 
+    CardHeader, 
+    CardTitle 
+} from "@/components/ui/card";
+import Image from "next/image";
+import { InviteButton } from "../_components/invite-button";
 
 interface SiteIdPageProps {
     params: {
@@ -41,9 +50,19 @@ const SiteIdPage = async ({
     
     return (
         <div>
-            <div className="mb-8">
-                <div className="text-3xl">{site?.name}</div>
-                <div>{site?.url}</div>
+            <div className="flex flex-row gap-8 mb-8">
+                <div className="shrink">
+                    <Image 
+                        src="/placeholder-150x150.svg"
+                        alt="Avatar"
+                        width="75"
+                        height="25"
+                    />
+                </div>
+                <div className="grow">
+                    <div className="text-3xl">{site?.name}</div>
+                    <div>{site?.url}</div>
+                </div>
             </div>
             {/* Menu placeholder. Need to abstract. */}
             <div className="flex flex-row gap-8 mb-8">
@@ -81,7 +100,7 @@ const SiteIdPage = async ({
                             Team member list goes here.
                         </CardContent>
                         <CardFooter>
-                            <Button>Invite Member</Button>
+                            <InviteButton />
                         </CardFooter>
                     </Card>
                     <Card>
