@@ -5,15 +5,18 @@ import { revalidatePath } from "next/cache";
 
 import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
+import { currentProfile } from "@/lib/current-profile";
 
 import { InputType, ReturnType } from "./types";
 import { CreateSite } from "./schema";
+import { MemberRole } from "@prisma/client";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-    const { userId, orgId } = auth();
+    const { orgId } = auth();
+    const profile = await currentProfile();
 
-    if (!userId || !orgId) {
+    if ( !orgId ) {
         return {
             error: "Unauthorized",
         };
@@ -29,8 +32,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 name,
                 slug,
                 url,
-                userId,
+                profileId: profile!.id,
                 orgId,
+                members: {
+                    create: [
+                        { profileId: profile!.id, role: MemberRole.OWNER}
+                    ]
+                }
             }
         })
     } catch (error) {
