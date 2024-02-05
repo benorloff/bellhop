@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import { InviteButton } from "../_components/invite-button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface SiteIdPageProps {
     params: {
@@ -29,6 +30,13 @@ const SiteIdPage = async ({
         where: {
             id: params.siteId,
         },
+        include: {
+            members: {
+                include: {
+                    profile: true,
+                },
+            },
+        }
     });
 
     const getSiteTickets = async () => {
@@ -97,7 +105,18 @@ const SiteIdPage = async ({
                             <CardTitle>Team</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            Team member list goes here.
+                            {site?.members.map((member) => (
+                                <div key={member.id} className="flex flex-row justify-between items-center gap-4">
+                                    <Avatar>
+                                        {/* Change this to next/image */}
+                                        <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
+                                        <AvatarFallback>BO</AvatarFallback>
+                                    </Avatar>
+                                    <div className="grow">{member.profile.firstName} {member.profile.lastName}</div>
+                                    <div className="shrink">{member.role}</div>
+                                </div>
+                            
+                            ))}
                         </CardContent>
                         <CardFooter>
                             <InviteButton />
