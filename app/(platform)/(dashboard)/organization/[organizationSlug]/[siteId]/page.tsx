@@ -58,13 +58,13 @@ const SiteIdPage = async ({
     
     return (
         <div>
-            <div className="flex flex-row gap-8 mb-8">
+            <div className="flex flex-row items-center gap-8 mb-8">
                 <div className="shrink">
                     <Image 
-                        src="/placeholder-150x150.svg"
+                        src="/placeholder-browser.svg"
                         alt="Avatar"
-                        width="75"
-                        height="25"
+                        width="120"
+                        height="80"
                     />
                 </div>
                 <div className="grow">

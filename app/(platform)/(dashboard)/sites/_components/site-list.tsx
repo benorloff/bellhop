@@ -56,7 +56,7 @@ export const SiteList = async () => {
                     className="flex flex-row flex-wrap justify-between items-center bg-white gap-4 rounded-sm shadow p-8"
                 >
                     <Image 
-                        src="/placeholder-150x100.svg"
+                        src="/placeholder-browser.svg"
                         alt={site.name}
                         width="150"
                         height="100"
