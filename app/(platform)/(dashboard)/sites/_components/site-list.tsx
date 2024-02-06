@@ -53,7 +53,7 @@ export const SiteList = async () => {
                 <Link
                     key={site.id}
                     href={`/organization/${orgSlug}/${site.id}`}
-                    className="flex flex-row flex-wrap justify-between items-center bg-white gap-4 rounded-sm shadow p-4"
+                    className="flex flex-row flex-wrap justify-between items-center bg-white gap-4 rounded-sm shadow p-8"
                 >
                     <Image 
                         src="/placeholder-150x100.svg"
