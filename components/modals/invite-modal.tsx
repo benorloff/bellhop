@@ -14,8 +14,6 @@ export const InviteModal = () => {
 
     const isModalOpen = isOpen && type === "invite";
 
-    console.log(data, '<-- data from modal')
-
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>

@@ -31,18 +31,16 @@ const NewTicketPage = () => {
 
         console.log({ subject, description })
 
-        // execute({ 
-        //     name, 
-        //     email, 
-        //     subject, 
-        //     type, 
-        //     status, 
-        //     priority, 
-        //     description,
-        //     source,
-        // });
-
-        execute({formData})
+        execute({ 
+            name, 
+            email, 
+            subject, 
+            type, 
+            status, 
+            priority, 
+            description,
+            source,
+        });
     }
 
     return (
