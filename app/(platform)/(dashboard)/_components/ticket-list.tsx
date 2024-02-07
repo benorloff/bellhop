@@ -45,7 +45,8 @@ export default async function TicketList() {
                 {/* Use Link component for navigation to the single ticket page */}
                 <Link href={`/tickets/${ticket.id}`}>
                   {ticket.subject}
-                </Link></td>
+                </Link>
+              </td>
               <td className="p-2">{new Date(ticket.updated_at).toLocaleString()}</td>
             </tr>
           ))}
