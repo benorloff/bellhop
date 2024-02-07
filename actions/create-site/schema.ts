@@ -17,5 +17,6 @@ export const CreateSite = z.object({
         required_error: "Site URL is required",
         invalid_type_error: "Site URL is required",
     }),
+    ipAddress: z.string(),
     // TODO: Add additional fields
 });

@@ -1,7 +1,8 @@
 "use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 import { createSite } from "@/actions/create-site";
 import { FormInput } from "@/components/form/form-input";
@@ -11,7 +12,6 @@ import { FormSubmit } from "@/components/form/form-submit";
 const MigrationPage = () => {
 
     const router = useRouter();
-
 
     const { execute, fieldErrors } = useAction(createSite, {
         onSuccess: (data) => {
@@ -28,8 +28,9 @@ const MigrationPage = () => {
         const name = formData.get("name") as string;
         const slug = formData.get("slug") as string;
         const url = formData.get("url") as string; 
+        const ipAddress = formData.get("ipAddress") as string;
 
-        execute({ name, slug, url });
+        execute({ name, slug, url, ipAddress });
     }
 
     return ( 
@@ -55,12 +56,12 @@ const MigrationPage = () => {
                         type="text"
                         errors={fieldErrors}
                     />
-                   {/* <FormInput 
-                        id="imageUrl"
-                        label="Image URL"
-                        type="file"
+                    <FormInput 
+                        id="ipAddress"
+                        label="IP Address"
+                        type="text"
                         errors={fieldErrors}
-                   /> */}
+                    />
                 </div>
                 <FormSubmit className="w-full">
                     Submit

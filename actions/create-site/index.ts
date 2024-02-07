@@ -22,7 +22,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     };
 
-    const { name, slug, url } = data;
+    const { name, slug, url, ipAddress } = data;
 
     let site;
 
@@ -34,6 +34,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 url,
                 profileId: profile!.id,
                 orgId,
+                ipAddress,
                 members: {
                     create: [
                         { profileId: profile!.id, role: MemberRole.OWNER}
