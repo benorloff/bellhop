@@ -8,7 +8,7 @@ const DashboardPage = async () => {
 
     return ( 
         <div>
-            <div className="text-3xl mb-8" suppressHydrationWarning>{greeting}</div>
+            <div className="text-3xl mb-8">{greeting}</div>
         </div>
      );
 }

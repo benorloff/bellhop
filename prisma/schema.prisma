@@ -22,11 +22,21 @@ model Profile {
   updatedAt DateTime @updatedAt
 }
 
+enum DataCenter {
+  US_IOWA
+  CANADA_MONTREAL
+  UNITED_KINGDOM_LONDON
+  EUROPE_BELGIUM
+  AUSTRALIA_SYDNEY
+}
+
 model Site {
   id       String  @id @default(uuid())
   name     String
   url      String
   imageUrl String?
+  dataCenter DataCenter @default(US_IOWA)
+  ipAddress String
   slug     String  @unique
   orgId    String
 

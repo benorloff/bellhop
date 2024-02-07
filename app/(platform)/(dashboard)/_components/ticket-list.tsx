@@ -1,11 +1,15 @@
 import Link from 'next/link';
 import { Ticket } from '@/types/index'
 
+import { currentUser } from '@clerk/nextjs';
+
 const apiKey = process.env.NEXT_PUBLIC_FRESHDESK_KEY;
 const ticketURL = process.env.NEXT_PUBLIC_FRESHDESK_API_URL;
 
 async function getData() {
-  const response = await fetch(`${ticketURL}`, {
+  const user = await currentUser();
+  
+  const response = await fetch(`${ticketURL}?email=${user?.emailAddresses[0].emailAddress}`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Basic ${btoa(`${apiKey}:x`)}`, 
@@ -21,7 +25,7 @@ async function getData() {
 }
 
 export default async function TicketList() {
-  const data = await getData()
+  const data = await getData();
  
   return  (
     <div>

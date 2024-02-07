@@ -88,15 +88,15 @@ export const SiteList = async () => {
 
 SiteList.Skeleton = function SkeletonSiteList() {
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
-            <Skeleton className="aspect-video h-full w-full p-2" />
+        <div className="flex flex-col gap-4 space-y-4">
+            <Skeleton className="h-[150px] w-full p-2" />
+            <Skeleton className="h-[150px] w-full p-2" />
+            <Skeleton className="h-[150px] w-full p-2" />
+            <Skeleton className="h-[150px] w-full p-2" />
+            <Skeleton className="h-[150px] w-full p-2" />
+            <Skeleton className="h-[100px] w-full p-2" />
+            <Skeleton className="h-[100px] w-full p-2" />
+            <Skeleton className="h-[100px] w-full p-2" />
         </div>
     )
 }

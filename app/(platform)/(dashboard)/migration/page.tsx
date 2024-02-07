@@ -12,6 +12,7 @@ const MigrationPage = () => {
 
     const router = useRouter();
 
+
     const { execute, fieldErrors } = useAction(createSite, {
         onSuccess: (data) => {
             toast.success("Site migration submitted!");
@@ -54,6 +55,12 @@ const MigrationPage = () => {
                         type="text"
                         errors={fieldErrors}
                     />
+                   {/* <FormInput 
+                        id="imageUrl"
+                        label="Image URL"
+                        type="file"
+                        errors={fieldErrors}
+                   /> */}
                 </div>
                 <FormSubmit className="w-full">
                     Submit

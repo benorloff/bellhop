@@ -95,7 +95,9 @@ const SiteIdPage = async ({
                             ))}
                         </CardContent>
                         <CardFooter>
-                            <Button>View all tickets</Button>
+                            <Button>
+                                View all tickets
+                            </Button>
                         </CardFooter>
                     </Card>
                 </div>
@@ -127,7 +129,7 @@ const SiteIdPage = async ({
                             <CardTitle>IP Address</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            IP address goes here.
+                            {site?.ipAddress}
                         </CardContent>
                         {/* <CardFooter>
                             <Button>Invite Member</Button>
