@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import { InviteButton } from "../_components/invite-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 interface SiteIdPageProps {
     params: {
@@ -87,11 +88,13 @@ const SiteIdPage = async ({
                         </CardHeader>
                         <CardContent>
                             {tickets.results.map((ticket: any) => (
-                                <div key={ticket.id} className="flex flex-row gap-4 justify-between rounded-lg bg-[#FFFFFF] py-2">
-                                    <Badge>Status {ticket.status}</Badge>
-                                    <div className="grow">{ticket.subject}</div>
-                                    <div className="shrink">{new Date(ticket.updated_at).toLocaleString()}</div>
-                                </div>
+                                <Link href={`/tickets/${ticket.id}`} key={ticket.id}>
+                                    <div className="flex flex-row gap-4 justify-between rounded-lg bg-[#FFFFFF] py-2">
+                                        <Badge>Status {ticket.status}</Badge>
+                                        <div className="grow">{ticket.subject}</div>
+                                        <div className="shrink">{new Date(ticket.updated_at).toLocaleString()}</div>
+                                    </div>
+                                </Link>
                             ))}
                         </CardContent>
                         <CardFooter>
