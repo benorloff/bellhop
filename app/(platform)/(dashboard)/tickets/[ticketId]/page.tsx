@@ -1,3 +1,9 @@
+import { currentUser } from "@clerk/nextjs";
+
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { TICKET_STATUS } from "@/constants/tickets";
+
 interface TicketIdPageProps {
     params: {
         ticketId: string;
@@ -57,13 +63,32 @@ const TicketIdPage =  async ({
 
     const ticket = await getTicket({ params });
     const conversations = await getTicketConversations({ params });
+
+    const status = TICKET_STATUS[ticket.status as keyof typeof TICKET_STATUS];
+
+    const user = await currentUser();
     
     return (
         <div>
-            <div className="text-3xl mb-8">{ticket.subject}</div>
-            <div>Ticket #: {ticket.id}</div>
-            <div>Status: {ticket.status}</div>
-            <div>Description: {ticket.description_text}</div>
+            <div>
+                <div className="text-3xl">{ticket.subject}</div>
+                <div className="flex flex-row justify-start items-center gap-4">
+                    <Badge>{status}</Badge>
+                    <div>Ticket #: {ticket.id}</div>
+                </div>
+                <div className="flex flex-row items-start gap-4 mt-8 mb-8">
+                    <Avatar>
+                        <AvatarImage src={user?.imageUrl} alt="Avatar"/>
+                    </Avatar>
+                    <div className="bg-white rounded-sm p-8">
+                        <div className="flex flex-row gap-4 justify-between items-center mb-4">
+                            <span className="font-bold">{user?.firstName} {user?.lastName}</span>
+                            {new Date(ticket.created_at).toLocaleString()}
+                        </div>
+                        {ticket.description_text}
+                    </div>
+                </div>
+            </div>
             { conversations.length ? 
                 <>
                     {conversations.map((conversation: ConversationProps) => (
