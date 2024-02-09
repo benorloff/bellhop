@@ -1,5 +1,3 @@
-import { Skeleton } from "@/components/ui/skeleton";
-
 interface TicketMessageProps {
     message: {
         body_text: string;
@@ -41,10 +39,4 @@ export const TicketMessage = ({
             )}
         </div>
      );
-}
-
-TicketMessage.Skeleton = function SkeletonTicketMessage() {
-    return (  
-        <Skeleton className="w-full h-[150px]" />    
-    )
-}
+};

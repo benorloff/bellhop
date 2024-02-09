@@ -52,14 +52,16 @@ async function getTicketConversations({ params
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
-        }
+        },
+        // TODO: Is there a more efficient way to revalidate this data?
+        cache: 'no-store'
     })
     const data = await res.json();
 
     return data;
 }
 
-const TicketIdPage =  async ({
+export const TicketIdPage =  async ({
     params
 }: TicketIdPageProps) => {
 
