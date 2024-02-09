@@ -1,7 +1,7 @@
 const TicketConversation = () => {
     return ( 
         <div>
-            Ticket conversation.
+            <h1>Ticket Conversation</h1>
         </div>
      );
 }

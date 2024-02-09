@@ -3,6 +3,7 @@ import { currentUser } from "@clerk/nextjs";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { TICKET_STATUS } from "@/constants/tickets";
+import TicketMessage from "@/components/tickets/ticket-message";
 
 interface TicketIdPageProps {
     params: {
@@ -75,12 +76,13 @@ const TicketIdPage =  async ({
                 <div className="flex flex-row justify-start items-center gap-4">
                     <Badge>{status}</Badge>
                     <div>Ticket #: {ticket.id}</div>
+                    <div>Site ID: {ticket.custom_fields.cf_site_id}</div>
                 </div>
                 <div className="flex flex-row items-start gap-4 mt-8 mb-8">
                     <Avatar>
                         <AvatarImage src={user?.imageUrl} alt="Avatar"/>
                     </Avatar>
-                    <div className="bg-white rounded-sm p-8">
+                    <div className="grow bg-white rounded-sm p-8">
                         <div className="flex flex-row gap-4 justify-between items-center mb-4">
                             <span className="font-bold">{user?.firstName} {user?.lastName}</span>
                             {new Date(ticket.created_at).toLocaleString()}
@@ -92,11 +94,7 @@ const TicketIdPage =  async ({
             { conversations.length ? 
                 <>
                     {conversations.map((conversation: ConversationProps) => (
-                        <div key={conversation.id} className="pt-8 pb-8">
-                            <div>User ID: {conversation.user_id}</div>
-                            <div>Created At: {conversation.created_at}</div>
-                            {conversation.body_text}
-                        </div>
+                        <TicketMessage key={conversation.id} message={conversation} />
                     ))}
                 </>
                 : 
