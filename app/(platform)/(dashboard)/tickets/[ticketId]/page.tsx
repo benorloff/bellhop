@@ -3,7 +3,8 @@ import { currentUser } from "@clerk/nextjs";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { TICKET_STATUS } from "@/constants/tickets";
-import TicketMessage from "@/components/tickets/ticket-message";
+import { TicketMessage } from "@/components/tickets/ticket-message";
+import { Separator } from "@/components/ui/separator";
 
 interface TicketIdPageProps {
     params: {
@@ -78,7 +79,7 @@ const TicketIdPage =  async ({
                     <div>Ticket #: {ticket.id}</div>
                     <div>Site ID: {ticket.custom_fields.cf_site_id}</div>
                 </div>
-                <div className="flex flex-row items-start gap-4 mt-8 mb-8">
+                <div className="flex flex-row items-start gap-4 mt-8">
                     <Avatar>
                         <AvatarImage src={user?.imageUrl} alt="Avatar"/>
                     </Avatar>
@@ -91,6 +92,7 @@ const TicketIdPage =  async ({
                     </div>
                 </div>
             </div>
+            <Separator className="mt-8 mb-8"/>
             { conversations.length ? 
                 <>
                     {conversations.map((conversation: ConversationProps) => (

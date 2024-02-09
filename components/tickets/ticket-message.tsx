@@ -1,3 +1,5 @@
+import { Skeleton } from "@/components/ui/skeleton";
+
 interface TicketMessageProps {
     message: {
         body_text: string;
@@ -21,9 +23,10 @@ interface TicketMessageProps {
     }
 }
 
-const TicketMessage = ({
+export const TicketMessage = ({
     message
 }: TicketMessageProps) => {
+
     return ( 
         <div className="w-full bg-white p-8 rounded-sm mb-8">
             <div className="flex flex-row justify-between items-center gap-4 mb-8">
@@ -39,5 +42,9 @@ const TicketMessage = ({
         </div>
      );
 }
- 
-export default TicketMessage;
+
+TicketMessage.Skeleton = function SkeletonTicketMessage() {
+    return (  
+        <Skeleton className="w-full h-[150px]" />    
+    )
+}

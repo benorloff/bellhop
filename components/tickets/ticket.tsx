@@ -1,9 +1,7 @@
-const Ticket = () => {
+export const Ticket = () => {
     return ( 
         <div>
-            Ticket conversation.
+            Ticket
         </div>
      );
 }
- 
-export default Ticket;
