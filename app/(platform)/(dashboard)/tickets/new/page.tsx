@@ -11,7 +11,7 @@ import { FormSubmit } from "@/components/form/form-submit";
 const NewTicketPage = () => {
 
     const { execute, fieldErrors } = useAction(createTicket, {
-        onSuccess: (data) => {
+        onSuccess: () => {
             toast.success("Ticket submitted!");
         },
         onError: (error) => {
@@ -23,7 +23,7 @@ const NewTicketPage = () => {
         const name = "Test name";
         const email = "benjamin.orloff@gmail.com";
         const subject = formData.get("subject") as string;
-        const type = "bug";
+        const type = "Bug";
         const status = 2;
         const priority = 2;
         const description = formData.get("description") as string;

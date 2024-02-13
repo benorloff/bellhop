@@ -31,26 +31,27 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         source, 
     } = data;
 
-    console.log(data, "<-- data from create-ticket action")
+    let ticket;
 
-    const response = await fetch("https://bellhop.freshdesk.com/api/v2/tickets",{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:X`)}`,
-        },
-        body: JSON.stringify(data),
-    })
-    
-    if (!response.ok) {
-        console.log(response, "<-- response from create-ticket action")
+    try {
+        const response = await fetch("https://bellhop.freshdesk.com/api/v2/tickets",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
+            },
+            body: JSON.stringify(data),
+        })
+        ticket = await response.json();
+    } catch (error) {
         return {
             error: "Failed to create ticket."
         }
     }
+    
 
     // revalidatePath(`/site/${site.slug}`);
-    return response.json();
+    return { data: ticket };
 };
 
 export const createTicket = createSafeAction(CreateTicket, handler);
