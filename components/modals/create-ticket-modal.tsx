@@ -7,8 +7,8 @@ import { Dialog } from "@radix-ui/react-dialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
-import { FormInput } from "../form/form-input";
-import { FormSubmit } from "../form/form-submit";
+import { FormInput } from "@/components/form/form-input";
+import { FormSubmit } from "@/components/form/form-submit";
 
 export const CreateTicketModal = () => {
     const { isOpen, onClose, type, data } = useModal();
@@ -36,8 +36,6 @@ export const CreateTicketModal = () => {
         const description = formData.get("description") as string;
         const source = 2;
 
-        console.log({ subject, description })
-
         execute({ 
             name, 
             email, 
@@ -52,7 +50,7 @@ export const CreateTicketModal = () => {
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
-            <DialogContent>
+            <DialogContent className="bg-black">
                 <DialogHeader>
                     <DialogTitle>
                         Open a new ticket
@@ -72,11 +70,12 @@ export const CreateTicketModal = () => {
                             type="text"
                             errors={fieldErrors}
                         />
-                    </div>
-                    <DialogFooter>
                         <FormSubmit className="w-full">
                             Submit
                         </FormSubmit>
+                    </div>
+                    <DialogFooter>
+                        asdf
                     </DialogFooter>
                 </form>
             </DialogContent>
