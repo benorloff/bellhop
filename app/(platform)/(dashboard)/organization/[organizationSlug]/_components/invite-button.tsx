@@ -1,25 +1,18 @@
-import { Plus } from "lucide-react";
-import { OrganizationProfile } from "@clerk/nextjs";
+"use client";
 
-import { 
-    Dialog,
-    DialogContent,
-    DialogTrigger
-} from "@/components/ui/dialog";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/hooks/use-modal-store";
 
 export const InviteButton = () => {
+    const { onOpen } = useModal();
+
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Invite Members
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="p-0 bg-transparent border-none max-w-[880px]">
-                <OrganizationProfile />
-            </DialogContent>
-        </Dialog>
+        <Button
+            onClick={() => onOpen("invite", {})}
+        >
+            <Plus className="h-4 w-4 mr-2" />
+            Invite Members
+        </Button> 
     )
 };

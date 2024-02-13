@@ -17,6 +17,7 @@ model Profile {
 
   sites   Site[]
   members Member[]
+  tickets Ticket[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -44,6 +45,7 @@ model Site {
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   members Member[]
+  tickets Ticket[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,6 +62,29 @@ enum MemberRole {
 model Member {
   id   String     @id @default(uuid())
   role MemberRole @default(COLLABORATOR)
+
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@index([siteId])
+}
+
+model Ticket {
+  id String @id @default(uuid())
+  freshdeskId Int @unique
+  priority Int
+  source Int
+  status Int
+  subject String
+  type String
+  descriptionText String
 
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
