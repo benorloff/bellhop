@@ -18,7 +18,7 @@ export const CreateTicketModal = () => {
 
     const { execute, fieldErrors } = useAction(createTicket, {
         onSuccess: (data) => {
-            toast.success("Ticket submitted!");
+            toast.success("Ticket submitted! Taking you to the ticket page...");
             router.push(`/tickets/${data.id}`)
         },
         onError: (error) => {
@@ -46,11 +46,13 @@ export const CreateTicketModal = () => {
             description,
             source,
         });
+
+        onClose();
     };
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
-            <DialogContent className="bg-black">
+            <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
                         Open a new ticket
@@ -70,12 +72,12 @@ export const CreateTicketModal = () => {
                             type="text"
                             errors={fieldErrors}
                         />
+                        
+                    </div>
+                    <DialogFooter>
                         <FormSubmit className="w-full">
                             Submit
                         </FormSubmit>
-                    </div>
-                    <DialogFooter>
-                        asdf
                     </DialogFooter>
                 </form>
             </DialogContent>
