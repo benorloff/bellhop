@@ -64,7 +64,7 @@ const SiteIdPage = async ({
             <div className="flex flex-row items-center gap-8 mb-8">
                 <div className="shrink">
                     <Image 
-                        src="/placeholder-browser.svg"
+                        src={site?.imageUrl || "/placeholder-browser.svg"}
                         alt="Avatar"
                         width="120"
                         height="80"

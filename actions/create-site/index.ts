@@ -22,7 +22,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     };
 
-    const { name, slug, url, ipAddress } = data;
+    const { name, slug, url, imageUrl, ipAddress } = data;
 
     let site;
 
@@ -32,6 +32,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 name,
                 slug,
                 url,
+                imageUrl,
                 profileId: profile!.id,
                 orgId,
                 ipAddress,

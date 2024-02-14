@@ -18,5 +18,8 @@ export const CreateSite = z.object({
         invalid_type_error: "Site URL is required",
     }),
     ipAddress: z.string(),
+    imageUrl: z.string().url({
+        message: "Image URL is invalid"
+    }),
     // TODO: Add additional fields
 });

@@ -37,8 +37,9 @@ const MigrationPage = () => {
         const slug = formData.get("slug") as string;
         const url = formData.get("url") as string; 
         const ipAddress = formData.get("ipAddress") as string;
+        const imageUrl = fileUrl ? fileUrl : "/placeholder-browser.svg"
 
-        execute({ name, slug, url, ipAddress });
+        execute({ name, slug, url, imageUrl, ipAddress });
     }
 
     return ( 
@@ -70,29 +71,16 @@ const MigrationPage = () => {
                         type="text"
                         errors={fieldErrors}
                     />
-                    {/* <UploadButton
+                    <FileUpload 
+                        onChange={fileUrl => setFileUrl(fileUrl!)}
+                        value={fileUrl}
                         endpoint="siteImage"
-                        onClientUploadComplete={(res) => {
-                            setFileUrl(res?.[0].url);
-                        }}
-                        onUploadError={(error: Error) => {
-                            toast.error(error.message);
-                        }}
-                    />   */}
+                    />
                 </div>
                 <FormSubmit className="w-full">
                     Submit
                 </FormSubmit>
             </form>
-            <UploadButton
-                endpoint="siteImage"
-                onClientUploadComplete={(res) => {
-                    console.log("Files:", res);
-                }}
-                onUploadError={(error: Error) => {
-                    console.log("Upload error:", error.message)
-                }}
-            />  
         </div>
      );
 }
