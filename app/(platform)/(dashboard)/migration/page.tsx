@@ -1,15 +1,23 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
 import { createSite } from "@/actions/create-site";
-import { FormInput } from "@/components/form/form-input";
 import { useAction } from "@/hooks/use-action";
+
+import { FormInput } from "@/components/form/form-input";
 import { FormSubmit } from "@/components/form/form-submit";
+import { FileUpload } from "@/components/file-upload";
+import { UploadDropzone } from "@uploadthing/react";
+import { UploadButton } from "@/lib/uploadthing";
+import { OurFileRouter } from "@/app/api/uploadthing/core";
 
 const MigrationPage = () => {
+
+    const [fileUrl, setFileUrl] = useState("");
 
     const router = useRouter();
 
@@ -62,12 +70,29 @@ const MigrationPage = () => {
                         type="text"
                         errors={fieldErrors}
                     />
+                    {/* <UploadButton
+                        endpoint="siteImage"
+                        onClientUploadComplete={(res) => {
+                            setFileUrl(res?.[0].url);
+                        }}
+                        onUploadError={(error: Error) => {
+                            toast.error(error.message);
+                        }}
+                    />   */}
                 </div>
                 <FormSubmit className="w-full">
                     Submit
                 </FormSubmit>
             </form>
-
+            <UploadButton
+                endpoint="siteImage"
+                onClientUploadComplete={(res) => {
+                    console.log("Files:", res);
+                }}
+                onUploadError={(error: Error) => {
+                    console.log("Upload error:", error.message)
+                }}
+            />  
         </div>
      );
 }

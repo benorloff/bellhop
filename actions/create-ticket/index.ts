@@ -8,7 +8,6 @@ import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
 import { CreateTicket } from "./schema";
-import { redirect } from "next/navigation";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {

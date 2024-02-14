@@ -19,7 +19,7 @@ export const InviteModal = () => {
         <Dialog open={isModalOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>
+                    <DialogTitle className="text-2xl">
                         Invite Members
                     </DialogTitle>
                     <DialogDescription>

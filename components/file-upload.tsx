@@ -11,7 +11,7 @@ import { toast } from "sonner";
 interface FileUploadProps {
     onChange: (url?: string) => void;
     value: string;
-    endpoint: "siteImage"
+    endpoint: "siteImage" | "ticketFile";
 };
 
 export const FileUpload = ({

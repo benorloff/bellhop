@@ -54,7 +54,7 @@ export const CreateTicketModal = () => {
         <Dialog open={isModalOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>
+                    <DialogTitle className="text-2xl">
                         Open a new ticket
                     </DialogTitle>
                 </DialogHeader>
