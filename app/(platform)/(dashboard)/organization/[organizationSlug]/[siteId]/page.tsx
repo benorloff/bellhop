@@ -68,6 +68,7 @@ const SiteIdPage = async ({
                         alt="Avatar"
                         width="120"
                         height="80"
+                        className="rounded-sm"
                     />
                 </div>
                 <div className="grow">

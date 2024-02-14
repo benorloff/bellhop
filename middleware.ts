@@ -6,6 +6,12 @@ import { NextResponse } from "next/server";
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
   publicRoutes: ["/", "/api/uploadthing"],
+  afterAuth(auth, req) {
+    // Add auth middleware here
+    if (!auth.userId && !auth.isPublicRoute) {
+      return redirectToSignIn({ returnBackUrl: req.url })
+    }
+  }
 });
  
 export const config = {
