@@ -75,7 +75,7 @@ export const TicketIdPage =  async ({
     return (
         <div>
             <div>
-                <div className="text-3xl">{ticket.subject}</div>
+                <div className="text-3xl pb-4">{ticket.subject}</div>
                 <div className="flex flex-row justify-start items-center gap-4">
                     <Badge>{status}</Badge>
                     <div>Ticket #: {ticket.id}</div>
@@ -85,7 +85,8 @@ export const TicketIdPage =  async ({
                     <Avatar>
                         <AvatarImage src={user?.imageUrl} alt="Avatar"/>
                     </Avatar>
-                    <div className="grow bg-white rounded-sm p-8">
+                    <div className="grow bg-white rounded-sm p-8 relative">
+                        <div className="absolute top-[8px] left-[-12px] w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[12px] border-r-white"></div>
                         <div className="flex flex-row gap-4 justify-between items-center mb-4">
                             <span className="font-bold">{user?.firstName} {user?.lastName}</span>
                             {new Date(ticket.created_at).toLocaleString()}

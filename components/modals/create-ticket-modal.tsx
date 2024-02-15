@@ -97,40 +97,6 @@ export const CreateTicketModal = () => {
 
     const isModalOpen = isOpen && type === "createTicket";
 
-    // const { execute, fieldErrors } = useAction(createTicket, {
-    //     onSuccess: (data) => {
-    //         toast.success("Ticket submitted! Taking you to the ticket page...");
-    //         router.push(`/tickets/${data.id}`)
-    //     },
-    //     onError: (error) => {
-    //         toast.error(error);
-    //     }
-    // });
-
-    // const onSubmit = (formData: FormData) => {
-    //     const name = "Test name";
-    //     const email = "benjamin.orloff@gmail.com";
-    //     const subject = formData.get("subject") as string;
-    //     const type = "Bug";
-    //     const status = 2;
-    //     const priority = 2;
-    //     const description = formData.get("description") as string;
-    //     const source = 2;
-
-    //     execute({ 
-    //         name, 
-    //         email, 
-    //         subject, 
-    //         type, 
-    //         status, 
-    //         priority, 
-    //         description,
-    //         source,
-    //     });
-
-    //     onClose();
-    // };
-
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -267,7 +233,7 @@ export const CreateTicketModal = () => {
                                     <FormControl>
                                         <Textarea
                                             placeholder="Write up a short description of the problem..."
-                                            className="h-[200px]"
+                                            className="h-[200px] resize-none"
                                             {...field}
                                         />
                                     </FormControl>

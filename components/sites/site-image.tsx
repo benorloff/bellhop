@@ -2,6 +2,8 @@ import Image from "next/image";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "../ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export const SiteImage = ({
     imageUrl,
@@ -23,7 +25,6 @@ export const SiteImage = ({
                 </TooltipTrigger>
                 <TooltipContent
                     side="bottom"
-                    className="w-[150px] text-center"
                 >
                     <Button>
                         {/* TODO: Connect to update-site action */}
@@ -34,3 +35,9 @@ export const SiteImage = ({
         </TooltipProvider>
     )
 };
+
+SiteImage.Skeleton = function SkeletonSiteImage() {
+    return (
+            <Skeleton className="h-[100px] w-[150px]" />
+    )
+}
