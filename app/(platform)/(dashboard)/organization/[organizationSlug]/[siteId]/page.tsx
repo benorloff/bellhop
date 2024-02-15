@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 import { TICKET_STATUS } from "@/constants/tickets";
+import { SiteImage } from "../../../sites/_components/site-image";
 
 interface SiteIdPageProps {
     params: {
@@ -63,13 +64,7 @@ const SiteIdPage = async ({
         <div>
             <div className="flex flex-row items-center gap-8 mb-8">
                 <div className="shrink">
-                    <Image 
-                        src={site?.imageUrl || "/placeholder-browser.svg"}
-                        alt="Avatar"
-                        width="120"
-                        height="80"
-                        className="rounded-sm"
-                    />
+                    <SiteImage imageUrl={site?.imageUrl as string} siteName={site?.name as string} />
                 </div>
                 <div className="grow">
                     <div className="text-3xl">{site?.name}</div>

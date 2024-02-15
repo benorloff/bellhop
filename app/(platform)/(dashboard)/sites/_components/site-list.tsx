@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Member, Profile } from "@prisma/client";
 import { SiteMembers } from "./site-members";
+import { SiteImage } from "./site-image";
 
 export const SiteList = async () => {
 
@@ -45,13 +46,7 @@ export const SiteList = async () => {
                     href={`/organization/${orgSlug}/${site.id}`}
                     className="flex flex-row flex-wrap justify-between items-center bg-white gap-4 rounded-sm shadow p-8"
                 >
-                    <Image 
-                        src={site.imageUrl || "/placeholder-browser.svg"}
-                        alt={site.name}
-                        width="150"
-                        height="100"
-                        className="rounded-sm"
-                    />
+                    <SiteImage imageUrl={site.imageUrl as string} siteName={site.name as string} />
                     <div className="flex flex-col grow gap-1">
                         <p className="font-semibold text-xl">
                             {site.name}
