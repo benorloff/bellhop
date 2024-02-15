@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { SiteList } from "./_components/site-list";
+import { SiteList } from "../../../../components/sites/site-list";
 
 const SitesPage = () => {
     return ( 

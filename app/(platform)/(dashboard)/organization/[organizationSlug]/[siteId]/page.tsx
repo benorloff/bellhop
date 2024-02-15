@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 import { TICKET_STATUS } from "@/constants/tickets";
-import { SiteImage } from "../../../sites/_components/site-image";
+import { SiteImage } from "../../../../../../components/sites/site-image";
 
 interface SiteIdPageProps {
     params: {
@@ -82,7 +82,7 @@ const SiteIdPage = async ({
                 <div className="flex flex-col basis-full lg:basis-7/12 gap-8">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Tickets</CardTitle>
+                            <CardTitle>Recent Tickets</CardTitle>
                         </CardHeader>
                         <CardContent>
                             {tickets.results.map((ticket: any) => (
