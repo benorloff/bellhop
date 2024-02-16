@@ -5,6 +5,8 @@ import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Badge } from "../ui/badge";
 
+import { TICKET_STATUS } from "@/constants/tickets";
+
 export type Ticket = {
     id: number;
     subject: string;
@@ -30,6 +32,7 @@ export const columns: ColumnDef<Ticket>[] =[
             <Button
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                className="pl-0"
             >
                 Status
                 <ArrowUpDown 
@@ -41,8 +44,9 @@ export const columns: ColumnDef<Ticket>[] =[
         cell: ({ row }) => (
             <Badge
                 variant="default"
+                className="bg-status-open text-green-800"
             >
-                {row.original.status}
+                {TICKET_STATUS[row.original.status as keyof typeof TICKET_STATUS]}
             </Badge>
         )
     },
@@ -56,6 +60,7 @@ export const columns: ColumnDef<Ticket>[] =[
             <Button
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                className="pl-0"
             >
                 Last Updated
                 <ArrowUpDown 
