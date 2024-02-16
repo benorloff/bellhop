@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Ticket } from '@/types/index'
 
 import { currentUser } from '@clerk/nextjs';
+import { DataTable } from '@/components/tickets/data-table';
+import { columns } from '@/components/tickets/columns';
 
 const apiKey = process.env.NEXT_PUBLIC_FRESHDESK_KEY;
 const ticketURL = process.env.NEXT_PUBLIC_FRESHDESK_API_URL;
@@ -28,30 +30,34 @@ export default async function TicketList() {
   const data = await getData();
  
   return  (
+    // <div>
+    //   <table className="w-full border-collapse mt-8 border-none">
+    //     <thead>
+    //       <tr>
+    //         <th className="p-2">Status</th>
+    //         <th className="p-2">Ticket</th>
+    //         <th className="p-2">Last Updated</th>
+    //       </tr>
+    //     </thead>
+    //     <tbody>
+    //       {data.map((ticket: Ticket) => (
+    //         <tr key={ticket.id} className='rounded-lg bg-[#FFFFFF] py-2'>
+    //           <td className="p-2">{ticket.status}</td>
+    //           <td className="p-2"> 
+    //             {/* Use Link component for navigation to the single ticket page */}
+    //             <Link href={`/tickets/${ticket.id}`}>
+    //               {ticket.subject}
+    //             </Link>
+    //           </td>
+    //           <td className="p-2">{new Date(ticket.updated_at).toLocaleString()}</td>
+    //         </tr>
+    //       ))}
+    //     </tbody>
+    //   </table>
+    // </div>
+
     <div>
-      <table className="w-full border-collapse mt-8 border-none">
-        <thead>
-          <tr>
-            <th className="p-2">Status</th>
-            <th className="p-2">Ticket</th>
-            <th className="p-2">Last Updated</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((ticket: Ticket) => (
-            <tr key={ticket.id} className='rounded-lg bg-[#FFFFFF] py-2'>
-              <td className="p-2">{ticket.status}</td>
-              <td className="p-2"> 
-                {/* Use Link component for navigation to the single ticket page */}
-                <Link href={`/tickets/${ticket.id}`}>
-                  {ticket.subject}
-                </Link>
-              </td>
-              <td className="p-2">{new Date(ticket.updated_at).toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }
