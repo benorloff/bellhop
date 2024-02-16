@@ -43,8 +43,8 @@ export const columns: ColumnDef<Ticket>[] =[
         ),
         cell: ({ row }) => (
             <Badge
-                variant="default"
-                className="bg-status-open text-green-800"
+                variant={TICKET_STATUS[row.original.status as keyof typeof TICKET_STATUS].toLowerCase() as any}
+                className="w-[75px] justify-center"
             >
                 {TICKET_STATUS[row.original.status as keyof typeof TICKET_STATUS]}
             </Badge>

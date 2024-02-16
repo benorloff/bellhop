@@ -56,8 +56,12 @@ module.exports = {
         status: {
           open: {
             DEFAULT: colors.green[300],
-            text: colors.green[800],
+            foreground: colors.green[800],
           },
+          pending: {
+            DEFAULT: colors.orange[300],
+            foreground: colors.orange[800],
+          }
         }
       },
       borderRadius: {
