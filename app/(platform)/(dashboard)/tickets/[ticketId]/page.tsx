@@ -58,6 +58,9 @@ async function getTicketConversations({ params
     })
     const data = await res.json();
 
+    data.sort((a: ConversationProps, b: ConversationProps) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
     return data;
 }
 
@@ -67,9 +70,6 @@ export const TicketIdPage =  async ({
 
     const ticket = await getTicket({ params });
     const conversations = await getTicketConversations({ params });
-
-    // Sort conversations by date in descending order
-    const sortedConversations = conversations.sort((a: ConversationProps, b: ConversationProps) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
     const status = TICKET_STATUS[ticket.status as keyof typeof TICKET_STATUS];
 
@@ -99,9 +99,10 @@ export const TicketIdPage =  async ({
                 </div>
             </div>
             <Separator className="mt-8 mb-8"/>
-            { sortedConversations.length ? 
+            <div className="text-2xl pb-4">Ticket Activity</div>
+            { conversations.length ? 
                 <>
-                    {sortedConversations.map((conversation: ConversationProps) => (
+                    {conversations.map((conversation: ConversationProps) => (
                         <TicketMessage key={conversation.id} message={conversation} />
                     ))}
                 </>
