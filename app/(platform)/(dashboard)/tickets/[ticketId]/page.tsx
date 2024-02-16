@@ -68,6 +68,9 @@ export const TicketIdPage =  async ({
     const ticket = await getTicket({ params });
     const conversations = await getTicketConversations({ params });
 
+    // Sort conversations by date in descending order
+    const sortedConversations = conversations.sort((a: ConversationProps, b: ConversationProps) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
     const status = TICKET_STATUS[ticket.status as keyof typeof TICKET_STATUS];
 
     const user = await currentUser();
@@ -96,9 +99,9 @@ export const TicketIdPage =  async ({
                 </div>
             </div>
             <Separator className="mt-8 mb-8"/>
-            { conversations.length ? 
+            { sortedConversations.length ? 
                 <>
-                    {conversations.map((conversation: ConversationProps) => (
+                    {sortedConversations.map((conversation: ConversationProps) => (
                         <TicketMessage key={conversation.id} message={conversation} />
                     ))}
                 </>
