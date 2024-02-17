@@ -10,7 +10,9 @@ const PlatformLayout = ({
     return (
         <ClerkProvider>
             <ModalProvider />
-            <Toaster />
+            <Toaster 
+                position="top-center"
+            />
             {children}
         </ClerkProvider>
     );

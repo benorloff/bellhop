@@ -97,8 +97,6 @@ export const CreateTicketModal = () => {
 
     const isModalOpen = isOpen && type === "createTicket";
 
-    const { register } = useForm();
-
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -144,10 +142,6 @@ export const CreateTicketModal = () => {
         }
     };
 
-    function onInvalid(errors: z.ZodIssue[]) {
-        console.error(errors);
-    }
-
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
             <DialogContent>
@@ -157,7 +151,7 @@ export const CreateTicketModal = () => {
                     </DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
                             control={form.control}
                             name="subject"

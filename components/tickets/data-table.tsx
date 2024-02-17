@@ -55,10 +55,11 @@ export function DataTable<TData, TValue>({
     return (
         <div>
             <div className="flex items-center py-4">
+                {/* QUESTION: Does this need to be debounced? */}
                 <Input
-                placeholder="Filter by status..."
-                value={(table.getColumn("status")?.getFilterValue() as string) ?? ""}
-                onChange={(event) => table.getColumn("status")?.setFilterValue(event.target.value)}
+                placeholder="Search for a ticket..."
+                value={(table.getColumn("subject")?.getFilterValue() as string) ?? ""}
+                onChange={(event) => table.getColumn("subject")?.setFilterValue(event.target.value)}
                 className="max-w-sm"
                 />
             </div>
