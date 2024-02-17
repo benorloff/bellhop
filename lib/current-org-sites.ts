@@ -2,7 +2,7 @@ import { auth, redirectToSignIn } from "@clerk/nextjs";
 
 import { db } from "@/lib/db";
 
-export const currentOrgSites = async (id: string) => {
+export const currentOrgSites = async () => {
     const { orgId } = auth();
 
     if (!orgId) {
@@ -11,7 +11,7 @@ export const currentOrgSites = async (id: string) => {
 
     const sites = await db.site.findMany({
         where: {
-            orgId: id,
+            orgId,
         }
     });
 

@@ -31,8 +31,8 @@ import {
     FormMessage 
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
     name: z.string({
@@ -245,7 +245,10 @@ export const CreateTicketModal = () => {
                             )}
                         />
                         <DialogFooter>
-                            <Button variant="primary">
+                            <Button 
+                                variant="primary"
+                                className="w-full"
+                            >
                                 Submit
                             </Button>
                         </DialogFooter>

@@ -12,6 +12,7 @@ export const SiteImage = ({
     imageUrl: string;
     siteName: string;
 }) => {
+
     return (
         <TooltipProvider>
             <Tooltip>
@@ -26,7 +27,9 @@ export const SiteImage = ({
                 <TooltipContent
                     side="bottom"
                 >
-                    <Button>
+                    <Button
+                        variant="ghost"
+                    >
                         {/* TODO: Connect to update-site action */}
                         Upload image
                     </Button>

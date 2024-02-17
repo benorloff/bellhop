@@ -24,6 +24,7 @@ import {
   } from "@/components/ui/table"
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { DataTableToolbar } from "./data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -54,15 +55,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-            <div className="flex items-center py-4">
-                {/* QUESTION: Does this need to be debounced? */}
-                <Input
-                placeholder="Search for a ticket..."
-                value={(table.getColumn("subject")?.getFilterValue() as string) ?? ""}
-                onChange={(event) => table.getColumn("subject")?.setFilterValue(event.target.value)}
-                className="max-w-sm"
-                />
-            </div>
+            <DataTableToolbar table={table} />
             <div className="rounded-md border">
                 <Table>
                 <TableHeader>
