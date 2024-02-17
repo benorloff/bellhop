@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { ThemeModeToggle } from "@/components/theme-mode-toggle";
 
 
 export const Navbar = () => {
@@ -41,6 +42,7 @@ export const Navbar = () => {
                         }
                     }}
                 />
+                <ThemeModeToggle />
             </div>
         </nav>
     )
