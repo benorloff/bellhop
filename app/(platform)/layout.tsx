@@ -12,6 +12,8 @@ const PlatformLayout = ({
             <ModalProvider />
             <Toaster 
                 position="top-center"
+                richColors={true}
+                closeButton={true}
             />
             {children}
         </ClerkProvider>
