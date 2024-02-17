@@ -69,5 +69,17 @@ export const columns: ColumnDef<Ticket>[] =[
                 />
             </Button>
         ),
+        cell: ({ row }) => (
+            <div>
+                {new Date(row.original.updated_at).toLocaleString("en-US", { 
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    timeZoneName: "short",
+                })}
+            </div>
+        )
     },
 ]

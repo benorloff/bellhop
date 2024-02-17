@@ -97,11 +97,13 @@ export const CreateTicketModal = () => {
 
     const isModalOpen = isOpen && type === "createTicket";
 
+    const { register } = useForm();
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            email: "",
+            email: "benjamin.orloff@gmail.com",
             subject: "",
             type: "",
             status: 2,
@@ -116,6 +118,7 @@ export const CreateTicketModal = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
+            console.log(values, "<-- values before sending to API")
             const response = await fetch(`https://bellhop.freshdesk.com/api/v2/tickets`, {
                 method: "POST",
                 headers: {
@@ -131,6 +134,7 @@ export const CreateTicketModal = () => {
 
             const data = await response.json();
 
+            form.reset();
             toast.success("Ticket submitted! Taking you to the ticket page...");
             router.push(`/tickets/${data.id}`);
 
@@ -139,6 +143,10 @@ export const CreateTicketModal = () => {
             console.log(error);
         }
     };
+
+    function onInvalid(errors: z.ZodIssue[]) {
+        console.error(errors);
+    }
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -149,7 +157,7 @@ export const CreateTicketModal = () => {
                     </DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <form onSubmit={form.handleSubmit(onSubmit, onInvalid)} className="space-y-8">
                         <FormField
                             control={form.control}
                             name="subject"
@@ -199,7 +207,8 @@ export const CreateTicketModal = () => {
                             control={form.control}
                             name="type"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem
+                                >
                                     <FormLabel>
                                         What do you need help with?
                                     </FormLabel>
@@ -213,9 +222,9 @@ export const CreateTicketModal = () => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem key="1" value="1">Bug</SelectItem>
-                                            <SelectItem key="2" value="2">Feature Request</SelectItem>
-                                            <SelectItem key="3" value="3">Billing</SelectItem>
+                                            <SelectItem key="1" value="Bug">Bug</SelectItem>
+                                            <SelectItem key="2" value="Feature Request">Feature Request</SelectItem>
+                                            <SelectItem key="3" value="Question">Question</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
