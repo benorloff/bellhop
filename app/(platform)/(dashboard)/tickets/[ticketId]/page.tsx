@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { TICKET_STATUS } from "@/constants/tickets";
 import { TicketMessage } from "@/components/tickets/ticket-message";
 import { Separator } from "@/components/ui/separator";
+import { TicketReplyPanel } from "@/components/tickets/ticket-reply-panel";
 
 interface TicketIdPageProps {
     params: {
@@ -109,6 +110,7 @@ export const TicketIdPage =  async ({
                 : 
                 <div className="pt-8 pb-8">No conversations yet.</div>
             }
+            <TicketReplyPanel />
         </div>
     );
 };

@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
+import { useModal } from "@/hooks/use-modal-store";
 
 export const SiteImage = ({
     imageUrl,
@@ -12,6 +15,7 @@ export const SiteImage = ({
     imageUrl: string;
     siteName: string;
 }) => {
+    const { onOpen } = useModal();
 
     return (
         <TooltipProvider>
@@ -29,6 +33,7 @@ export const SiteImage = ({
                 >
                     <Button
                         variant="ghost"
+                        onClick={() => onOpen("siteImage", {})}
                     >
                         {/* TODO: Connect to update-site action */}
                         Upload image

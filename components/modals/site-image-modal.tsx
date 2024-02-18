@@ -9,27 +9,27 @@ import {
     DialogTitle
 } from "@/components/ui/dialog";
 
-export const InviteModal = () => {
+export const SiteImageModal = () => {
     const { onOpen, isOpen, onClose, type, data } = useModal();
 
-    const isModalOpen = isOpen && type === "invite";
+    const isModalOpen = isOpen && type === "siteImage";
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className="text-2xl">
-                        Invite Members
+                        Upload Site Image
                     </DialogTitle>
                     <DialogDescription>
-                        Add collaborators to your site.
+                        Add an image to your site.
                     </DialogDescription>
                 </DialogHeader>
                 <div>
-                    Invitation form will go here.
+                    Upload dropzone will go here.
                 </div>
             </DialogContent>
 
         </Dialog>
     )
-}
+};
