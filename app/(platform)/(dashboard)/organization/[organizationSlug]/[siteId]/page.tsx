@@ -87,8 +87,8 @@ const SiteIdPage = async ({
                         <CardContent>
                             {tickets.results.map((ticket: any) => (
                                 <Link href={`/tickets/${ticket.id}`} key={ticket.id}>
-                                    <div className="flex flex-row gap-4 justify-between rounded-lg bg-[#FFFFFF] py-2">
-                                        <Badge variant="default">{TICKET_STATUS[ticket.status as keyof typeof TICKET_STATUS]}</Badge>
+                                    <div className="flex flex-row gap-4 justify-between border rounded-sm bg-background hover:bg-background/90 p-4 mb-4">
+                                        <Badge variant="open">{TICKET_STATUS[ticket.status as keyof typeof TICKET_STATUS]}</Badge>
                                         <div className="grow">{ticket.subject}</div>
                                         <div className="shrink">{new Date(ticket.updated_at).toLocaleString()}</div>
                                     </div>
