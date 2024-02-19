@@ -1,3 +1,6 @@
+// This is a temporary solution for creating a profile for a user when they sign up.
+// TODO: This should be handled in the Clerk webhook for user creation.
+
 import { currentUser, redirectToSignIn } from "@clerk/nextjs";
 
 import { db } from "@/lib/db";

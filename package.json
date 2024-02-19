@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "tunnel 3000 -- next dev --port PORT",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -38,6 +38,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.50.1",
     "sonner": "^1.2.4",
+    "svix": "^1.18.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^6.3.3",
