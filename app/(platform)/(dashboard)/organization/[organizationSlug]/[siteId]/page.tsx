@@ -12,13 +12,12 @@ import {
     CardHeader, 
     CardTitle 
 } from "@/components/ui/card";
-import Image from "next/image";
 import { InviteButton } from "../_components/invite-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 import { TICKET_STATUS } from "@/constants/tickets";
-import { SiteImage } from "../../../../../../components/sites/site-image";
+import { SiteImage } from "@/components/sites/site-image";
 
 interface SiteIdPageProps {
     params: {
@@ -44,7 +43,7 @@ const SiteIdPage = async ({
     });
 
     const getSiteTickets = async () => {
-        const response = await fetch(`https://bellhop.freshdesk.com/api/v2/search/tickets?query="custom_string:'${site?.id}'"`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_FRESHDESK_API_URL}?query="custom_string:'${site?.id}'"`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
@@ -64,7 +63,11 @@ const SiteIdPage = async ({
         <div>
             <div className="flex flex-row items-center gap-8 mb-8">
                 <div className="shrink">
-                    <SiteImage imageUrl={site?.imageUrl as string} siteName={site?.name as string} />
+                    <SiteImage 
+                        siteId={site?.id as string}
+                        imageUrl={site?.imageUrl as string} 
+                        siteName={site?.name as string} 
+                    />
                 </div>
                 <div className="grow">
                     <div className="text-3xl">{site?.name}</div>
@@ -132,9 +135,6 @@ const SiteIdPage = async ({
                         <CardContent>
                             {site?.ipAddress}
                         </CardContent>
-                        {/* <CardFooter>
-                            <Button>Invite Member</Button>
-                        </CardFooter> */}
                     </Card>
                 </div>
             </div>

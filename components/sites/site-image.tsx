@@ -4,14 +4,15 @@ import Image from "next/image";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "../ui/skeleton";
-import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useModal } from "@/hooks/use-modal-store";
 
 export const SiteImage = ({
+    siteId,
     imageUrl,
     siteName
 }: {
+    siteId: string;
     imageUrl: string;
     siteName: string;
 }) => {
@@ -26,6 +27,7 @@ export const SiteImage = ({
                         alt={siteName}
                         width={150}
                         height={100}
+                        className="rounded-sm"
                     />
                 </TooltipTrigger>
                 <TooltipContent
@@ -33,7 +35,7 @@ export const SiteImage = ({
                 >
                     <Button
                         variant="ghost"
-                        onClick={() => onOpen("siteImage", {})}
+                        onClick={() => onOpen("siteImage", { siteId })}
                     >
                         {/* TODO: Connect to update-site action */}
                         Upload image

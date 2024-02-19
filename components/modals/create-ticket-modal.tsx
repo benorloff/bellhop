@@ -117,7 +117,7 @@ export const CreateTicketModal = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             console.log(values, "<-- values before sending to API")
-            const response = await fetch(`https://bellhop.freshdesk.com/api/v2/tickets`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_FRESHDESK_API_URL}`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

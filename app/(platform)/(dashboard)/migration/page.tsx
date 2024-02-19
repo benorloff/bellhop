@@ -11,9 +11,6 @@ import { useAction } from "@/hooks/use-action";
 import { FormInput } from "@/components/form/form-input";
 import { FormSubmit } from "@/components/form/form-submit";
 import { FileUpload } from "@/components/file-upload";
-import { UploadDropzone } from "@uploadthing/react";
-import { UploadButton } from "@/lib/uploadthing";
-import { OurFileRouter } from "@/app/api/uploadthing/core";
 
 const MigrationPage = () => {
 

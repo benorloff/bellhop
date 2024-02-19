@@ -23,19 +23,19 @@ export const FileUpload = ({
 
     if (value) {
         return (
-            <div className="relative h-20 w-20">
+            <div className="relative aspect-video">
                 <Image 
                     fill
                     src={value}
                     alt="Upload"
-                    className="rounded-full"
+                    className="rounded-sm"
                 />
                 <button
                     onClick={() => onChange("")}
-                    className="bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm"
+                    className="bg-rose-500 text-white p-1 rounded-full absolute top-[-8px] right-[-8px] shadow-sm"
                     type="button"
                 >
-                    <X className="w-4 h-4" />
+                    <X className="w-[16px] h-[16px]" />
                 </button>
             </div>
         )
