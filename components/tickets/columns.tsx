@@ -6,6 +6,8 @@ import { ArrowUpDown } from "lucide-react";
 import { Badge } from "../ui/badge";
 
 import { TICKET_STATUS } from "@/constants/tickets";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export type Ticket = {
     id: number;
@@ -53,6 +55,13 @@ export const columns: ColumnDef<Ticket>[] =[
     {
         accessorKey: "subject",
         header: "Subject",
+        cell: ({ row }) => (
+            <Link
+                href={`/tickets/${row.original.id}`}
+            >
+                {row.original.subject}
+            </Link>
+        )
     },
     {
         accessorKey: "updated_at",

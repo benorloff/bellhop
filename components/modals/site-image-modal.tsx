@@ -26,9 +26,7 @@ export const SiteImageModal = () => {
     const [fileUrl, setFileUrl] = useState("");
 
     const isModalOpen = isOpen && type === "siteImage";
-
-    console.log(data.siteId, '<-- siteId')
-
+    
     const { execute, fieldErrors } = useAction(updateSite, {
         onSuccess: (data) => {
             toast.success("Site image updated!");

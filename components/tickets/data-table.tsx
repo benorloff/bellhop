@@ -25,6 +25,7 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { redirect } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -80,8 +81,8 @@ export function DataTable<TData, TValue>({
                     {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map((row) => (
                         <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
+                            key={row.id}
+                            data-state={row.getIsSelected() && "selected"}
                         >
                         {row.getVisibleCells().map((cell) => (
                             <TableCell key={cell.id}>

@@ -1,6 +1,3 @@
-import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-
 import { db } from "@/lib/db";
 
 import { Button } from "@/components/ui/button";
@@ -43,7 +40,7 @@ const SiteIdPage = async ({
     });
 
     const getSiteTickets = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_FRESHDESK_API_URL}?query="custom_string:'${site?.id}'"`, {
+        const response = await fetch(`https://bellhop.freshdesk.com/api/v2/search/tickets?query="custom_string:'${site?.id}'"`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
