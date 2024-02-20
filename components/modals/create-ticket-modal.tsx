@@ -246,7 +246,6 @@ export const CreateTicketModal = () => {
                         />
                         <DialogFooter>
                             <Button 
-                                variant="primary"
                                 className="w-full"
                             >
                                 Submit

@@ -44,9 +44,13 @@ export const SiteList = async () => {
                 <Link
                     key={site.id}
                     href={`/organization/${orgSlug}/${site.id}`}
-                    className="flex flex-row flex-wrap justify-between items-center bg-white dark:bg-gray-800 gap-4 rounded-sm shadow p-8"
+                    className="flex flex-row flex-wrap justify-between items-center bg-card border gap-4 rounded-sm shadow p-8"
                 >
-                    <SiteImage imageUrl={site.imageUrl as string} siteName={site.name as string} />
+                    <SiteImage 
+                        siteId={site.id as string} 
+                        imageUrl={site.imageUrl as string} 
+                        siteName={site.name as string} 
+                    />
                     <div className="flex flex-col grow gap-1">
                         <p className="font-semibold text-xl">
                             {site.name}

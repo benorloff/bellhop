@@ -77,7 +77,7 @@ export const TicketIdPage =  async ({
     const user = await currentUser();
     
     return (
-        <div>
+        <>
             <div>
                 <div className="text-3xl pb-4">{ticket.subject}</div>
                 <div className="flex flex-row justify-start items-center gap-4">
@@ -110,7 +110,7 @@ export const TicketIdPage =  async ({
                 <div className="pt-8 pb-8">No conversations yet.</div>
             }
             <TicketReplyPanel />
-        </div>
+        </>
     );
 };
 

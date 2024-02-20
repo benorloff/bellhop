@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import TicketList from "../_components/ticket-list";
+import TicketList from "@/components/tickets/ticket-list";
 import { Suspense } from "react";
 import Link from "next/link";
 import { useModal } from "@/hooks/use-modal-store";
