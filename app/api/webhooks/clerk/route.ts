@@ -5,7 +5,7 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 
 export async function POST(req: Request) {
-    const WEBHOOK_SECRET = process.env.NEXT_PUBLIC_CLERK_WEBHOOK_SECRET
+    const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
 
     if (!WEBHOOK_SECRET) {
         throw new Error('Clerk webhook secret not set')
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
 
     // If there are no headers, return a 400
     if (!svix_id || !svix_timestamp || !svix_signature) {
-        return new Response('Error: Missing svix headers', { 
+        return new Response(`Error: missing svix headers ${svix_id}`, { 
             status: 400 
         });
     }
@@ -40,8 +40,8 @@ export async function POST(req: Request) {
             "svix-timestamp": svix_timestamp,
             "svix-signature": svix_signature,
         }) as WebhookEvent;
-    } catch (error) {
-        console.error('Error verifying webhook', error);
+    } catch (err) {
+        console.error('Error verifying webhook', err);
         return new Response('Error: Invalid svix signature', {
             status: 400
         });
@@ -63,7 +63,9 @@ export async function POST(req: Request) {
     }
 
     // Update profile when a user is updated in Clerk
-    // ...
+    if (eventType === "user.updated") {
+        console.log('Clerk user updated webhook hit');
+    }
 
     // Delete profile when a user is deleted in Clerk
     if (eventType === "user.deleted") {
