@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/config/site'
 
+import { TunnelToolbar } from "@tunnel/nextjs"
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -28,6 +30,11 @@ export default function RootLayout({
     <html lang="en" className='dark'>
       <body className={inter.className}>
         {children}
+        {(process.env.NODE_ENV !== "development") && (
+          <TunnelToolbar
+            projectId="rxn75blw4lqo827i9yzz707a"
+          />
+        )}
       </body>
     </html>
   )

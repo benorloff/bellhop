@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "tunnel 3000 -- next dev --port 3000",
+    "dev": "tunnel 3000 -- next dev --port PORT",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
