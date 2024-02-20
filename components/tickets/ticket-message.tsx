@@ -26,7 +26,7 @@ export const TicketMessage = ({
 }: TicketMessageProps) => {
 
     return ( 
-        <div className="w-full bg-white p-8 rounded-sm mb-8">
+        <div className="w-full bg-card p-8 rounded-sm mb-8">
             <div className="flex flex-row justify-between items-center gap-4 mb-8">
                 <div>User ID: {message.user_id}</div>
                 <div>{new Date(message.created_at).toLocaleString()}</div>
