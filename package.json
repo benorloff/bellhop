@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "tunnel 3000 -- next dev --port PORT",
+    "dev": "tunnel 3000 -- next dev --port 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -25,6 +25,8 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@sendgrid/mail": "^8.1.1",
     "@tanstack/react-table": "^8.12.0",
+    "@tunnel/cli": "^0.4.6",
+    "@tunnel/nextjs": "^0.0.12",
     "@uploadthing/react": "^6.2.2",
     "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
