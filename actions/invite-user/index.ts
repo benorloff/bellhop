@@ -22,14 +22,19 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     const { email } = data;
 
+    // TODO: Check if user already exists in the app before sending invitation
+
     let invitation;
     
     try {
         invitation = await clerkClient.invitations.createInvitation({
             emailAddress: email,
         })
+        console.log(invitation, "<-- invitation response from Clerk");
     } catch (error) {
         console.log(error);
+        // TODO: Add switch statement to handle different error codes
+        // Example: if (error.code === "duplicate_record") { ... }
         return {
             error: "Failed to invite user."
         }
