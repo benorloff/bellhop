@@ -12,6 +12,7 @@ export default authMiddleware({
   //     return redirectToSignIn({ returnBackUrl: req.url })
   //   }
   // }
+  // debug: true
 });
  
 export const config = {
