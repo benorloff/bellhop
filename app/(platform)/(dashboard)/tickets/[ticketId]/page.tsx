@@ -85,11 +85,11 @@ export const TicketIdPage =  async ({
                     <div>Ticket #: {ticket.id}</div>
                     <div>Site ID: {ticket.custom_fields.cf_site_id}</div>
                 </div>
-                <div className="flex flex-row items-start gap-4 mt-8">
+                <div className="flex flex-row items-start gap-4 mt-8 p-8 border rounded-sm">
                     <Avatar>
                         <AvatarImage src={user?.imageUrl} alt="Avatar"/>
                     </Avatar>
-                    <div className="grow bg-card rounded-sm p-8 relative">
+                    <div className="grow bg-card rounded-sm relative">
                         <div className="flex flex-row gap-4 justify-between items-center mb-4">
                             <span className="font-bold">{user?.firstName} {user?.lastName}</span>
                             {new Date(ticket.created_at).toLocaleString()}

@@ -26,16 +26,18 @@ export const TicketMessage = ({
 }: TicketMessageProps) => {
 
     return ( 
-        <div className="w-full bg-card p-8 rounded-sm mb-8">
+        <div className="w-full bg-card p-8 border rounded-sm mb-8">
             <div className="flex flex-row justify-between items-center gap-4 mb-8">
                 <div>User ID: {message.user_id}</div>
                 <div>{new Date(message.created_at).toLocaleString()}</div>
             </div>
             {message.body_text}
-            {message.attachments?.length && (
+            {(message.attachments?.length! > 0) ? (
                 <div>
                     {message.attachments?.length} Attachment(s)
                 </div>
+            ): (
+                null
             )}
         </div>
      );

@@ -32,7 +32,7 @@ export const Container = ({
 
     return (
         <div className={cn(
-            "flex-1 p-8 overflow-auto",
+            "flex-1 p-8 pb-0 overflow-auto",
             collapsed ? "ml-16" : "ml-16 lg:ml-48"
         )}>
             {children}
