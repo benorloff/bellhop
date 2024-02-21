@@ -1,28 +1,30 @@
+"use client";
+
+import Textarea from "react-textarea-autosize";
+
 import { CornerRightUp } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { Hint } from "@/components/hint";
 
 export const TicketReplyPanel = () => {
     return (
         <div className="sticky bottom-0 w-full p-4 rounded-t-sm bg-background border">
-            <div className="flex flex-row gap-2">
-                <Input
-                    type="text"
-                    placeholder="Type your reply here"
+            <div className="flex flex-row gap-2 items-start">
+                <Textarea 
+                    placeholder="Type your reply here..."
+                    rows={1}
+                    spellCheck={false}
+                    className="min-h-[40px] w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-within:outline-none sm:text-sm"
                 />
-                <TooltipProvider>
-                    <Tooltip delayDuration={50}>
-                        <TooltipTrigger asChild>
-                            <Button>
-                                <CornerRightUp size={24} />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p className="font-semibold text-sm">Send Reply</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
+                <Hint
+                    label="Send Reply"
+                    side="top"
+                >
+                    <Button>
+                        <CornerRightUp size={24} />
+                    </Button>
+                </Hint>
             </div>
         </div>
     );
