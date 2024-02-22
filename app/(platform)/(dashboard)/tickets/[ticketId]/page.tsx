@@ -13,56 +13,47 @@ interface TicketIdPageProps {
     };
 };
 
-interface ConversationProps {
-    body_text: string;
-    body: string;
-    id: number;
-    incoming: boolean;
-    private: boolean;
-    user_id: number;
-    support_email?: string;
-    source: number;
-    ticket_id: number;
-    created_at: string;
-    updated_at: string;
-    from_email?: string;
-    to_emails?: string[];
-    cc_emails?: string[];
-    bcc_emails?: string[];
-    attachments?: [];
-    last_edited_at?: string;
-    last_edited_user_id?: number;
-}
+interface CommentProps {
+    id: number,
+    type: string,
+    author_id: number,
+    body: string,
+    html_body: string,
+    plain_body: string,
+    public: boolean,
+    attachments: string[],
+    audit_id: number,
+    via: object,
+    created_at: string,
+    metadata: object,
+};
 
 async function getTicket({ params 
 }: TicketIdPageProps) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_FRESHDESK_API_URL}/${params.ticketId}?include=conversations`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ZENDESK_API_TICKET_URL}/${params.ticketId}?include=custom_statuses`, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
+            Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_ZENDESK_USERNAME}:${process.env.NEXT_PUBLIC_ZENDESK_PASSWORD}`)}`,
         }
     })
-    const data = await res.json();
+    const { ticket } = await res.json();
 
-    return data;
+    return ticket;
 }
 
-async function getTicketConversations({ params 
+async function getTicketComments({ params 
 }: TicketIdPageProps) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_FRESHDESK_API_URL}/${params.ticketId}/conversations`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ZENDESK_API_TICKET_URL}/${params.ticketId}/comments`, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
+            Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_ZENDESK_USERNAME}:${process.env.NEXT_PUBLIC_ZENDESK_PASSWORD}`)}`,
         },
         // TODO: Is there a more efficient way to revalidate this data?
         cache: 'no-store'
     })
-    const data = await res.json();
+    const { comments } = await res.json();
 
-    data.sort((a: ConversationProps, b: ConversationProps) => 
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-
-    return data;
+    return comments;
 }
 
 export const TicketIdPage =  async ({
@@ -70,9 +61,7 @@ export const TicketIdPage =  async ({
 }: TicketIdPageProps) => {
 
     const ticket = await getTicket({ params });
-    const conversations = await getTicketConversations({ params });
-
-    const status = TICKET_STATUS[ticket.status as keyof typeof TICKET_STATUS];
+    const comments = await getTicketComments({ params });
 
     const user = await currentUser();
     
@@ -81,9 +70,12 @@ export const TicketIdPage =  async ({
             <div>
                 <div className="text-3xl pb-4">{ticket.subject}</div>
                 <div className="flex flex-row justify-start items-center gap-4">
-                    <Badge>{status}</Badge>
+                    <Badge variant={ticket.status}>
+                        {/* Capitalize first letter of status */}
+                        {`${ticket.status.charAt(0).toUpperCase()}${ticket.status.slice(1)}`}
+                    </Badge>
                     <div>Ticket #: {ticket.id}</div>
-                    <div>Site ID: {ticket.custom_fields.cf_site_id}</div>
+                    {/* <div>Site ID: {ticket.custom_fields.cf_site_id}</div> */}
                 </div>
                 <div className="flex flex-row items-start gap-4 mt-8 p-8 border rounded-sm">
                     <Avatar>
@@ -94,20 +86,27 @@ export const TicketIdPage =  async ({
                             <span className="font-bold">{user?.firstName} {user?.lastName}</span>
                             {new Date(ticket.created_at).toLocaleString()}
                         </div>
-                        {ticket.description_text}
+                        {ticket.subject}
                     </div>
                 </div>
             </div>
             <Separator className="mt-8 mb-8"/>
             <div className="text-2xl pb-4">Ticket Activity</div>
-            { conversations.length ? 
+            { comments.length ? 
                 <>
-                    {conversations.map((conversation: ConversationProps) => (
-                        <TicketMessage key={conversation.id} message={conversation} />
+                    {comments.map((comment: CommentProps) => (
+                        <TicketMessage 
+                            key={comment.id}
+                            id={comment.id}
+                            author_id={comment.author_id}
+                            body={comment.body} 
+                            created_at={comment.created_at}
+                            attachments={comment.attachments}
+                        />
                     ))}
                 </>
                 : 
-                <div className="pt-8 pb-8">No conversations yet.</div>
+                <div className="pt-8 pb-8">No comments yet.</div>
             }
             <TicketReplyPanel />
         </>

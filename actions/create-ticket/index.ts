@@ -58,9 +58,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         }
     }
     
-
-    // revalidatePath(`/site/${site.slug}`);
     return { data: ticket };
+
 };
 
 export const createTicket = createSafeAction(CreateTicket, handler);

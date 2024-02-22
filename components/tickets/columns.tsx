@@ -11,20 +11,15 @@ import Link from "next/link";
 
 export type Ticket = {
     id: number;
+    url: string;
     subject: string;
     description: string;
-    status: number;
-    priority: number;
-    type: number;
+    status: string;
+    requester_id: number;
+    submitter_id: number;
+    organization_id: number;
     created_at: string;
     updated_at: string;
-    from_email?: string;
-    to_emails?: string[];
-    cc_emails?: string[];
-    bcc_emails?: string[];
-    attachments?: [];
-    last_edited_at?: string;
-    last_edited_user_id?: number;
 }
 
 export const columns: ColumnDef<Ticket>[] =[
@@ -45,10 +40,10 @@ export const columns: ColumnDef<Ticket>[] =[
         ),
         cell: ({ row }) => (
             <Badge
-                variant={TICKET_STATUS[row.original.status as keyof typeof TICKET_STATUS].toLowerCase() as any}
+                variant={row.original.status === "open" ? "open" : "pending"}
                 className="w-[75px] justify-center"
             >
-                {TICKET_STATUS[row.original.status as keyof typeof TICKET_STATUS]}
+                {row.original.status === "open" ? "Open" : "Pending"}
             </Badge>
         )
     },
