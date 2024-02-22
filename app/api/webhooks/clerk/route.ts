@@ -58,13 +58,23 @@ export async function POST(req: Request) {
                 lastName: payload.data.last_name,
                 imageUrl: payload.data.image_url,
                 email: payload.data.email_addresses[0].email_address,
-            }
-        })
+            },
+        });
     }
 
     // Update profile when a user is updated in Clerk
     if (eventType === "user.updated") {
-        console.log('Clerk user updated webhook hit');
+        await db.profile.update({
+            where: {
+                userId: payload.data.id,
+            },
+            data: {
+                firstName: payload.data.first_name,
+                lastName: payload.data.last_name,
+                imageUrl: payload.data.image_url,
+                email: payload.data.email_addresses[0].email_address,
+            },
+        });
     }
 
     // Delete profile when a user is deleted in Clerk

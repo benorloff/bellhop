@@ -33,6 +33,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useAction } from "@/hooks/use-action";
+import { createTicket } from "@/actions/create-ticket";
+import { FormInput } from "../form/form-input";
+import { FormSubmit } from "../form/form-submit";
+import { revalidatePath } from "next/cache";
 
 const formSchema = z.object({
     name: z.string({
@@ -97,50 +102,69 @@ export const CreateTicketModal = () => {
 
     const isModalOpen = isOpen && type === "createTicket";
 
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: "",
-            email: "benjamin.orloff@gmail.com",
-            subject: "",
-            type: "",
-            status: 2,
-            priority: 2,
-            description: "",
-            source: 2,
-            custom_fields: {
-                cf_site_id: "",
-            }
+    // const form = useForm({
+    //     resolver: zodResolver(formSchema),
+    //     defaultValues: {
+    //         name: "",
+    //         email: "ben@circle.black",
+    //         subject: "",
+    //         type: "",
+    //         status: 2,
+    //         priority: 2,
+    //         description: "",
+    //         source: 2,
+    //         custom_fields: {
+    //             cf_site_id: "",
+    //         }
+    //     }
+    // });
+
+    // const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    //     try {
+    //         console.log(values, "<-- values before sending to API")
+    //         const response = await fetch(`${process.env.NEXT_PUBLIC_FRESHDESK_API_URL}`, {
+    //             method: "POST",
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
+    //             },
+    //             body: JSON.stringify(values)
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Failed to create ticket');
+    //         };
+
+    //         const data = await response.json();
+
+    //         form.reset();
+    //         toast.success("Ticket submitted! Taking you to the ticket page...");
+    //         router.push(`/tickets/${data.id}`);
+
+    //         onClose();
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+
+    const { execute, fieldErrors } = useAction(createTicket, {
+        onSuccess: (data) => {
+            toast.success("Ticket created! Taking you to the ticket page...");
+            router.push(`/tickets/${data.id}`);
+            onClose();
+        },
+        onError: (error) => {
+            toast.error(error);
         }
     });
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            console.log(values, "<-- values before sending to API")
-            const response = await fetch(`${process.env.NEXT_PUBLIC_FRESHDESK_API_URL}`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
-                },
-                body: JSON.stringify(values)
-            });
+    const onSubmit = (formData: FormData) => {
+        const subject = formData.get("subject") as string;
+        const type = formData.get("type") as string;
+        const description = formData.get("description") as string;
 
-            if (!response.ok) {
-                throw new Error('Failed to create ticket');
-            };
-
-            const data = await response.json();
-
-            form.reset();
-            toast.success("Ticket submitted! Taking you to the ticket page...");
-            router.push(`/tickets/${data.id}`);
-
-            onClose();
-        } catch (error) {
-            console.log(error);
-        }
-    };
+        execute({ subject, type, description});
+    }
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -150,109 +174,31 @@ export const CreateTicketModal = () => {
                         Open a Ticket
                     </DialogTitle>
                 </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                        <FormField
-                            control={form.control}
-                            name="subject"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Subject
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Subject"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="custom_fields.cf_site_id"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Choose a site...
-                                    </FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Choose a site..." />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem key="1" value="1">Site 1</SelectItem>
-                                            <SelectItem key="2" value="2">Site 2</SelectItem>
-                                            <SelectItem key="3" value="3">Site 3</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="type"
-                            render={({ field }) => (
-                                <FormItem
-                                >
-                                    <FormLabel>
-                                        What do you need help with?
-                                    </FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Choose a help category..." />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem key="1" value="Bug">Bug</SelectItem>
-                                            <SelectItem key="2" value="Feature Request">Feature Request</SelectItem>
-                                            <SelectItem key="3" value="Question">Question</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        How can we help?
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            placeholder="Write up a short description of the problem..."
-                                            className="h-[200px] resize-none"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <DialogFooter>
-                            <Button 
-                                className="w-full"
-                            >
-                                Submit
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </Form>
+                <form action={onSubmit} className="space-y-4">
+                    <FormInput 
+                        id="subject"
+                        label="Subject"
+                        type="text"
+                        errors={fieldErrors}
+                    />
+                    <FormInput 
+                        id="type"
+                        label="Type"
+                        type="text"
+                        errors={fieldErrors}
+                    />
+                    <FormInput 
+                        id="description"
+                        label="Description"
+                        type="text"
+                        errors={fieldErrors}
+                    />
+                    <DialogFooter>
+                        <FormSubmit className="w-full">
+                            Submit Ticket
+                        </FormSubmit>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     )

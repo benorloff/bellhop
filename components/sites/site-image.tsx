@@ -25,9 +25,8 @@ export const SiteImage = ({
                     <Image 
                         src={imageUrl || "/placeholder-browser.svg"}
                         alt={siteName}
-                        width={150}
                         height={100}
-                        className="rounded-sm"
+                        width={150}
                     />
                 </TooltipTrigger>
                 <TooltipContent

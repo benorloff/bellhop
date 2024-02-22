@@ -16,6 +16,9 @@ async function getData() {
       'Content-Type': 'application/json',
       Authorization: `Basic ${btoa(`${apiKey}:x`)}`, 
     },
+    next: {
+      tags: ['tickets'],
+    }
   })
  
   if (!response.ok) {

@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@clerk/nextjs";
-import { revalidatePath } from "next/cache";
+import { auth, currentUser } from "@clerk/nextjs";
+import { revalidateTag } from "next/cache";
 
 import { createSafeAction } from "@/lib/create-safe-action";
 
@@ -19,16 +19,24 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     };
 
-    const { 
-        name,
-        email,
-        subject,
-        type,
-        status,
-        priority,
-        description,
-        source, 
-    } = data;
+    const user = await currentUser();
+
+    if (!user) {
+        return {
+            error: "User not found",
+        };
+    }
+
+    const ticketData = {
+        name: `${user.firstName} ${user.lastName}`,
+        subject: data.subject,
+        email: user.emailAddresses[0].emailAddress,
+        type: data.type,
+        description: data.description,
+        status: 2,
+        priority: 2,
+        source: 1,
+    }
 
     let ticket;
 
@@ -39,9 +47,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 'Content-Type': 'application/json',
                 Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(ticketData),
         })
         ticket = await response.json();
+        // Purge the cache for all fetches tagged with 'tickets'
+        revalidateTag('tickets');
     } catch (error) {
         return {
             error: "Failed to create ticket."
