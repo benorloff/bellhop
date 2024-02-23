@@ -39,7 +39,6 @@ export const TicketReplyPanel = () => {
     
     const onSubmit = () => {
         const request_id = parseInt(ticketId as string);
-
         execute({ body, request_id });
     }; 
     
@@ -55,12 +54,13 @@ export const TicketReplyPanel = () => {
                         className="min-h-[40px] w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-within:outline-none sm:text-sm"
                     />
                     <Hint
-                        label="Send Reply"
+                        label={body ? "Send Reply" : "Need a message to send"}
                         side="top"
                     >
                         <Button
                             type="submit"
                             onClick={onSubmit}
+                            disabled={!body}
                         >
                             <CornerRightUp size={24} />
                         </Button>

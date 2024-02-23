@@ -47,6 +47,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             body: JSON.stringify(requestData),
         })
         const r  = await response.json();
+        console.log(r, '<-- create comment response')
         request = r.request;
     } catch (error) {
         console.log(error, '<-- create comment error')

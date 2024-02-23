@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { TicketMessage } from "@/components/tickets/ticket-message";
 import { Separator } from "@/components/ui/separator";
 import { TicketReplyPanel } from "@/components/tickets/ticket-reply-panel";
-import { baseUrl, apiUsername, apiPassword } from "@/constants/tickets";
+import { baseUrl, requestUrl, apiUsername, apiPassword } from "@/constants/tickets";
 
 interface TicketIdPageProps {
     params: {
@@ -43,7 +43,7 @@ async function getTicket({ params
 
 async function getTicketComments({ params 
 }: TicketIdPageProps) {
-    const res = await fetch(`${baseUrl}/${params.ticketId}/comments?sort_by=updated_at&sort_order=desc`, {
+    const res = await fetch(`${requestUrl}/${params.ticketId}/comments?sort_by=updated_at&sort_order=desc`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,

@@ -11,6 +11,8 @@ import { CreateTicket } from "./schema";
 
 import { requestUrl } from "@/constants/tickets";
 
+// Zendesk Requests API Reference
+// https://developer.zendesk.com/api-reference/ticketing/tickets/ticket-requests/#create-request
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const { userId, orgId } = auth();
