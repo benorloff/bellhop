@@ -54,19 +54,17 @@ export async function POST(req: Request) {
     // Create a profile when a user is created in Clerk
     if (eventType === "user.created") {
 
+        // Define the user properties for Zendesk
         const zendeskUser = {
             user: {
                 name: `${payload.data.first_name} ${payload.data.last_name}`,
                 email: payload.data.email_addresses[0].email_address,
                 role: 'end-user',
-                photo: {
-                    content_type: 'image/png',
-                    content_url: payload.data.image_url,
-                },
                 skip_verify_email: true,
             }
         }
 
+        // Create the user in Zendesk
         const res = await fetch(`${userUrl}`, {
             method: 'POST',
             headers: {
