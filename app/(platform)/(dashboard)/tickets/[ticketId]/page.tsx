@@ -2,10 +2,10 @@ import { currentUser } from "@clerk/nextjs";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { TICKET_STATUS } from "@/constants/tickets";
 import { TicketMessage } from "@/components/tickets/ticket-message";
 import { Separator } from "@/components/ui/separator";
 import { TicketReplyPanel } from "@/components/tickets/ticket-reply-panel";
+import { baseUrl, apiUsername, apiPassword } from "@/constants/tickets";
 
 interface TicketIdPageProps {
     params: {
@@ -30,10 +30,10 @@ interface CommentProps {
 
 async function getTicket({ params 
 }: TicketIdPageProps) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_ZENDESK_API_TICKET_URL}/${params.ticketId}?include=custom_statuses`, {
+    const res = await fetch(`${baseUrl}/${params.ticketId}?include=custom_statuses`, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_ZENDESK_USERNAME}:${process.env.NEXT_PUBLIC_ZENDESK_PASSWORD}`)}`,
+            Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
         }
     })
     const { ticket } = await res.json();
@@ -43,10 +43,10 @@ async function getTicket({ params
 
 async function getTicketComments({ params 
 }: TicketIdPageProps) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_ZENDESK_API_TICKET_URL}/${params.ticketId}/comments`, {
+    const res = await fetch(`${baseUrl}/${params.ticketId}/comments?sort_by=updated_at&sort_order=desc`, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_ZENDESK_USERNAME}:${process.env.NEXT_PUBLIC_ZENDESK_PASSWORD}`)}`,
+            Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
         },
         // TODO: Is there a more efficient way to revalidate this data?
         cache: 'no-store'
@@ -76,18 +76,7 @@ export const TicketIdPage =  async ({
                     </Badge>
                     <div>Ticket #: {ticket.id}</div>
                     {/* <div>Site ID: {ticket.custom_fields.cf_site_id}</div> */}
-                </div>
-                <div className="flex flex-row items-start gap-4 mt-8 p-8 border rounded-sm">
-                    <Avatar>
-                        <AvatarImage src={user?.imageUrl} alt="Avatar"/>
-                    </Avatar>
-                    <div className="grow bg-card rounded-sm relative">
-                        <div className="flex flex-row gap-4 justify-between items-center mb-4">
-                            <span className="font-bold">{user?.firstName} {user?.lastName}</span>
-                            {new Date(ticket.created_at).toLocaleString()}
-                        </div>
-                        {ticket.subject}
-                    </div>
+                    <div>Created: {new Date(ticket.created_at).toLocaleString()}</div>
                 </div>
             </div>
             <Separator className="mt-8 mb-8"/>

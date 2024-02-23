@@ -32,9 +32,9 @@ export const CreateTicketModal = () => {
     const isModalOpen = isOpen && type === "createTicket";
 
     const { execute, fieldErrors } = useAction(createTicket, {
-        onSuccess: (data) => {
-            toast.success("Ticket created! Taking you to the ticket page...");
-            router.push(`/tickets/${data.id}`);
+        onSuccess: () => {
+            toast.success("Ticket created! 🎉");
+            router.refresh();
             onClose();
         },
         onError: (error) => {
@@ -72,8 +72,10 @@ export const CreateTicketModal = () => {
                             <SelectValue placeholder="Select a type" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="Question">Question</SelectItem>
-                            <SelectItem value="Bug">Bug</SelectItem>
+                            <SelectItem value="question">Question</SelectItem>
+                            <SelectItem value="incident">Incident</SelectItem>
+                            <SelectItem value="problem">Problem</SelectItem>
+                            <SelectItem value="task">Task</SelectItem>
                         </SelectContent>
                     </Select>
                     <FormInput 

@@ -4,6 +4,8 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 
 import { db } from '@/lib/db'
 
+import { userUrl, apiPassword, apiUsername } from '@/constants/tickets'
+
 export async function POST(req: Request) {
     const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
 
@@ -51,9 +53,36 @@ export async function POST(req: Request) {
 
     // Create a profile when a user is created in Clerk
     if (eventType === "user.created") {
+
+        const zendeskUser = {
+            user: {
+                name: `${payload.data.first_name} ${payload.data.last_name}`,
+                email: payload.data.email_addresses[0].email_address,
+                role: 'end-user',
+                photo: {
+                    content_type: 'image/png',
+                    content_url: payload.data.image_url,
+                },
+                skip_verify_email: true,
+            }
+        }
+
+        const res = await fetch(`${userUrl}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
+            }, 
+            body: JSON.stringify(zendeskUser)
+        }); 
+
+        const { user } = await res.json();
+
+
         await db.profile.create({
             data: {
                 userId: payload.data.id,
+                zendeskUserId: user.id,
                 firstName: payload.data.first_name,
                 lastName: payload.data.last_name,
                 imageUrl: payload.data.image_url,

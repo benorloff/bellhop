@@ -10,6 +10,7 @@ datasource db {
 model Profile {
   id        String @id @default(uuid())
   userId    String @unique
+  zendeskUserId BigInt @unique
   firstName String
   lastName  String
   imageUrl  String @db.Text
@@ -78,7 +79,7 @@ model Member {
 
 model Ticket {
   id String @id @default(uuid())
-  freshdeskId Int @unique
+  freshdeskId BigInt @unique
   priority Int
   source Int
   status Int

@@ -9,6 +9,8 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { InputType, ReturnType } from "./types";
 import { CreateTicket } from "./schema";
 
+import { requestUrl } from "@/constants/tickets";
+
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const { userId, orgId } = auth();
@@ -28,24 +30,27 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     }
 
     const ticketData = {
-        name: `${user.firstName} ${user.lastName}`,
-        subject: data.subject,
-        email: user.emailAddresses[0].emailAddress,
-        type: data.type,
-        description: data.description,
-        status: 2,
-        priority: 2,
-        source: 1,
-    }
+        request: {
+            requester: {
+                name: `${user.firstName} ${user.lastName}`,
+                email: user.emailAddresses[0].emailAddress,
+            },
+            subject: data.subject,
+            comment: {
+                body: data.description,
+            },
+            type: data.type,
+        }
+    };
 
     let ticket;
 
     try {
-        const response = await fetch("https://bellhop.freshdesk.com/api/v2/tickets",{
+        const response = await fetch(`${requestUrl}`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
+                // Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
             },
             body: JSON.stringify(ticketData),
         })
