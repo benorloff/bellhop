@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "createTicket" | "invite" | "siteImage";
+export type ModalType = "createTicket" | "invite" | "siteImage" | "siteInvite";
 
 interface ModalData {
     siteId?: string;

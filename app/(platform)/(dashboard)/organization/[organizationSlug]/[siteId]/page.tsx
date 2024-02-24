@@ -115,7 +115,10 @@ const SiteIdPage = async ({
                                         <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
                                         <AvatarFallback>BO</AvatarFallback>
                                     </Avatar>
-                                    <div className="grow">{member.profile.firstName} {member.profile.lastName}</div>
+                                    <div className="grow">
+                                        <div>{member.profile.firstName} {member.profile.lastName}</div>
+                                        <div className="text-sm">{member.profile.email}</div>
+                                    </div>
                                     <div className="shrink">{member.role}</div>
                                 </div>
                             

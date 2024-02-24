@@ -8,8 +8,10 @@ import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
-import { InviteUser } from "./schema";
+import { CreateOrgInvite } from "./schema";
 
+// Clerk Organization Invitations API Reference
+// https://clerk.com/docs/reference/backend-api/tag/Organization-Invitations
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const { orgId } = auth();
@@ -42,7 +44,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     // Add redirect/revalidate to site page here?
 
-    return { data: invitation };
+    return invitation as ReturnType;
 };
 
-export const inviteUser = createSafeAction(InviteUser, handler);
+export const createOrgInvite = createSafeAction(CreateOrgInvite, handler);

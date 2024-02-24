@@ -21,8 +21,7 @@ const MigrationPage = () => {
     const { execute, fieldErrors } = useAction(createSite, {
         onSuccess: (data) => {
             toast.success("Site migration submitted!");
-            // TODO: Redirect to site page?
-            // router.push(`/site/${data.slug}`);
+            router.push("/sites");
         },
         onError: (error) => {
             toast.error(error);

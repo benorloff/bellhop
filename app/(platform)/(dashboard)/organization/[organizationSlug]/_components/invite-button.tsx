@@ -9,7 +9,7 @@ export const InviteButton = () => {
 
     return (
         <Button
-            onClick={() => onOpen("invite", {})}
+            onClick={() => onOpen("siteInvite", {})}
         >
             <Plus className="h-4 w-4 mr-2" />
             Invite Members

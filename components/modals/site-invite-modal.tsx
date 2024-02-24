@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { createOrgInvite } from "@/actions/create-org-invite";
+import { createSiteInvite } from "@/actions/create-site-invite";
 import { useModal } from "@/hooks/use-modal-store";
 import { useAction } from "@/hooks/use-action";
 
@@ -16,14 +16,17 @@ import {
 } from "@/components/ui/dialog";
 import { FormInput } from "../form/form-input";
 import { FormSubmit } from "../form/form-submit";
+import { useRouter } from "next/navigation";
 
-export const InviteModal = () => {
+export const SiteInviteModal = () => {
+    const router = useRouter();
     const { onOpen, isOpen, onClose, type, data } = useModal();
 
-    const isModalOpen = isOpen && type === "invite";
+    const isModalOpen = isOpen && type === "siteInvite";
 
-    const { execute, fieldErrors } = useAction(createOrgInvite, {
-        onSuccess: () => {
+    const { execute, fieldErrors } = useAction(createSiteInvite, {
+        onSuccess: (data) => {
+            router.refresh();
             toast.success("Invitation sent!");
             onClose();
         },
@@ -43,7 +46,7 @@ export const InviteModal = () => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className="text-2xl">
-                        Invite Members
+                        Invite Site Members
                     </DialogTitle>
                     <DialogDescription>
                         Add collaborators to your site.
