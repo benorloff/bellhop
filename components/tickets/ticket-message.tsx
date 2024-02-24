@@ -11,11 +11,13 @@ interface CommentProps {
     via?: object,
     created_at: string,
     metadata?: object,
+    name?: string,
 };
 
 export const TicketMessage = ({
     author_id,
     body,
+    name,
     created_at,
     attachments,
 }: CommentProps) => {
@@ -23,7 +25,10 @@ export const TicketMessage = ({
     return ( 
         <div className="w-full bg-card p-8 border rounded-sm mb-8">
             <div className="flex flex-row justify-between items-center gap-4 mb-8">
-                <div>User ID: {author_id}</div>
+                <div>
+                    <p>{name}</p>
+                    <p className="text-sm">ID: {author_id}</p>
+                </div>
                 <div>{new Date(created_at).toLocaleString()}</div>
             </div>
             {body}

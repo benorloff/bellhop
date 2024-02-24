@@ -1,11 +1,9 @@
-import { currentUser } from "@clerk/nextjs";
-
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { TicketMessage } from "@/components/tickets/ticket-message";
 import { Separator } from "@/components/ui/separator";
 import { TicketReplyPanel } from "@/components/tickets/ticket-reply-panel";
-import { baseUrl, requestUrl, apiUsername, apiPassword } from "@/constants/tickets";
+import { baseUrl, apiUsername, apiPassword } from "@/constants/tickets";
 
 interface TicketIdPageProps {
     params: {
@@ -43,7 +41,7 @@ async function getTicket({ params
 
 async function getTicketComments({ params 
 }: TicketIdPageProps) {
-    const res = await fetch(`${requestUrl}/${params.ticketId}/comments?sort_by=updated_at&sort_order=desc`, {
+    const res = await fetch(`${baseUrl}/${params.ticketId}/comments?include=users&sort_by=updated_at&sort_order=desc`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
@@ -51,7 +49,7 @@ async function getTicketComments({ params
         // TODO: Is there a more efficient way to revalidate this data?
         cache: 'no-store'
     })
-    const { comments } = await res.json();
+    const comments = await res.json();
 
     return comments;
 }
@@ -62,8 +60,6 @@ export const TicketIdPage =  async ({
 
     const ticket = await getTicket({ params });
     const comments = await getTicketComments({ params });
-
-    const user = await currentUser();
     
     return (
         <>
@@ -81,13 +77,14 @@ export const TicketIdPage =  async ({
             </div>
             <Separator className="mt-8 mb-8"/>
             <div className="text-2xl pb-4">Ticket Activity</div>
-            { comments.length ? 
+            { comments.comments.length ? 
                 <>
-                    {comments.map((comment: CommentProps) => (
+                    {comments.comments.map((comment: CommentProps) => (
                         <TicketMessage 
                             key={comment.id}
                             id={comment.id}
                             author_id={comment.author_id}
+                            name={comments.users.find((user: any) => user.id === comment.author_id).name}
                             body={comment.body} 
                             created_at={comment.created_at}
                             attachments={comment.attachments}
