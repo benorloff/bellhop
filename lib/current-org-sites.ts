@@ -1,4 +1,5 @@
-import { auth, redirectToSignIn } from "@clerk/nextjs"; 
+import { auth } from "@clerk/nextjs"; 
+import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 
@@ -6,12 +7,19 @@ export const currentOrgSites = async () => {
     const { orgId } = auth();
 
     if (!orgId) {
-        redirectToSignIn();
+        return redirect("/select/org");
     }
 
     const sites = await db.site.findMany({
         where: {
             orgId,
+        }, 
+        include: {
+            members: {
+                include: {
+                    profile: true,
+                },
+            },
         }
     });
 

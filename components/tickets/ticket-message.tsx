@@ -24,7 +24,7 @@ export const TicketMessage = ({
 
     return ( 
         <div className="w-full bg-card p-8 border rounded-sm mb-8">
-            <div className="flex flex-row justify-between items-center gap-4 mb-8">
+            <div className="flex flex-row justify-between items-start gap-4 mb-8">
                 <div>
                     <p>{name}</p>
                     <p className="text-sm">ID: {author_id}</p>

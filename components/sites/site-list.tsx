@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Member, Profile } from "@prisma/client";
 import { SiteMembers } from "./site-members";
 import { SiteImage } from "./site-image";
+import { currentOrgSites } from "@/lib/current-org-sites";
 
 export const SiteList = async () => {
 
@@ -17,18 +18,7 @@ export const SiteList = async () => {
         return redirect("/select/org");
     };
 
-    const sites = await db.site.findMany({
-        where: {
-            orgId,
-        }, 
-        include: {
-            members: {
-                include: {
-                    profile: true,
-                },
-            },
-        }
-    });
+    const sites = await currentOrgSites();
 
     const siteProfiles = (siteMembers: Member[]) => {
         let profiles: Profile[] = [];

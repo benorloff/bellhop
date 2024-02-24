@@ -23,6 +23,7 @@ import { useAction } from "@/hooks/use-action";
 import { createTicket } from "@/actions/create-ticket";
 import { FormInput } from "@/components/form/form-input";
 import { FormSubmit } from "@/components/form/form-submit";
+import { FormLabel } from "../ui/form";
 
 
 export const CreateTicketModal = () => {
@@ -43,11 +44,19 @@ export const CreateTicketModal = () => {
     });
 
     const onSubmit = (formData: FormData) => {
-        const subject = formData.get("subject") as string;
-        const type = formData.get("type") as string;
-        const description = formData.get("description") as string;
 
-        execute({ subject, type, description});
+        const site = data.sites?.find((site: any) => site.id === formData.get("siteId"));
+
+
+
+
+        const subject = formData.get("subject") as string;
+        const description = formData.get("description") as string;
+        const siteId = site?.id as string;
+        const siteName = site?.name as string;
+        const siteUrl = site?.url as string;
+
+        execute({ subject, description, siteId, siteName, siteUrl});
     }
 
     return (
@@ -59,25 +68,27 @@ export const CreateTicketModal = () => {
                     </DialogTitle>
                 </DialogHeader>
                 <form action={onSubmit} className="space-y-4">
+                    <Select
+                        name="siteId"
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a site" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {data.sites?.map((site) => (
+                                <SelectItem key={site.id} value={site.id}>
+                                    {site.name}
+                                </SelectItem>
+                            
+                            ))}
+                        </SelectContent>
+                    </Select>
                     <FormInput 
                         id="subject"
                         label="Subject"
                         type="text"
                         errors={fieldErrors}
                     />
-                    <Select
-                        name="type"
-                    >
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="question">Question</SelectItem>
-                            <SelectItem value="incident">Incident</SelectItem>
-                            <SelectItem value="problem">Problem</SelectItem>
-                            <SelectItem value="task">Task</SelectItem>
-                        </SelectContent>
-                    </Select>
                     <FormInput 
                         id="description"
                         label="Description"

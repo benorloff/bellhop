@@ -41,9 +41,25 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             comment: {
                 body: data.description,
             },
-            type: data.type,
+            custom_fields: [
+                {
+                    id: 23229752282907,
+                    value: data.siteId,
+                },
+                {
+                    id: 23229761862043,
+                    value: data.siteName,
+                },
+                {
+                    id: 23229762482843,
+                    value: data.siteUrl,
+                }
+            ]
         }
     };
+
+    console.log(ticketData, 'ticketData')
+    console.log(ticketData.request.custom_fields, 'ticketData.request.custom_fields')
 
     let ticket;
 

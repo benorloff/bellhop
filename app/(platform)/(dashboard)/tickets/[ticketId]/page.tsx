@@ -64,15 +64,15 @@ export const TicketIdPage =  async ({
     return (
         <>
             <div>
-                <div className="text-3xl pb-4">{ticket.subject}</div>
+                <div className="text-3xl pb-4">{ticket?.subject}</div>
                 <div className="flex flex-row justify-start items-center gap-4">
-                    <Badge variant={ticket.status}>
+                    <Badge variant={ticket?.status}>
                         {/* Capitalize first letter of status */}
-                        {`${ticket.status.charAt(0).toUpperCase()}${ticket.status.slice(1)}`}
+                        {`${ticket?.status.charAt(0).toUpperCase()}${ticket?.status.slice(1)}`}
                     </Badge>
-                    <div>Ticket #: {ticket.id}</div>
+                    <div>Ticket #: {ticket?.id}</div>
                     {/* <div>Site ID: {ticket.custom_fields.cf_site_id}</div> */}
-                    <div>Created: {new Date(ticket.created_at).toLocaleString()}</div>
+                    <div>Created: {new Date(ticket?.created_at).toLocaleString()}</div>
                 </div>
             </div>
             <Separator className="mt-8 mb-8"/>
