@@ -7,5 +7,5 @@ export const CreateComment = z.object({
         required_error: "Comment is required",
         invalid_type_error: "Comment must be a string",
     }),
-    request_id: z.number(),
+    ticket_id: z.number(),
 });

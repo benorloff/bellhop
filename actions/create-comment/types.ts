@@ -5,7 +5,7 @@ import { ActionState } from "@/lib/create-safe-action";
 import { CreateComment } from "./schema";
 
 interface Comment {
-    request_id: number;
+    ticket_id: number;
     author_id: number;
     body: string;
 }

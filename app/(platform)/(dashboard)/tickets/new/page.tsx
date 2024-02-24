@@ -29,8 +29,6 @@ const NewTicketPage = () => {
         const description = formData.get("description") as string;
         const source = 2;
 
-        console.log({ subject, description })
-
         execute({ 
             name, 
             email, 

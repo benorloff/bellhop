@@ -38,8 +38,8 @@ export const TicketReplyPanel = () => {
     };
     
     const onSubmit = () => {
-        const request_id = parseInt(ticketId as string);
-        execute({ body, request_id });
+        const ticket_id = parseInt(ticketId as string);
+        execute({ body, ticket_id });
     }; 
     
     return (
