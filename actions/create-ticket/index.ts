@@ -9,7 +9,7 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { InputType, ReturnType } from "./types";
 import { CreateTicket } from "./schema";
 
-import { requestUrl } from "@/constants/tickets";
+import { requestUrl, apiPassword, apiUsername } from "@/constants/tickets";
 
 // Zendesk Requests API Reference
 // https://developer.zendesk.com/api-reference/ticketing/tickets/ticket-requests/#create-request
@@ -68,7 +68,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
+                Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
             },
             body: JSON.stringify(ticketData),
         })
