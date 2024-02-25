@@ -21,8 +21,6 @@ export const TICKET_SOURCE = {
     10: 'Outbound Email',
 }
 
-export const baseUrl = process.env.NEXT_PUBLIC_ZENDESK_API_TICKET_URL;
-export const requestUrl = process.env.NEXT_PUBLIC_ZENDESK_API_REQUEST_URL;
-export const userUrl = process.env.NEXT_PUBLIC_ZENDESK_API_USER_URL;
-export const apiUsername = process.env.NEXT_PUBLIC_ZENDESK_USERNAME;
-export const apiPassword = process.env.NEXT_PUBLIC_ZENDESK_PASSWORD;
+export const zendeskApiHost = process.env.NEXT_PUBLIC_ZENDESK_API_HOST;
+export const zendeskApiUsername = process.env.NEXT_PUBLIC_ZENDESK_API_USERNAME;
+export const zendeskApiPassword = process.env.NEXT_PUBLIC_ZENDESK_API_PASSWORD;

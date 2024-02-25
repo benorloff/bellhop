@@ -1,12 +1,16 @@
 "use server";
 
 import { createSafeAction } from "@/lib/create-safe-action";
+import { currentProfile } from "@/lib/current-profile";
 
 import { InputType, ReturnType } from "./types";
 import { CreateComment } from "./schema";
 
-import { baseUrl, apiPassword, apiUsername } from "@/constants/tickets";
-import { currentProfile } from "@/lib/current-profile";
+import { 
+    zendeskApiHost, 
+    zendeskApiPassword, 
+    zendeskApiUsername 
+} from "@/constants/tickets";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -33,11 +37,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     let ticket;
 
     try {
-        const response = await fetch(`${baseUrl}/${data.ticket_id}`,{
+        const response = await fetch(`${zendeskApiHost}/tickets/${data.ticket_id}`,{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
+                Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`,
             },
             body: JSON.stringify(ticketData),
         })

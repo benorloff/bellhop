@@ -4,7 +4,11 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 
 import { db } from '@/lib/db'
 
-import { userUrl, apiPassword, apiUsername } from '@/constants/tickets'
+import { 
+    zendeskApiHost, 
+    zendeskApiPassword, 
+    zendeskApiUsername 
+} from '@/constants/tickets'
 
 export async function POST(req: Request) {
     const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
@@ -65,11 +69,11 @@ export async function POST(req: Request) {
         }
 
         // Create the user in Zendesk
-        const res = await fetch(`${userUrl}`, {
+        const res = await fetch(`${zendeskApiHost}/users`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
+                Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`,
             }, 
             body: JSON.stringify(zendeskUser)
         }); 

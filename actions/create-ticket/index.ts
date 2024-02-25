@@ -9,7 +9,11 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { InputType, ReturnType } from "./types";
 import { CreateTicket } from "./schema";
 
-import { requestUrl, apiPassword, apiUsername } from "@/constants/tickets";
+import { 
+    zendeskApiHost, 
+    zendeskApiPassword, 
+    zendeskApiUsername 
+} from "@/constants/tickets";
 
 // Zendesk Requests API Reference
 // https://developer.zendesk.com/api-reference/ticketing/tickets/ticket-requests/#create-request
@@ -58,17 +62,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         }
     };
 
-    console.log(ticketData, 'ticketData')
-    console.log(ticketData.request.custom_fields, 'ticketData.request.custom_fields')
-
     let ticket;
 
     try {
-        const response = await fetch(`${requestUrl}`,{
+        const response = await fetch(`${zendeskApiHost}/requests`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
+                Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`,
             },
             body: JSON.stringify(ticketData),
         })

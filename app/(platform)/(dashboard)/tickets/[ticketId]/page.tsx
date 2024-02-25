@@ -3,7 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { TicketMessage } from "@/components/tickets/ticket-message";
 import { Separator } from "@/components/ui/separator";
 import { TicketReplyPanel } from "@/components/tickets/ticket-reply-panel";
-import { baseUrl, apiUsername, apiPassword } from "@/constants/tickets";
+import { 
+    zendeskApiHost, 
+    zendeskApiPassword, 
+    zendeskApiUsername 
+} from "@/constants/tickets";
 
 interface TicketIdPageProps {
     params: {
@@ -26,12 +30,13 @@ interface CommentProps {
     metadata: object,
 };
 
-async function getTicket({ params 
+async function getTicket({ 
+    params 
 }: TicketIdPageProps) {
-    const res = await fetch(`${baseUrl}/${params.ticketId}?include=custom_statuses`, {
+    const res = await fetch(`${zendeskApiHost}/tickets/${params.ticketId}?include=custom_statuses`, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
+            Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`,
         }
     })
     const { ticket } = await res.json();
@@ -39,12 +44,13 @@ async function getTicket({ params
     return ticket;
 }
 
-async function getTicketComments({ params 
+async function getTicketComments({ 
+    params 
 }: TicketIdPageProps) {
-    const res = await fetch(`${baseUrl}/${params.ticketId}/comments?include=users&sort_by=updated_at&sort_order=desc`, {
+    const res = await fetch(`${zendeskApiHost}/tickets/${params.ticketId}/comments?include=users&sort_by=updated_at&sort_order=desc`, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`,
+            Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`,
         },
         // TODO: Is there a more efficient way to revalidate this data?
         cache: 'no-store'

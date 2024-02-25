@@ -16,6 +16,12 @@ import Link from "next/link";
 import { TICKET_STATUS } from "@/constants/tickets";
 import { SiteImage } from "@/components/sites/site-image";
 
+import { 
+    zendeskApiHost,
+    zendeskApiPassword,
+    zendeskApiUsername, 
+} from "@/constants/tickets";
+
 interface SiteIdPageProps {
     params: {
         siteId: string;
@@ -39,19 +45,32 @@ const SiteIdPage = async ({
         }
     });
 
+    const query = new URLSearchParams({
+        query: `type:ticket custom_field_23229752282907:${site?.id}`,
+        sort_by: "updated_at",
+        sort_order: "desc",
+    });
+
     const getSiteTickets = async () => {
-        const response = await fetch(`https://bellhop.freshdesk.com/api/v2/search/tickets?query="custom_string:'${site?.id}'"`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_FRESHDESK_KEY}:x`)}`,
+
+        let tickets;
+
+        try {
+            const response = await fetch(`${zendeskApiHost}/search?${query}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`,
+                }, 
+            });
+            tickets = await response.json();
+        } catch (error) {
+            return {
+                error: "Failed to get site tickets."
             }
-        });
+        }
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch data');
-        };
 
-        return response.json();
+        return tickets;
     };
 
     const tickets = await getSiteTickets();
@@ -95,11 +114,6 @@ const SiteIdPage = async ({
                                 </Link>
                             ))}
                         </CardContent>
-                        <CardFooter>
-                            <Button>
-                                View all tickets
-                            </Button>
-                        </CardFooter>
                     </Card>
                 </div>
                 <div className="flex flex-col grow basis-auto gap-8">
