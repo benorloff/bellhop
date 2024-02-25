@@ -5,17 +5,21 @@ import { currentUser } from '@clerk/nextjs';
 import { DataTable } from '@/components/tickets/data-table';
 import { columns } from '@/components/tickets/columns';
 
-import { baseUrl, apiUsername, apiPassword } from '@/constants/tickets';
+import { 
+  zendeskApiHost, 
+  zendeskApiPassword, 
+  zendeskApiUsername 
+} from '@/constants/tickets';
 
 async function getData() {
 
   const user = await currentUser();
   
   const response = await fetch(
-    `${baseUrl}?sort_by=updated_at&sort_order=desc`, {
+    `${zendeskApiHost}/tickets?sort_by=updated_at&sort_order=desc`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Basic ${btoa(`${apiUsername}:${apiPassword}`)}`, 
+        Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`, 
       },
       next: {
         tags: ['tickets'],

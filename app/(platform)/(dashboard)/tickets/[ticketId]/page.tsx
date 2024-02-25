@@ -65,7 +65,7 @@ export const TicketIdPage =  async ({
 }: TicketIdPageProps) => {
 
     const ticket = await getTicket({ params });
-    const comments = await getTicketComments({ params });
+    const { comments, users } = await getTicketComments({ params });
     
     return (
         <>
@@ -83,14 +83,14 @@ export const TicketIdPage =  async ({
             </div>
             <Separator className="mt-8 mb-8"/>
             <div className="text-2xl pb-4">Ticket Activity</div>
-            { comments.comments.length ? 
+            { comments ? 
                 <>
-                    {comments.comments.map((comment: CommentProps) => (
+                    {comments.map((comment: CommentProps) => (
                         <TicketMessage 
                             key={comment.id}
                             id={comment.id}
                             author_id={comment.author_id}
-                            name={comments.users.find((user: any) => user.id === comment.author_id).name}
+                            name={users.find((user: any) => user.id === comment.author_id).name}
                             body={comment.body} 
                             created_at={comment.created_at}
                             attachments={comment.attachments}
