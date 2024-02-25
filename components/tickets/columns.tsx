@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { Badge } from "../ui/badge";
 
-import { TICKET_STATUS } from "@/constants/tickets";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
@@ -40,10 +39,11 @@ export const columns: ColumnDef<Ticket>[] =[
         ),
         cell: ({ row }) => (
             <Badge
-                variant={row.original.status === "open" ? "open" : "pending"}
+                variant={row.original.status as "open" | "pending" | "solved"}
                 className="w-[75px] justify-center"
             >
-                {row.original.status === "open" ? "Open" : "Pending"}
+                {/* Capitalize first letter of status */}
+                {`${row.original.status.charAt(0).toUpperCase()}${row.original.status.slice(1)}`}
             </Badge>
         )
     },

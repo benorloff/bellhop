@@ -61,6 +61,10 @@ module.exports = {
           pending: {
             DEFAULT: colors.orange[300],
             foreground: colors.orange[800],
+          },
+          solved: {
+            DEFAULT: colors.gray[300],
+            foreground: colors.gray[800],
           }
         }
       },

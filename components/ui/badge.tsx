@@ -20,6 +20,8 @@ const badgeVariants = cva(
           "border-transparent bg-status-open text-status-open-foreground hover:bg-status-open/80",
         pending:
           "border-transparent bg-status-pending text-status-pending-foreground hover:bg-status-pending/80",
+        solved:
+          "border-transparent bg-status-solved text-status-solved-foreground hover:bg-status-solved/80",
       },
     },
     defaultVariants: {
