@@ -7,6 +7,7 @@ interface ModalData {
     site?: Site;
     sites?: Array<Site>;
     profile?: Profile;
+    siteId?: string;
 }
 
 interface ModalStore {

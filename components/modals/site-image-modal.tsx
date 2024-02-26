@@ -63,16 +63,12 @@ export const SiteImageModal = () => {
                 <DialogFooter>
                     { fileUrl ? (
                         <Button 
-                            variant="primary"
-                            className="w-full"
                             onClick={onSubmit}
                         >
                             Submit
                         </Button>
                     ) : (
                         <Button 
-                            variant="primary"
-                            className="w-full"
                             disabled
                         >
                             Submit
