@@ -37,8 +37,10 @@ export const SiteInviteModal = () => {
 
     const onSubmit = (formData: FormData) => {
         const email = formData.get("email") as string;
+        const site = data.site;
+        const profile = data.profile;
 
-        execute({ email });
+        execute({ email, site, profile });
     }
 
     return (

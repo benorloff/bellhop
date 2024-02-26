@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/current-profile";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +32,8 @@ interface SiteIdPageProps {
 const SiteIdPage = async ({
     params,
 }: SiteIdPageProps) => {
+
+    const profile = await currentProfile();
 
     const site = await db.site.findUnique({
         where: {
@@ -139,7 +142,7 @@ const SiteIdPage = async ({
                             ))}
                         </CardContent>
                         <CardFooter>
-                            <InviteButton />
+                            <InviteButton site={site!} profile={profile!}/>
                         </CardFooter>
                     </Card>
                     <Card>

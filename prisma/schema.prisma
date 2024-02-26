@@ -8,17 +8,18 @@ datasource db {
 }
 
 model Profile {
-  id        String @id @default(uuid())
-  userId    String @unique
+  id            String @id @default(uuid())
+  userId        String @unique
   zendeskUserId BigInt @unique
-  firstName String
-  lastName  String
-  imageUrl  String @db.Text
-  email     String @db.Text
+  firstName     String
+  lastName      String
+  imageUrl      String @db.Text
+  email         String @db.Text
 
   sites   Site[]
   members Member[]
   tickets Ticket[]
+  invites Invite[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,20 +34,21 @@ enum DataCenter {
 }
 
 model Site {
-  id       String  @id @default(uuid())
-  name     String
-  url      String
-  imageUrl String?
+  id         String     @id @default(uuid())
+  name       String
+  url        String
+  imageUrl   String?
   dataCenter DataCenter @default(US_IOWA)
-  ipAddress String
-  slug     String  @unique
-  orgId    String
+  ipAddress  String
+  slug       String     @unique
+  orgId      String
 
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   members Member[]
   tickets Ticket[]
+  invites Invite[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -78,13 +80,13 @@ model Member {
 }
 
 model Ticket {
-  id String @id @default(uuid())
-  freshdeskId BigInt @unique
-  priority Int
-  source Int
-  status Int
-  subject String
-  type String
+  id              String @id @default(uuid())
+  freshdeskId     BigInt @unique
+  priority        Int
+  source          Int
+  status          Int
+  subject         String
+  type            String
   descriptionText String
 
   profileId String
@@ -92,6 +94,24 @@ model Ticket {
 
   siteId String
   site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@index([siteId])
+}
+
+model Invite {
+  id             String   @id @default(uuid())
+  recipientEmail String
+  expiresAt      DateTime @default(dbgenerated("NOW() + interval '48 hours'"))
+
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

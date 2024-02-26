@@ -2,18 +2,21 @@
 
 import { auth } from "@clerk/nextjs";
 
-import sgMail from "@sendgrid/mail";
-
+import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
 
 import { InputType, ReturnType } from "./types";
 import { CreateSiteInvite } from "./schema";
+
+import { sendgridApiHost, sendgridApiKey } from "@/constants/mail";
 
 // Clerk Organization Invitations API Reference
 // https://clerk.com/docs/reference/backend-api/tag/Organization-Invitations
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const { userId, orgId } = auth();
+    const { email, site, profile } = data;
+
 
     if ( !userId || !orgId ) {
         return {
@@ -21,33 +24,68 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     };
 
-    const { email } = data;
+    let invite;
 
-    const msg = {
-        to: email,
-        from: "ben@circle.black",
-        templateId: "d-46448a712cc2427b9b485f0f4bf5043d",
-        dynamicTemplateData: {
-            site_name: "Circle Black",
-        },
-    }
-
-    sgMail.setApiKey(`${process.env.SENDGRID_API_KEY}`);
-
-    // TODO: Check if user already exists in the app before sending invitation
-    
     try {
-        await sgMail.send(msg);
+        invite = await db.invite.create({
+            data: {
+                recipientEmail: email,
+                siteId: site.id,
+                profileId: profile.id,
+            }
+        })
     } catch (error) {
         console.log(error);
         return {
-            error: "Failed to invite user."
+            error: "Failed to create invitation."
+        }
+    }
+
+    const msg = {
+        from: {
+            email: "ben@circle.black"
+        },
+        personalizations: [
+            {
+                to: [
+                    {
+                        email: email
+                    }
+                ],
+                dynamic_template_data: {
+                    site_name: "Circle Black",
+                    url: `http://localhost:3000/organization/test-org/${site.id}/invite/${invite.id}`
+                }
+            }
+        ],
+        template_id: "d-46448a712cc2427b9b485f0f4bf5043d"
+    }
+
+    // TODO: Check if user already exists in the app before sending invitation
+
+    let mail;
+    
+    try {
+        mail = await fetch(`${sendgridApiHost}/mail/send`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${sendgridApiKey}`,
+            },
+            body: JSON.stringify(msg),
+        })
+        // mail = await sgMail.send(msg);
+
+    } catch (error) {
+        console.log(error);
+        return {
+            error: "Failed to send site invite email."
         }
     }
 
     // Add redirect/revalidate to site page here?
 
-    return { data: msg };
+    return { data: invite };
 };
 
 export const createSiteInvite = createSafeAction(CreateSiteInvite, handler);
