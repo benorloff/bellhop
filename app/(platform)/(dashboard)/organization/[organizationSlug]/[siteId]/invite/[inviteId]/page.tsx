@@ -23,20 +23,6 @@ const InviteIdPage = async ({
         return redirect("/");
     }
 
-    const existingMember = await db.site.findFirst({
-        where: {
-            members: {
-                some: {
-                    profileId: profile.id
-                }
-            }
-        }
-    });
-
-    // if (existingMember) {
-    //     // Redirect to the site
-    // }
-
     const invite = await db.invite.findUnique({
         where: {
             id: params.inviteId
@@ -45,20 +31,39 @@ const InviteIdPage = async ({
             site: true,
         }
     });
-
+    
     if (!invite || invite.expiresAt < new Date()) {
         throw new Error("Invite not found or has expired");
     }
 
-    return (
-        <div>
-            <h1>Invite</h1>
-            <p>Invite to {invite.site.name}</p>
-            <p>Expires at: {invite.expiresAt.toLocaleString()}</p>
-            <Button>Accept</Button>
-            <Button>Decline</Button>
-        </div>
-    )
+    if (invite.recipientEmail !== profile.email) {
+        throw new Error("You are not authorized to view this invite");
+    }
+
+    // const existingMember = await db.site.findFirst({
+    //     where: {
+    //         id: invite.siteId,
+    //         members: {
+    //             some: {
+    //                 profileId: profile.id
+    //             }
+    //         }
+    //     }
+    // });
+
+    // if (existingMember) {
+    //     throw new Error("You are already a member of this site")
+    //     return redirect('/dashboard');
+    // }
+
+    const member = await db.member.create({
+        data: {
+            profileId: profile.id,
+            siteId: invite.siteId
+        }
+    });
+
+    return redirect('/dashboard');
 };
 
 export default InviteIdPage;
