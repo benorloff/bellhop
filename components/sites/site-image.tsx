@@ -6,16 +6,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useModal } from "@/hooks/use-modal-store";
+import { Site } from "@prisma/client";
 
-export const SiteImage = ({
-    siteId,
-    imageUrl,
-    siteName
-}: {
-    siteId: string;
-    imageUrl: string;
-    siteName: string;
-}) => {
+
+export const SiteImage = (
+    site
+: Site) => {
     const { onOpen } = useModal();
 
     return (
@@ -23,8 +19,8 @@ export const SiteImage = ({
             <Tooltip>
                 <TooltipTrigger>
                     <Image 
-                        src={imageUrl || "/placeholder-browser.svg"}
-                        alt={siteName}
+                        src={site.imageUrl || "/placeholder-browser.svg"}
+                        alt={site.name}
                         height={100}
                         width={150}
                     />
@@ -34,7 +30,7 @@ export const SiteImage = ({
                 >
                     <Button
                         variant="ghost"
-                        onClick={() => onOpen("siteImage", { siteId })}
+                        onClick={() => onOpen("siteImage", { site })}
                     >
                         {/* TODO: Connect to update-site action */}
                         Upload image

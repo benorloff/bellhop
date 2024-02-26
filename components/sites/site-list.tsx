@@ -31,20 +31,25 @@ export const SiteList = async () => {
     return (
         <div className="flex flex-col gap-4 space-y-4">
             {sites.map((site) => (
-                <Link
+                <div
                     key={site.id}
-                    href={`/organization/${orgSlug}/${site.id}`}
                     className="flex flex-row flex-wrap justify-between items-center bg-card border gap-4 rounded-sm shadow p-8"
                 >
-                    <SiteImage 
-                        siteId={site.id as string} 
-                        imageUrl={site.imageUrl as string} 
-                        siteName={site.name as string} 
-                    />
+                    <Link
+                        href={`/organization/${orgSlug}/${site.id}`}
+                    >
+                        <SiteImage 
+                            {...site}
+                        />
+                    </Link>
                     <div className="flex flex-col grow gap-1">
-                        <p className="font-semibold text-xl">
-                            {site.name}
-                        </p>
+                        <Link
+                            href={`/organization/${orgSlug}/${site.id}`}
+                        >
+                            <p className="font-semibold text-xl">
+                                {site.name}
+                            </p>
+                        </Link>
                         <p>
                             {site.url}
                         </p>
@@ -52,7 +57,7 @@ export const SiteList = async () => {
                     <div className="flex flex-row gap-2">
                         <SiteMembers profiles={siteProfiles(site.members)} />
                     </div>
-                </Link>
+                </div>
             ))}
         </div>
     )

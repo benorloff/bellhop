@@ -48,6 +48,10 @@ const SiteIdPage = async ({
         }
     });
 
+    if (!site) {
+        throw new Error("Site not found");
+    }
+
     const query = new URLSearchParams({
         query: `type:ticket custom_field_23229752282907:${site?.id}`,
         sort_by: "updated_at",
@@ -83,9 +87,7 @@ const SiteIdPage = async ({
             <div className="flex flex-row items-center gap-8 mb-8">
                 <div className="shrink">
                     <SiteImage 
-                        siteId={site?.id as string}
-                        imageUrl={site?.imageUrl as string} 
-                        siteName={site?.name as string} 
+                        {...site}
                     />
                 </div>
                 <div className="grow">
@@ -125,21 +127,21 @@ const SiteIdPage = async ({
                             <CardTitle>Team</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {site?.members.map((member) => (
-                                <div key={member.id} className="flex flex-row justify-between items-center gap-4">
-                                    <Avatar>
-                                        {/* Change this to next/image */}
-                                        <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
-                                        <AvatarFallback>BO</AvatarFallback>
-                                    </Avatar>
-                                    <div className="grow">
-                                        <div>{member.profile.firstName} {member.profile.lastName}</div>
-                                        <div className="text-sm">{member.profile.email}</div>
+                            <div className="flex flex-col gap-4">
+                                {site?.members.map((member) => (
+                                    <div key={member.id} className="flex flex-row justify-between items-center gap-4">
+                                        <Avatar>
+                                            {/* Change this to next/image */}
+                                            <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
+                                            <AvatarFallback>BO</AvatarFallback>
+                                        </Avatar>
+                                        <div className="grow">
+                                            <div>{member.profile.firstName} {member.profile.lastName}</div>
+                                        </div>
+                                        <div className="shrink">{member.role}</div>
                                     </div>
-                                    <div className="shrink">{member.role}</div>
-                                </div>
-                            
-                            ))}
+                                ))}
+                            </div>
                         </CardContent>
                         <CardFooter>
                             <InviteButton site={site!} profile={profile!}/>

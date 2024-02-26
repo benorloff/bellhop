@@ -90,7 +90,7 @@ export const TicketIdPage =  async ({
                             key={comment.id}
                             id={comment.id}
                             author_id={comment.author_id}
-                            name={users.find((user: any) => user.id === comment.author_id).name}
+                            user={users.find((user: any) => user.id === comment.author_id)}
                             body={comment.body} 
                             created_at={comment.created_at}
                             attachments={comment.attachments}

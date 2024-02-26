@@ -11,6 +11,7 @@ import {
 from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { Hint } from "@/components/hint";
 
 interface SiteMembersProps {
     profiles: Profile[];
@@ -24,17 +25,29 @@ export const SiteMembers = ({
     return (
         <>
             {profiles.map((profile) => (
-                <Avatar key={profile.id}>
-                    <AvatarImage src={profile.imageUrl} alt={profile.firstName} />
-                    <AvatarFallback>{profile.firstName[0]}{profile.lastName[0]}</AvatarFallback>
-                </Avatar>
+                <Hint
+                    side="top"
+                    label={`${profile.firstName} ${profile.lastName}`}
+                    key={profile.id}
+                >
+                    <Avatar>
+                        <AvatarImage src={profile.imageUrl} alt={profile.firstName} />
+                        <AvatarFallback>{profile.firstName[0]}{profile.lastName[0]}</AvatarFallback>
+                    </Avatar>
+                </Hint>
             ))}
-            <Button
-                className="rounded-full w-[40px] h-[40px] p-0"
-                onClick={() => onOpen("invite", {})}
+            <Hint
+                side="top"
+                label="Invite"
             >
-                <Plus size={24} />
-            </Button>
+                <Button
+                    className="rounded-full w-[40px] h-[40px] p-0"
+                    onClick={() => onOpen("invite", {})}
+                >
+                    <Plus size={24} />
+                </Button>
+            </Hint>
+            
         </>
     )
 };
