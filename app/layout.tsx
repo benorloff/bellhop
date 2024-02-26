@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/config/site'
-
-const inter = Inter({ subsets: ['latin'] })
+import { ClerkProvider } from '@clerk/nextjs'
+import { ThemeProvider } from '@/components/providers/theme-provider'
+import { ModalProvider } from '@/components/providers/modal-provider'
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: {
@@ -25,10 +26,25 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className='dark'>
-      <body className={inter.className}>
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+          >
+            <ModalProvider />
+            <Toaster 
+                position="top-center"
+                richColors={true}
+                closeButton={true}
+            />
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
+    
   )
 }

@@ -32,7 +32,6 @@ interface SiteIdPageProps {
 const SiteIdPage = async ({
     params,
 }: SiteIdPageProps) => {
-
     const profile = await currentProfile();
 
     const site = await db.site.findUnique({

@@ -1,15 +1,16 @@
-import { Plus } from "lucide-react";
+"use client";
 
 import { Logo } from "@/components/logo";
-import { Button } from "@/components/ui/button";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { ThemeModeToggle } from "@/components/theme-mode-toggle";
+import { useTheme } from "next-themes";
+import { dark } from "@clerk/themes";
 
 
 export const Navbar = () => {
+    const { theme } = useTheme();
     return (
         <nav id="top" className="fixed z-50 top-0 px-4 w-full h-14 border-b shadow-sm bg-background flex items-center">
-            {/* TODO: Mobile Sidebar */}
             <div className="flex items-center gap-x-4">
                 <div className="hidden md:flex">
                     <Logo />
@@ -29,6 +30,7 @@ export const Navbar = () => {
                                 alignItems: "center",
                             },
                         },
+                        baseTheme: theme === "dark" ? dark : undefined,
                     }}
                 />
                 <UserButton 
@@ -39,7 +41,8 @@ export const Navbar = () => {
                                 height: 30,
                                 width: 30,
                             }
-                        }
+                        },
+                        baseTheme: theme === "dark" ? dark : undefined,
                     }}
                 />
                 <ThemeModeToggle />
