@@ -1,7 +1,6 @@
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/current-profile";
 
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
     Card, 
@@ -15,7 +14,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 import { TICKET_STATUS } from "@/constants/tickets";
-import { SiteImage } from "@/components/sites/site-image";
 
 import { 
     zendeskApiHost,
@@ -83,24 +81,6 @@ const SiteIdPage = async ({
     
     return (
         <div>
-            <div className="flex flex-row items-center gap-8 mb-8">
-                <div className="shrink">
-                    <SiteImage 
-                        {...site}
-                    />
-                </div>
-                <div className="grow">
-                    <div className="text-3xl">{site?.name}</div>
-                    <div>{site?.url}</div>
-                </div>
-            </div>
-            {/* Menu placeholder. Need to abstract. */}
-            <div className="flex flex-row gap-8 mb-8">
-                <div>Overview</div>
-                <div>Tickets</div>
-                <div>Team</div>
-                <div>Settings</div>
-            </div>
             <div className="flex flex-row flex-wrap gap-8">
                 <div className="flex flex-col basis-full lg:basis-7/12 gap-8">
                     <Card>

@@ -38,8 +38,8 @@ export const Navbar = () => {
                     appearance={{
                         elements: {
                             avatarBox: {
-                                height: 30,
-                                width: 30,
+                                height: 35,
+                                width: 35,
                             }
                         },
                         baseTheme: theme === "dark" ? dark : undefined,

@@ -42,6 +42,7 @@ model Site {
   ipAddress  String
   slug       String     @unique
   orgId      String
+  orgSlug    String @default("default")
 
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)

@@ -12,10 +12,10 @@ import { MemberRole } from "@prisma/client";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-    const { orgId } = auth();
+    const { orgId, orgSlug } = auth();
     const profile = await currentProfile();
 
-    if ( !orgId ) {
+    if ( !orgId || !profile ) {
         return {
             error: "Unauthorized",
         };
@@ -32,12 +32,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 slug,
                 url,
                 imageUrl,
-                profileId: profile!.id,
+                profileId: profile.id,
                 orgId,
+                orgSlug,
                 ipAddress,
                 members: {
                     create: [
-                        { profileId: profile!.id, role: MemberRole.OWNER}
+                        { profileId: profile.id, role: MemberRole.OWNER}
                     ]
                 }
             }
