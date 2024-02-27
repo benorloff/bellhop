@@ -49,7 +49,7 @@ export const SiteNav = ({
         <NavigationMenu className="mb-8">
             <NavigationMenuList>
                 {routes.map((route) => (
-                    <NavigationMenuItem>
+                    <NavigationMenuItem key={route.label}>
                         <Link href={route.href} legacyBehavior passHref>
                             <NavigationMenuLink 
                                 className={cn(

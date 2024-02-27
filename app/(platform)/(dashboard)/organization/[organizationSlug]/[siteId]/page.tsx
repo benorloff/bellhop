@@ -1,4 +1,3 @@
-import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/current-profile";
 
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +19,7 @@ import {
     zendeskApiPassword,
     zendeskApiUsername, 
 } from "@/constants/tickets";
+import { getSite } from "@/lib/get-site";
 
 interface SiteIdPageProps {
     params: {
@@ -32,22 +32,7 @@ const SiteIdPage = async ({
 }: SiteIdPageProps) => {
     const profile = await currentProfile();
 
-    const site = await db.site.findUnique({
-        where: {
-            id: params.siteId,
-        },
-        include: {
-            members: {
-                include: {
-                    profile: true,
-                },
-            },
-        }
-    });
-
-    if (!site) {
-        throw new Error("Site not found");
-    }
+    const site = await getSite(params.siteId);
 
     const query = new URLSearchParams({
         query: `type:ticket custom_field_23229752282907:${site?.id}`,

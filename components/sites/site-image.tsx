@@ -23,6 +23,7 @@ export const SiteImage = (
                         alt={site.name}
                         height={100}
                         width={150}
+                        className="rounded-sm"
                     />
                 </TooltipTrigger>
                 <TooltipContent

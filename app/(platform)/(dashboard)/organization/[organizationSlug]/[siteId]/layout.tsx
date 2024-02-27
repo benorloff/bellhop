@@ -1,15 +1,8 @@
-import { db } from "@/lib/db";
-
 import { SiteHeader } from "@/components/sites/site-header";
 import { SiteNav } from "@/components/sites/site-nav";
+import { getSite } from "@/lib/get-site";
 
-interface SiteLayoutProps {
-    params: {
-        organizationSlug: string;
-        siteId: string;
-    },
-    children: React.ReactNode;
-}
+export const revalidate = 3600 // revlalidate the data at most every hour
 
 export default async function SiteLayout({
     children,
@@ -22,18 +15,8 @@ export default async function SiteLayout({
     }
 }) {
 
-    const site = await db.site.findUnique({
-        where: {
-            id: params.siteId,
-        },
-        include: {
-            members: {
-                include: {
-                    profile: true,
-                },
-            },
-        }
-    });
+    const site = await getSite(params.siteId);
+    
 
     if (!site) {
         throw new Error("Site not found");

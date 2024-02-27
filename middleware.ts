@@ -7,16 +7,27 @@ import { NextResponse } from "next/server";
 export default authMiddleware({
   publicRoutes: ["/", "/api/uploadthing(.*)", "/api/webhooks/clerk(.*)"],
   afterAuth(auth, req) {
-    // Add auth middleware here
+    // Handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url })
     }
-
+    // Redirect logged in users to organization selection page if they are not active in an organization
+    if (auth.userId && !auth.orgId && req.nextUrl.pathname !== "/org-selection") {
+      const orgSelection = new URL("/org-selection", req.url);
+      return NextResponse.redirect(orgSelection);
+    }
+    // Redirect users to the dashboard if they're already authenticated
     if (auth.userId && req.nextUrl.pathname === "/") {
       const dashboard = new URL("/dashboard", req.url);
       return NextResponse.redirect(dashboard);
     }
-  }
+    // If the user is logged in and trying to access a protected route, allow them to access route
+    if (auth.userId && !auth.isPublicRoute) {
+      return NextResponse.next();
+    }
+    // Allow users visiting public routes to access them
+    return NextResponse.next();
+  },
   // debug: true
 });
  
