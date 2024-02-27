@@ -19,10 +19,6 @@ const InviteIdPage = async ({
         return redirectToSignIn();
     }
 
-    if (!params.inviteId) {
-        return redirect("/");
-    }
-
     const invite = await db.invite.findUnique({
         where: {
             id: params.inviteId
@@ -63,7 +59,9 @@ const InviteIdPage = async ({
         }
     });
 
-    return redirect('/dashboard');
+    const sitePath = `/organization/${invite.site.orgSlug}/${invite.site.id}`
+
+    return redirect(sitePath);
 };
 
 export default InviteIdPage;

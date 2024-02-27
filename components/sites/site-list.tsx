@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { auth } from "@clerk/nextjs";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
@@ -9,16 +9,32 @@ import { Member, Profile } from "@prisma/client";
 import { SiteMembers } from "./site-members";
 import { SiteImage } from "./site-image";
 import { currentOrgSites } from "@/lib/current-org-sites";
+import { currentProfile } from "@/lib/current-profile";
 
 export const SiteList = async () => {
 
-    const { orgId, orgSlug } = auth();
+    const profile = await currentProfile();
 
-    if (!orgId) {
-        return redirect("/select/org");
-    };
+    if (!profile) {
+        return redirectToSignIn();
+    }
 
-    const sites = await currentOrgSites();
+    const sites = await db.site.findMany({
+        where: {
+            members: {
+                some: {
+                    profileId: profile.id
+                }
+            }
+        }, 
+        include: {
+            members: {
+                include: {
+                    profile: true,
+                },
+            },
+        }
+    })
 
     const siteProfiles = (siteMembers: Member[]) => {
         let profiles: Profile[] = [];
@@ -36,7 +52,7 @@ export const SiteList = async () => {
                     className="flex flex-row flex-wrap justify-between items-center bg-card border gap-4 rounded-sm shadow p-8"
                 >
                     <Link
-                        href={`/organization/${orgSlug}/${site.id}`}
+                        href={`/organization/${site.orgSlug}/${site.id}`}
                     >
                         <SiteImage 
                             {...site}
@@ -44,7 +60,7 @@ export const SiteList = async () => {
                     </Link>
                     <div className="flex flex-col grow gap-1">
                         <Link
-                            href={`/organization/${orgSlug}/${site.id}`}
+                            href={`/organization/${site.orgSlug}/${site.id}`}
                         >
                             <p className="font-semibold text-xl">
                                 {site.name}

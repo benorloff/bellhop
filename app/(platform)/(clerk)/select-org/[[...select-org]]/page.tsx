@@ -1,3 +1,5 @@
+"use client";
+
 import { OrganizationList } from "@clerk/nextjs";
 
 import { dark } from "@clerk/themes";

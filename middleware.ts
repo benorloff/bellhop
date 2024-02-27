@@ -12,8 +12,8 @@ export default authMiddleware({
       return redirectToSignIn({ returnBackUrl: req.url })
     }
     // Redirect logged in users to organization selection page if they are not active in an organization
-    if (auth.userId && !auth.orgId && req.nextUrl.pathname !== "/org-selection") {
-      const orgSelection = new URL("/org-selection", req.url);
+    if (auth.userId && !auth.orgId && req.nextUrl.pathname !== "/select-org") {
+      const orgSelection = new URL("/select-org", req.url);
       return NextResponse.redirect(orgSelection);
     }
     // Redirect users to the dashboard if they're already authenticated
