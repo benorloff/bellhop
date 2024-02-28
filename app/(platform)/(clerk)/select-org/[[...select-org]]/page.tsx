@@ -10,8 +10,8 @@ export default function CreateOrganizationPage() {
     return (
         <OrganizationList 
             hidePersonal
-            afterSelectOrganizationUrl="/organization/:slug"
-            afterCreateOrganizationUrl="/organization/:slug"
+            afterSelectOrganizationUrl="/dashboard"
+            afterCreateOrganizationUrl="/dashboard"
             appearance={{
                 baseTheme: theme === "dark" ? dark : undefined,
             }}
