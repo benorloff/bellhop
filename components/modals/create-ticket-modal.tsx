@@ -23,14 +23,47 @@ import { useAction } from "@/hooks/use-action";
 import { createTicket } from "@/actions/create-ticket";
 import { FormInput } from "@/components/form/form-input";
 import { FormSubmit } from "@/components/form/form-submit";
-import { FormLabel } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Site } from "@prisma/client";
+
+const FormSchema = z.object({
+    siteId: z
+        .string({
+            required_error: "Please select a site."
+        }),
+    subject: z
+        .string({
+            required_error: "Please enter a subject."
+        }),
+    description: z
+        .string({
+            required_error: "Please enter a description."
+        })
+})
 
 
 export const CreateTicketModal = () => {
     const { isOpen, onClose, type, data } = useModal();
+    const isModalOpen = isOpen && type === "createTicket";
+    
     const router = useRouter();
 
-    const isModalOpen = isOpen && type === "createTicket";
+    const sites = data.sites;
+
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            siteId: "",
+            subject: "",
+            description: ""
+        }
+    });
 
     const { execute, fieldErrors } = useAction(createTicket, {
         onSuccess: () => {
@@ -43,21 +76,13 @@ export const CreateTicketModal = () => {
         }
     });
 
-    const onSubmit = (formData: FormData) => {
+    const onSubmit = (data: z.infer<typeof FormSchema>) => {
+        const site = sites?.find((site: Site) => site.id === data.siteId);
+        const siteName = site?.name!;
+        const siteUrl = site?.url!;
 
-        const site = data.sites?.find((site: any) => site.id === formData.get("siteId"));
-
-
-
-
-        const subject = formData.get("subject") as string;
-        const description = formData.get("description") as string;
-        const siteId = site?.id as string;
-        const siteName = site?.name as string;
-        const siteUrl = site?.url as string;
-
-        execute({ subject, description, siteId, siteName, siteUrl});
-    }
+        execute({ ...data, siteName, siteUrl });
+    };
 
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -67,42 +92,66 @@ export const CreateTicketModal = () => {
                         Open a Ticket
                     </DialogTitle>
                 </DialogHeader>
-                <form action={onSubmit} className="space-y-4">
-                    <Select
-                        name="siteId"
-                    >
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a site" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {data.sites?.map((site) => (
-                                <SelectItem key={site.id} value={site.id}>
-                                    {site.name}
-                                </SelectItem>
-                            
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <FormInput 
-                        id="subject"
-                        label="Subject"
-                        type="text"
-                        errors={fieldErrors}
-                    />
-                    <FormInput 
-                        id="description"
-                        label="Description"
-                        type="text"
-                        errors={fieldErrors}
-                    />
-                    <DialogFooter>
-                        <FormSubmit className="w-full">
-                            Submit Ticket
-                        </FormSubmit>
-                    </DialogFooter>
-                </form>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="siteId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Site</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a site" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {data.sites?.map((site) => (
+                                                <SelectItem key={site.id} value={site.id}>
+                                                    {site.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="subject"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Subject</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="What can we help with?" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="How can we help?"
+                                            rows={10}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="submit">Submit</Button>
+                    </form>
+                </Form>
             </DialogContent>
         </Dialog>
     )
-
 };
