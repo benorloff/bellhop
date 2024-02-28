@@ -22,7 +22,7 @@ import {
     Form, 
     FormControl, 
     FormField, 
-    FormItem, 
+    FormItem,
     FormLabel, 
     FormMessage 
 } from "@/components/ui/form";
@@ -38,23 +38,22 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 const FormSchema = z.object({
-    siteId: z
-        .string({
-            required_error: "Please select a site."
-        }),
-    subject: z
-        .string({
-            required_error: "Please enter a subject."
-        }),
-    description: z
-        .string({
-            required_error: "Please enter a description."
-        })
+    siteId: z.string().min(2, {
+        message: "Please select a site.",
+    }),
+    subject: z.string().min(2, {
+        message: "Subject must be at least 2 characters.",
+    }),
+    description: z.string().min(10, {
+        message: "Description must be at least 2 characters.",
+    }),
 });
 
 export const CreateTicketModal = () => {
     const { isOpen, onClose, type, data } = useModal();
     const isModalOpen = isOpen && type === "createTicket";
+
+    const { formState: { errors } } = useForm();
     
     const router = useRouter();
 
@@ -104,7 +103,7 @@ export const CreateTicketModal = () => {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Site</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value} required>
                                         <FormControl>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Select a site" />
