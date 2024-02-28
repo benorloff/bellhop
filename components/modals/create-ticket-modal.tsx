@@ -2,16 +2,30 @@
 
 import { useRouter } from "next/navigation";
 
+import { z } from "zod";
 import { toast } from "sonner";
+import { Site } from "@prisma/client";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useAction } from "@/hooks/use-action";
 import { useModal } from "@/hooks/use-modal-store";
+import { createTicket } from "@/actions/create-ticket";
+
 import { 
     Dialog, 
     DialogContent, 
-    DialogFooter, 
     DialogHeader, 
     DialogTitle 
 } from "@/components/ui/dialog";
+import { 
+    Form, 
+    FormControl, 
+    FormField, 
+    FormItem, 
+    FormLabel, 
+    FormMessage 
+} from "@/components/ui/form";
 import { 
     Select, 
     SelectContent, 
@@ -19,18 +33,9 @@ import {
     SelectTrigger, 
     SelectValue 
 } from "@/components/ui/select";
-import { useAction } from "@/hooks/use-action";
-import { createTicket } from "@/actions/create-ticket";
-import { FormInput } from "@/components/form/form-input";
-import { FormSubmit } from "@/components/form/form-submit";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { Site } from "@prisma/client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 const FormSchema = z.object({
     siteId: z
@@ -45,8 +50,7 @@ const FormSchema = z.object({
         .string({
             required_error: "Please enter a description."
         })
-})
-
+});
 
 export const CreateTicketModal = () => {
     const { isOpen, onClose, type, data } = useModal();
