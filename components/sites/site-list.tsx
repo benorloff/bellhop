@@ -16,7 +16,7 @@ export const SiteList = async () => {
     const profile = await currentProfile();
 
     if (!profile) {
-        return redirectToSignIn();
+        throw new Error("Profile not found");
     }
 
     const sites = await db.site.findMany({

@@ -14,7 +14,7 @@ model Profile {
   firstName     String
   lastName      String
   imageUrl      String @db.Text
-  email         String @db.Text
+  email         String @unique @db.Text
 
   sites   Site[]
   members Member[]
