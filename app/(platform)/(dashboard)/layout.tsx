@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { Container } from "./_components/container";
 import { Navbar } from "./_components/navbar";
 import { Sidebar } from "./_components/sidebar";
@@ -6,8 +5,6 @@ import { Sidebar } from "./_components/sidebar";
 const DashboardLayout = async ({ children }: {
     children: React.ReactNode;
 }) => {
-    // Protect the entire dashboard route, including all children
-    auth().protect();
 
     return (
         <>

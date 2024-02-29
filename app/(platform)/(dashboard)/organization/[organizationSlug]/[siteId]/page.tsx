@@ -20,6 +20,7 @@ import {
     zendeskApiUsername, 
 } from "@/constants/tickets";
 import { getSite } from "@/lib/get-site";
+import { auth } from "@clerk/nextjs";
 
 interface SiteIdPageProps {
     params: {
@@ -30,7 +31,9 @@ interface SiteIdPageProps {
 const SiteIdPage = async ({
     params,
 }: SiteIdPageProps) => {
-    const profile = await currentProfile();
+    const { userId } = auth();
+
+    const profile = await currentProfile(userId as string);
 
     const site = await getSite(params.siteId);
 

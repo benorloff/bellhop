@@ -12,8 +12,9 @@ import { currentOrgSites } from "@/lib/current-org-sites";
 import { currentProfile } from "@/lib/current-profile";
 
 export const SiteList = async () => {
+    const { userId } = auth();
 
-    const profile = await currentProfile();
+    const profile = await currentProfile(userId as string);
 
     if (!profile) {
         throw new Error("Profile not found");

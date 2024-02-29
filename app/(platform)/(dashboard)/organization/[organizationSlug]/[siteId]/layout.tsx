@@ -2,8 +2,6 @@ import { SiteHeader } from "@/components/sites/site-header";
 import { SiteNav } from "@/components/sites/site-nav";
 import { getSite } from "@/lib/get-site";
 
-export const revalidate = 3600 // revlalidate the data at most every hour
-
 export default async function SiteLayout({
     children,
     params,
@@ -14,9 +12,7 @@ export default async function SiteLayout({
         siteId: string;
     }
 }) {
-
     const site = await getSite(params.siteId);
-    
 
     if (!site) {
         throw new Error("Site not found");
@@ -26,7 +22,7 @@ export default async function SiteLayout({
 
     return (
         <>
-            <SiteHeader {...site} />
+            <SiteHeader {...site} /> 
             <SiteNav basePath={basePath}/>
             {children}
         </>

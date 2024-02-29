@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Ticket } from '@/types/index'
 
-import { currentUser, redirectToSignIn } from '@clerk/nextjs';
+import { auth, currentUser, redirectToSignIn } from '@clerk/nextjs';
 import { DataTable } from '@/components/tickets/data-table';
 import { columns } from '@/components/tickets/columns';
 
@@ -14,7 +14,9 @@ import { currentProfile } from '@/lib/current-profile';
 
 async function getData() {
 
-  const profile = await currentProfile();
+  const { userId } = auth();
+
+  const profile = await currentProfile(userId as string);
 
   if (!profile) {
     return redirectToSignIn();

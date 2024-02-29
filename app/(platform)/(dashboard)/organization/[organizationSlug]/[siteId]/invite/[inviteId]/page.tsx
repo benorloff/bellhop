@@ -1,4 +1,4 @@
-import { redirectToSignIn } from "@clerk/nextjs";
+import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
@@ -13,7 +13,9 @@ interface InviteIdPageProps {
 const InviteIdPage = async ({
     params
 }: InviteIdPageProps) => {
-    const profile = await currentProfile();
+    const { userId } = auth();
+
+    const profile = await currentProfile(userId as string);
 
     if (!profile) {
         return redirectToSignIn();
