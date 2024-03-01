@@ -1,6 +1,7 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
+import { clerkClient } from '@clerk/nextjs/server'
 
 import { db } from '@/lib/db'
 
@@ -81,10 +82,11 @@ export async function POST(req: Request) {
             body: JSON.stringify(zendeskUser)
         }); 
 
+        // Extract the user from the response
         const { user } = await res.json();
 
-
-        await db.profile.create({
+        // Create the profile in the database
+        const profile = await db.profile.create({
             data: {
                 userId: payload.data.id,
                 zendeskUserId: user.id,
@@ -93,6 +95,14 @@ export async function POST(req: Request) {
                 imageUrl: payload.data.image_url,
                 email: payload.data.email_addresses[0].email_address,
             },
+        });
+
+        // Update the user in Clerk with ZendeskID and profileId
+        const updatedUser = await clerkClient.users.updateUser(payload.data.id, {
+            externalId: profile.id,
+            privateMetadata: {
+                zendeskId: user.id,
+            }
         });
     }
 
