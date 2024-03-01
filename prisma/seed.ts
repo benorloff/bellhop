@@ -1,8 +1,18 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, DataCenter } from "@prisma/client";
+import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
+const randomDataCenter = (enumeration: object) => {
+    const array = Object.values(enumeration);
+    const randomIndex = Math.floor(Math.random() * array.length);
+    const dataCenter = array[randomIndex];
+    return dataCenter;
+}
+
 async function main() {
+    // Create profiles for seed users
+    // Seed users were manually created in Clerk and Zendesk
     const carlos = await prisma.profile.upsert({
         where: { email: "carloshayes@domain.com" },
         update: {},
@@ -13,7 +23,53 @@ async function main() {
             lastName: "Hayes",
             email: "carloshayes@domain.com",
             imageUrl: "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvdXBsb2FkZWQvaW1nXzJjeVcweFRwMVVWRk5mZnJwTEVmSFZKekY2TiJ9",
-        }
+            sites: {
+                create: [
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyVzSYg1j1pGrTcIfRpj4jtFsy",
+                        orgSlug: "hayes-sons",
+                    },
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyVzSYg1j1pGrTcIfRpj4jtFsy",
+                        orgSlug: "hayes-sons",
+                    },
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyVzSYg1j1pGrTcIfRpj4jtFsy",
+                        orgSlug: "hayes-sons",
+                    },
+                ],
+            },
+        },
     })
     const jean = await prisma.profile.upsert({
         where: { email: "jean.stoltenberg@domain.com" },
@@ -25,6 +81,52 @@ async function main() {
             lastName: "Stoltenberg",
             email: "jean.stoltenberg@domain.com",
             imageUrl: "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvdXBsb2FkZWQvaW1nXzJjeVdBaDZsTDlkT0pUNVRLNTFTc0RXRGEyVCJ9",
+            sites: {
+                create: [
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyW9KKyi2l1ly0nlrrGmRFpw5p",
+                        orgSlug: "stolt-apparel",
+                    },
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyW9KKyi2l1ly0nlrrGmRFpw5p",
+                        orgSlug: "stolt-apparel",
+                    },
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyW9KKyi2l1ly0nlrrGmRFpw5p",
+                        orgSlug: "stolt-apparel",
+                    },
+                ],
+            },
         }
     })
     const stuart = await prisma.profile.upsert({
@@ -37,7 +139,56 @@ async function main() {
             lastName: "Donnelly",
             email: "stuart.donnelly@domain.com",
             imageUrl: "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvdXBsb2FkZWQvaW1nXzJjeVZxczhPcFM3cDNQNldYOFdZWUNScVpBUSJ9",
+            sites: {
+                create: [
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyVp1Gg8Fkliv1wXMHhsBZNipk",
+                        orgSlug: "donnelly-inc",
+                    },
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyVp1Gg8Fkliv1wXMHhsBZNipk",
+                        orgSlug: "donnelly-inc",
+                    },
+                    {
+                        name: faker.company.name(),
+                        url: faker.internet.domainName(),
+                        imageUrl: faker.image.urlLoremFlickr({
+                            category: "abstract",
+                            width: 300,
+                            height: 200,
+                        }),
+                        dataCenter: randomDataCenter(DataCenter),
+                        ipAddress: faker.internet.ip(),
+                        slug: `${faker.word.adjective()}-${faker.word.noun()}`,
+                        orgId: "org_2cyVp1Gg8Fkliv1wXMHhsBZNipk",
+                        orgSlug: "donnelly-inc",
+                    },
+                ],
+            },
         }
+    })
+    const seedSite1 = await prisma.site.upsert({
+
     })
     console.log({ carlos, jean, stuart }, "<-- seed profiles");
 };

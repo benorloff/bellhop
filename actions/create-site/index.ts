@@ -12,14 +12,22 @@ import { MemberRole } from "@prisma/client";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-    const { orgId, orgSlug } = auth();
-    const profile = await currentProfile();
+    const { userId, orgId, orgSlug } = auth();
+    
 
-    if ( !orgId || !profile ) {
+    if ( !orgId || ! orgSlug ) {
         return {
             error: "Unauthorized",
         };
     };
+
+    const profile = await currentProfile(userId);
+
+    if (!profile) {
+        return {
+            error: "Profile not found",
+        };
+    }
 
     const { name, slug, url, imageUrl, ipAddress } = data;
 
