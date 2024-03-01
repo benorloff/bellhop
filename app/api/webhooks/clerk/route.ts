@@ -59,8 +59,6 @@ export async function POST(req: Request) {
     // Create a profile when a user is created in Clerk
     if (eventType === "user.created") {
 
-
-
         // Define the user properties for Zendesk
         const zendeskUser = {
             user: {

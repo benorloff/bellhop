@@ -1,4 +1,4 @@
-import { PrismaClient, DataCenter } from "@prisma/client";
+import { Prisma, PrismaClient, DataCenter } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
@@ -187,9 +187,45 @@ async function main() {
             },
         }
     })
-    const seedSite1 = await prisma.site.upsert({
 
+    const carlosSites = await prisma.site.findMany({
+        where: { profileId: carlos.id },
+    });
+    const jeanSites = await prisma.site.findMany({
+        where: { profileId: jean.id },
+    });
+    const stuartSites = await prisma.site.findMany({
+        where: { profileId: stuart.id },
+    });
+
+    carlosSites.map(async (site) => {
+        await prisma.member.create({
+            data: {
+                profileId: carlos.id,
+                siteId: site.id,
+                role: "OWNER",
+            },
+        })
     })
+    jeanSites.map(async (site) => {
+        await prisma.member.create({
+            data: {
+                profileId: jean.id,
+                siteId: site.id,
+                role: "OWNER",
+            },
+        })
+    })
+    stuartSites.map(async (site) => {
+        await prisma.member.create({
+            data: {
+                profileId: stuart.id,
+                siteId: site.id,
+                role: "OWNER",
+            },
+        })
+    })
+
     console.log({ carlos, jean, stuart }, "<-- seed profiles");
 };
 

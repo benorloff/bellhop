@@ -1,14 +1,13 @@
+import { db } from "@/lib/db";
+
 import { FormInput } from "@/components/form/form-input";
-import { SiteNav } from "@/components/sites/site-nav";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { db } from "@/lib/db";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+
 import { MoreHorizontal } from "lucide-react";
-import Link from "next/link";
 
 interface SiteTeamPageProps {
     params: {
@@ -54,55 +53,67 @@ const SiteTeamPage = async ({
                 >
                     <CardTitle>Team Members</CardTitle>
                 </CardHeader>
-                <CardDescription
-                    className="border-b py-2 px-6"
-                >
-                    {/* TODO: Store state and connect these buttons */}
-                    <div className="flex flex-row gap-4 items-center">
-                        <Button variant="ghost">Members</Button>
-                        <Button variant="ghost">Invitations</Button>
-                    </div>
-                </CardDescription>
                 <CardContent
                     className="p-6"
                 >
-                    <div className="flex flex-col gap-4">
-                        {members.map((member) => (
-                            <div key={member.id} className="flex flex-row gap-4 items-center">
-                                <Avatar>
-                                    <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
-                                    <AvatarFallback>{member.profile.firstName[0]}{member.profile.lastName[0]}</AvatarFallback>
-                                </Avatar>
-                                <div className="grow">
-                                    <div>{member.profile.firstName} {member.profile.lastName}</div>
-                                    <div className="text-sm">{member.profile.email}</div>
-                                </div>
-                                <div>
-                                    {member.role}
-                                </div>
-                                <Popover>
-                                    <PopoverTrigger>
-                                        <Button
-                                            className="rounded-full h-10 w-10 p-1"
-                                            variant="ghost"
-                                        >
-                                            <MoreHorizontal />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent
-                                        side="top"
-                                        align="end"
-                                        className="max-w-[150px]"
-                                    >
-                                        <div className="flex flex-col gap-4">
-                                            <Button variant="destructive">Remove</Button>
+                    <Tabs defaultValue="members">
+                        <TabsList className="flex flex-row justify-center items-center w-full mb-6">
+                            <TabsTrigger 
+                                value="members"
+                                className="w-full"
+                            >
+                                Members
+                            </TabsTrigger>
+                            <TabsTrigger 
+                                value="invitations"
+                                className="w-full"
+                            >
+                                Invitations
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="members">
+                            <div className="flex flex-col gap-4">
+                                {members.map((member) => (
+                                    <div key={member.id} className="flex flex-row flex-wrap gap-4 items-center">
+                                        <Avatar>
+                                            <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
+                                            <AvatarFallback>{member.profile.firstName[0]}{member.profile.lastName[0]}</AvatarFallback>
+                                        </Avatar>
+                                        <div className="grow">
+                                            <div>{member.profile.firstName} {member.profile.lastName}</div>
+                                            <div className="text-sm">{member.profile.email}</div>
                                         </div>
-                                    </PopoverContent>
-                                </Popover>
-                                
+                                        <div>
+                                            {member.role}
+                                        </div>
+                                        <Popover>
+                                            <PopoverTrigger>
+                                                <Button
+                                                    className="rounded-full h-10 w-10 p-1"
+                                                    variant="ghost"
+                                                >
+                                                    <MoreHorizontal />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent
+                                                side="top"
+                                                align="end"
+                                                className="max-w-[150px]"
+                                            >
+                                                <div className="flex flex-col gap-4">
+                                                    <Button variant="destructive">Remove</Button>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                        
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        </TabsContent>
+                        <TabsContent value="invitations">
+                            Invitations go here.
+                        </TabsContent>
+                    </Tabs>
                 </CardContent>
             </Card>
         </div>
