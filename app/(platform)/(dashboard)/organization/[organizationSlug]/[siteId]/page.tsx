@@ -1,6 +1,19 @@
-import { currentProfile } from "@/lib/current-profile";
+import Link from "next/link";
 
+import { EntityType, AuditLog } from "@prisma/client";
+import { auth } from "@clerk/nextjs";
+
+import { currentProfile } from "@/lib/current-profile";
+import { getSite } from "@/lib/get-site";
+import { db } from "@/lib/db";
+
+import { ActivityList } from "@/components/activities/activity-list";
 import { Badge } from "@/components/ui/badge";
+import { 
+    Avatar, 
+    AvatarFallback, 
+    AvatarImage 
+} from "@/components/ui/avatar";
 import { 
     Card, 
     CardContent, 
@@ -9,20 +22,17 @@ import {
     CardTitle 
 } from "@/components/ui/card";
 import { InviteButton } from "../_components/invite-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Link from "next/link";
-
-import { TICKET_STATUS } from "@/constants/tickets";
 
 import { 
     zendeskApiHost,
     zendeskApiPassword,
     zendeskApiUsername, 
 } from "@/constants/tickets";
-import { getSite } from "@/lib/get-site";
-import { auth } from "@clerk/nextjs";
-import { db } from "@/lib/db";
-import { EntityType, AuditLog } from "@prisma/client";
+import {
+    dataCenters
+} from "@/constants/sites";
+import { Hint } from "@/components/hint";
+import Image from "next/image";
 
 interface SiteIdPageProps {
     params: {
@@ -110,21 +120,7 @@ const SiteIdPage = async ({
                             <CardTitle>Recent Activity</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {/* Render the 3 most recent activity logs */}
-                            {activities.map((activity: AuditLog, index: number) => {
-                                if ( index < 3 ) {
-                                    return (
-                                        <div key={activity.id} className="flex flex-row justify-between items-center gap-4 mb-4">
-                                            <Avatar>
-                                                <AvatarImage src={activity.userImage} alt={activity.userName} />
-                                                <AvatarFallback>{activity.userName[0]}</AvatarFallback>
-                                            </Avatar>
-                                            <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d ${activity.entityTitle}`}</div>
-                                            <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
-                                        </div>
-                                    )
-                                }
-                            })}
+                            <ActivityList activities={activities as AuditLog[]} />
                         </CardContent>
                     </Card>
                 </div>
@@ -159,7 +155,23 @@ const SiteIdPage = async ({
                             <CardTitle>IP Address</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {site?.ipAddress}
+                            <div className="flex flex-row items-center gap-4">
+                                <Hint
+                                    label={dataCenters[site?.dataCenter!].label}
+                                    side="top"
+                                >
+                                    <Image
+                                        src={dataCenters[site?.dataCenter!].iconPath}
+                                        alt={dataCenters[site?.dataCenter!].label}
+                                        width={36}
+                                        height={36}
+                                        className="rounded-sm"
+                                    />
+                                </Hint>
+                                <div className="grow">
+                                    {site?.ipAddress}
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
