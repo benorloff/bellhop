@@ -42,10 +42,12 @@ export const columns: ColumnDef<Ticket>[] =[
                 variant={row.original.status as "open" | "pending" | "solved"}
                 className="w-[75px] justify-center"
             >
-                {/* Capitalize first letter of status */}
-                {`${row.original.status.charAt(0).toUpperCase()}${row.original.status.slice(1)}`}
+                {row.original.status}
             </Badge>
-        )
+        ),
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id))
+        }
     },
     {
         accessorKey: "subject",

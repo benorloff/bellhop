@@ -14,22 +14,22 @@ interface DataTableToolbarProps<TData> {
 
 const statuses = [
     {
-      value: "2",
+      value: "open",
       label: "Open",
       icon: ShieldQuestionIcon,
     },
     {
-      value: "3",
+      value: "pending",
       label: "Pending",
       icon: CircleDashedIcon,
     },
     {
-      value: "4",
-      label: "Resolved",
+      value: "solved",
+      label: "Solved",
       icon: WatchIcon,
     },
     {
-      value: "5",
+      value: "closed",
       label: "Closed",
       icon: CheckCircleIcon,
     },

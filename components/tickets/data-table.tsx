@@ -114,7 +114,7 @@ export function DataTable<TData, TValue>({
                 variant="outline"
                 size="sm"
                 onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
+                disabled={!table.getPaginationRowModel}
                 >
                 Next
                 </Button>
