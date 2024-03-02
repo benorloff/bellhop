@@ -15,7 +15,7 @@ import { sendgridApiHost, sendgridApiKey } from "@/constants/mail";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
     const { userId, orgId } = auth();
-    const { email, site, profile } = data;
+    const { email, siteId, profileId } = data;
 
 
     if ( !userId || !orgId ) {
@@ -30,8 +30,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         invite = await db.invite.create({
             data: {
                 recipientEmail: email,
-                siteId: site.id,
-                profileId: profile.id,
+                siteId: siteId,
+                profileId: profileId,
             }
         })
     } catch (error) {
@@ -54,7 +54,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 ],
                 dynamic_template_data: {
                     site_name: "Circle Black",
-                    url: `http://localhost:3000/organization/test-org/${site.id}/invite/${invite.id}`
+                    url: `http://localhost:3000/organization/test-org/${siteId}/invite/${invite.id}`
                 }
             }
         ],

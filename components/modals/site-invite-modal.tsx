@@ -36,8 +36,8 @@ export const SiteInviteModal = () => {
 
     const router = useRouter();
 
-    const site = data.site;
-    const profile = data.profile;
+    const siteId = data?.siteId!;
+    const profileId = data?.profileId!;
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -60,7 +60,7 @@ export const SiteInviteModal = () => {
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
         const email = data.email;
 
-        execute({ email, site, profile });
+        execute({ email, siteId, profileId });
     }
 
     return (
