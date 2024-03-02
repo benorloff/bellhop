@@ -73,7 +73,7 @@ const SiteIdPage = async ({
                             <CardTitle>Recent Activity</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ActivityList activities={activities as AuditLog[]} />
+                            <ActivityList activities={activities} />
                         </CardContent>
                     </Card>
                 </div>
