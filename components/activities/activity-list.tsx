@@ -17,11 +17,13 @@ export const ActivityList = ({
         )
     }
 
+    console.log(activities, '<-- activities from activity-list.tsx')
+
     if (limit) {
         return (
             <>
                 {activities.map((activity: AuditLog, index: number) => {
-                    if (index < limit) {
+                    if (index < limit) (
                         <div key={activity.id} className="flex flex-row justify-between items-center gap-4 mb-4">
                             <Avatar>
                                 <AvatarImage src={activity.userImage} alt={activity.userName} />
@@ -30,24 +32,26 @@ export const ActivityList = ({
                             <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d ${activity.entityTitle}`}</div>
                             <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
                         </div>
-                    }
-                })}
-            </>
-        )
-    } else {
-        return (
-            <>
-                {activities.map((activity: AuditLog) => {
-                    <div key={activity.id} className="flex flex-row justify-between items-center gap-4 mb-4">
-                        <Avatar>
-                            <AvatarImage src={activity.userImage} alt={activity.userName} />
-                            <AvatarFallback>{activity.userName[0]}</AvatarFallback>
-                        </Avatar>
-                        <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d ${activity.entityTitle}`}</div>
-                        <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
-                    </div>
+                    )
                 })}
             </>
         )
     }
+
+    return (
+        <>
+            {activities.map((activity: AuditLog) => (
+                <div key={activity.id} className="flex flex-row justify-between items-center gap-4 mb-4">
+                    <Avatar>
+                        <AvatarImage src={activity.userImage} alt={activity.userName} />
+                        <AvatarFallback>{activity.userName[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d ${activity.entityTitle}`}</div>
+                    <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
+                </div>
+            ))}
+        </>
+    )
+
+
 } 
