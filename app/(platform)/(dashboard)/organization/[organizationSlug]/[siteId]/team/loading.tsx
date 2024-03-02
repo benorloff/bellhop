@@ -14,7 +14,7 @@ const SiteTeamLoading = () => {
             >
                 <CardTitle>
                     <div className="flex flex-row justify-between items-center">
-                        <Skeleton className="w-1/5 h-10" />
+                        <div>Team Members</div>
                         <Skeleton className="w-1/5 h-10" />
                     </div>
                 </CardTitle>
@@ -28,10 +28,6 @@ const SiteTeamLoading = () => {
                     <Skeleton className="h-10 grow"/>
                 </div>
                 <div className="flex flex-row flex-wrap gap-4 items-center justify-between mb-6"> 
-                    <Skeleton className="h-10 w-10 rounded-full" />
-                    <Skeleton className="h-10 grow"/>
-                </div>
-                <div className="flex flex-row flex-wrap gap-4 items-center justify-between"> 
                     <Skeleton className="h-10 w-10 rounded-full" />
                     <Skeleton className="h-10 grow"/>
                 </div>

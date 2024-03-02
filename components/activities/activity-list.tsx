@@ -21,7 +21,7 @@ export const ActivityList = ({
         return (
             <>
                 {activities.map((activity: AuditLog, index: number) => {
-                    while (index < limit) {
+                    if (index < limit) {
                         <div key={activity.id} className="flex flex-row justify-between items-center gap-4 mb-4">
                             <Avatar>
                                 <AvatarImage src={activity.userImage} alt={activity.userName} />

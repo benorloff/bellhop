@@ -33,6 +33,8 @@ import {
 } from "@/constants/sites";
 import { Hint } from "@/components/hint";
 import Image from "next/image";
+import { RecentTickets } from "@/components/tickets/recent-tickets";
+import { Suspense } from "react";
 
 interface SiteIdPageProps {
     params: {
@@ -99,20 +101,9 @@ const SiteIdPage = async ({
                             <CardTitle>Recent Tickets</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {/* Render the 3 most recent tickets */}
-                            {tickets.results.map((ticket: any, index: number) => {
-                                if ( index < 3 ) {
-                                    return (
-                                        <Link href={`/tickets/${ticket.id}`} key={ticket.id}>
-                                            <div className="flex flex-row gap-4 justify-between border rounded-sm bg-background hover:bg-background/90 p-4 mb-4">
-                                                <Badge variant="open">{`${ticket.status.charAt(0).toUpperCase()}${ticket.status.slice(1)}`}</Badge>
-                                                <div className="grow">{ticket.subject}</div>
-                                                <div className="shrink">{new Date(ticket.updated_at).toLocaleString()}</div>
-                                            </div>
-                                        </Link>
-                                    )
-                                }
-                            })}     
+                            <Suspense fallback={<RecentTickets.Skeleton />}>
+                                <RecentTickets requestType="site" siteId={params.siteId} />
+                            </Suspense>
                         </CardContent>
                     </Card>
                     <Card>
