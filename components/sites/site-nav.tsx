@@ -34,6 +34,11 @@ export const SiteNav = ({
             href: `${basePath}/tickets`,
         },
         {
+            label: "Activity",
+            value: "activity",
+            href: `${basePath}/activity`,
+        },
+        {
             label: "Team",
             value: "team",
             href: `${basePath}/team`,

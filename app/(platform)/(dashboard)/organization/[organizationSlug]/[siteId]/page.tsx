@@ -21,6 +21,8 @@ import {
 } from "@/constants/tickets";
 import { getSite } from "@/lib/get-site";
 import { auth } from "@clerk/nextjs";
+import { db } from "@/lib/db";
+import { EntityType, AuditLog } from "@prisma/client";
 
 interface SiteIdPageProps {
     params: {
@@ -69,6 +71,13 @@ const SiteIdPage = async ({
         return tickets;
     };
 
+    const activities = await db.auditLog.findMany({
+        where: {
+            entityType: EntityType.SITE,
+            entityId: site?.id,
+        }
+    });
+
     const tickets = await getSiteTickets();
     
     return (
@@ -96,6 +105,28 @@ const SiteIdPage = async ({
                             })}     
                         </CardContent>
                     </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Recent Activity</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {/* Render the 3 most recent activity logs */}
+                            {activities.map((activity: AuditLog, index: number) => {
+                                if ( index < 3 ) {
+                                    return (
+                                        <div key={activity.id} className="flex flex-row justify-between items-center gap-4 mb-4">
+                                            <Avatar>
+                                                <AvatarImage src={activity.userImage} alt={activity.userName} />
+                                                <AvatarFallback>{activity.userName[0]}</AvatarFallback>
+                                            </Avatar>
+                                            <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d ${activity.entityTitle}`}</div>
+                                            <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
+                                        </div>
+                                    )
+                                }
+                            })}
+                        </CardContent>
+                    </Card>
                 </div>
                 <div className="flex flex-col grow basis-auto gap-8">
                     <Card>
@@ -109,7 +140,7 @@ const SiteIdPage = async ({
                                         <Avatar>
                                             {/* Change this to next/image */}
                                             <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
-                                            <AvatarFallback>BO</AvatarFallback>
+                                            <AvatarFallback>{`${member.profile.firstName[0]}${member.profile.lastName[0]}`}</AvatarFallback>
                                         </Avatar>
                                         <div className="grow">
                                             <div>{member.profile.firstName} {member.profile.lastName}</div>
