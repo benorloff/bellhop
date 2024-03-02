@@ -99,9 +99,9 @@ const SiteIdPage = async ({
                                 ))}
                             </div>
                         </CardContent>
-                        <CardFooter>
+                        {/* <CardFooter>
                             <InviteButton siteId={params.siteId} profileId={profile.id}/>
-                        </CardFooter>
+                        </CardFooter> */}
                     </Card>
                     <Card>
                         <CardHeader>
