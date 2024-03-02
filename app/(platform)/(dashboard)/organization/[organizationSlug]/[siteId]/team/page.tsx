@@ -121,8 +121,8 @@ const SiteTeamPage = async ({
                             {invitations.map((invite) => (
                                 <div key={invite.id} className="flex flex-row flex-wrap gap-4 items-center">
                                     <Avatar>
-                                            <AvatarFallback>{invite.recipientEmail[0].toUpperCase()}</AvatarFallback>
-                                        </Avatar>
+                                        <AvatarFallback>{invite.recipientEmail[0].toUpperCase()}</AvatarFallback>
+                                    </Avatar>
                                     <div className="grow">
                                         <div>{invite.recipientEmail}</div>
                                     </div>
