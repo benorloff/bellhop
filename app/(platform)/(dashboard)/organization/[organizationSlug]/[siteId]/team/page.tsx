@@ -28,6 +28,15 @@ const SiteTeamPage = async ({
         }
     })
 
+    const invitations = await db.invite.findMany({
+        where: {
+            siteId: params.siteId,
+        },
+        include: {
+            profile: true,
+        },
+    });
+
     return (
         <div className="flex flex-col gap-4">
             <Card>
@@ -111,7 +120,39 @@ const SiteTeamPage = async ({
                             </div>
                         </TabsContent>
                         <TabsContent value="invitations">
-                            Invitations go here.
+                            {invitations.map((invite) => (
+                                <div key={invite.id} className="flex flex-row flex-wrap gap-4 items-center mb-4 border p-4 rounded-sm">
+                                    <div className="flex flex-row gap-4 items-center grow">
+                                        <Avatar>
+                                            <AvatarFallback>{invite.recipientEmail[0].toUpperCase()}</AvatarFallback>
+                                        </Avatar>
+                                        <div>{invite.recipientEmail}</div>
+                                    </div>
+                                    <div>
+                                        Pending
+                                    </div>
+                                    <Popover>
+                                        <PopoverTrigger>
+                                            <Button
+                                                className="rounded-full h-10 w-10 p-1"
+                                                variant="ghost"
+                                            >
+                                                <MoreHorizontal />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            side="top"
+                                            align="end"
+                                            className="max-w-[150px]"
+                                        >
+                                            <div className="flex flex-col gap-4">
+                                                {/* TODO: Add revoke invitatino action */}
+                                                <Button variant="destructive">Revoke</Button>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+                            ))}
                         </TabsContent>
                     </Tabs>
                 </CardContent>
