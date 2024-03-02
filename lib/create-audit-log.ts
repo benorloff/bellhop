@@ -1,13 +1,13 @@
 import { auth, currentUser } from "@clerk/nextjs";
-import { ACTION, ENTITY_TYPE } from "@prisma/client";
+import { Action, EntityType } from "@prisma/client";
 
 import { db } from "@/lib/db";
 
 interface CreateAuditLogProps {
     entityId: string;
-    entityType: ENTITY_TYPE,
+    entityType: EntityType,
     entityTitle: string;
-    action: ACTION;
+    action: Action;
 };
 
 export const createAuditLog = async (props: CreateAuditLogProps) => {

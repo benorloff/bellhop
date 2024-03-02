@@ -121,13 +121,13 @@ model Invite {
   @@index([siteId])
 }
 
-enum ACTION {
+enum Action {
   CREATE
   UPDATE
   DELETE
 }
 
-enum ENTITY_TYPE {
+enum EntityType {
   PROFILE
   SITE
   MEMBER
@@ -138,9 +138,9 @@ enum ENTITY_TYPE {
 model AuditLog {
   id          String      @id @default(uuid())
   orgId       String
-  action      ACTION
+  action      Action
   entityId    String
-  entityType  ENTITY_TYPE
+  entityType  EntityType
   entityTitle String
   userId      String
   userImage   String      @db.Text

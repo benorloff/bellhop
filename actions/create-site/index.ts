@@ -1,15 +1,15 @@
 "use server";
 
 import { auth } from "@clerk/nextjs";
+import { Action, EntityType, MemberRole } from "@prisma/client";
 
-import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
+import { createAuditLog } from "@/lib/create-audit-log";
 import { currentProfile } from "@/lib/current-profile";
+import { db } from "@/lib/db";
 
 import { InputType, ReturnType } from "./types";
 import { CreateSite } from "./schema";
-import { ACTION, ENTITY_TYPE, MemberRole } from "@prisma/client";
-import { createAuditLog } from "@/lib/create-audit-log";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -35,6 +35,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     let site;
 
     try {
+        // Create the site
         site = await db.site.create({
             data: {
                 name,
@@ -53,11 +54,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             }
         })
 
+        // Create audit log for site creation
         await createAuditLog({
             entityTitle: site.name,
             entityId: site.id,
-            entityType: ENTITY_TYPE.SITE,
-            action: ACTION.CREATE,
+            entityType: EntityType.SITE,
+            action: Action.CREATE,
         })
     } catch (error) {
         console.log(error);
