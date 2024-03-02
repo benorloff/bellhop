@@ -1,5 +1,6 @@
 import { AuditLog } from "@prisma/client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "../ui/skeleton";
 
 interface ActivityListProps {
     activities: AuditLog[];
@@ -16,8 +17,6 @@ export const ActivityList = ({
             <div>No activity yet.</div>
         )
     }
-
-    console.log(activities, '<-- activities from activity-list.tsx')
 
     if (limit) {
         return (
@@ -52,6 +51,27 @@ export const ActivityList = ({
             ))}
         </>
     )
-
-
 } 
+
+ActivityList.Skeleton = function SkeletonActivityList() {
+    return (
+        <>
+            <div className="flex flex-row gap-4 justify-between items-center border rounded-sm p-4 mb-4">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="h-6 grow" />
+                <Skeleton className="h-6 w-[150px]" />
+            </div>
+            <div className="flex flex-row gap-4 justify-between items-center border rounded-sm p-4 mb-4">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="h-6 grow" />
+                <Skeleton className="h-6 w-[150px]" />
+            </div>
+            <div className="flex flex-row gap-4 justify-between items-center border rounded-sm p-4 mb-4">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="h-6 grow" />
+                <Skeleton className="h-6 w-[150px]" />
+            </div>
+        </>
+        
+    )
+}

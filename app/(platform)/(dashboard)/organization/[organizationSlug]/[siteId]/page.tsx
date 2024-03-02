@@ -73,7 +73,9 @@ const SiteIdPage = async ({
                             <CardTitle>Recent Activity</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ActivityList activities={activities} />
+                            <Suspense fallback={<ActivityList.Skeleton />}>
+                                <ActivityList activities={activities} />
+                            </Suspense>
                         </CardContent>
                     </Card>
                 </div>
