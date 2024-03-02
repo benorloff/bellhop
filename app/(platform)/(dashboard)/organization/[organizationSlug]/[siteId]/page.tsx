@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { EntityType, AuditLog } from "@prisma/client";
 import { auth } from "@clerk/nextjs";
 
@@ -8,7 +6,6 @@ import { getSite } from "@/lib/get-site";
 import { db } from "@/lib/db";
 
 import { ActivityList } from "@/components/activities/activity-list";
-import { Badge } from "@/components/ui/badge";
 import { 
     Avatar, 
     AvatarFallback, 
@@ -23,11 +20,6 @@ import {
 } from "@/components/ui/card";
 import { InviteButton } from "../_components/invite-button";
 
-import { 
-    zendeskApiHost,
-    zendeskApiPassword,
-    zendeskApiUsername, 
-} from "@/constants/tickets";
 import {
     dataCenters
 } from "@/constants/sites";
@@ -55,42 +47,12 @@ const SiteIdPage = async ({
 
     const site = await getSite(params.siteId);
 
-    const query = new URLSearchParams({
-        query: `type:ticket custom_field_23229752282907:${site?.id}`,
-        sort_by: "updated_at",
-        sort_order: "desc",
-    });
-
-    const getSiteTickets = async () => {
-
-        let tickets;
-
-        try {
-            const response = await fetch(`${zendeskApiHost}/search?${query}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`,
-                }, 
-            });
-            tickets = await response.json();
-        } catch (error) {
-            return {
-                error: "Failed to get site tickets."
-            }
-        }
-
-
-        return tickets;
-    };
-
     const activities = await db.auditLog.findMany({
         where: {
             entityType: EntityType.SITE,
             entityId: site?.id,
         }
     });
-
-    const tickets = await getSiteTickets();
     
     return (
         <div>

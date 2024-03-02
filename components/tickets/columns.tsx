@@ -42,7 +42,7 @@ export const columns: ColumnDef<Ticket>[] =[
                 variant={row.original.status as "open" | "pending" | "solved"}
                 className="w-[75px] justify-center"
             >
-                {row.original.status}
+                {`${row.original.status.charAt(0).toUpperCase()}${row.original.status.slice(1)}`}
             </Badge>
         ),
         filterFn: (row, id, value) => {

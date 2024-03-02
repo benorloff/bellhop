@@ -9,6 +9,7 @@ interface ModalData {
     profile?: Profile;
     siteId?: string;
     profileId?: string;
+    orgMembers?: Array<object>;
 }
 
 interface ModalStore {

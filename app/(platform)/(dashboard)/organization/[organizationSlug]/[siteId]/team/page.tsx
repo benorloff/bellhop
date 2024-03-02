@@ -10,7 +10,7 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { MoreHorizontal } from "lucide-react";
 import { InviteButton } from "../../_components/invite-button";
 import { getSite } from "@/lib/get-site";
-import { auth } from "@clerk/nextjs";
+import { auth, clerkClient } from "@clerk/nextjs";
 import { currentProfile } from "@/lib/current-profile";
 
 interface SiteTeamPageProps {
@@ -22,12 +22,12 @@ interface SiteTeamPageProps {
 const SiteTeamPage = async ({
     params
 }: SiteTeamPageProps) => {
-    const { userId } = auth();
+    const { userId, orgId } = auth();
     const profile = await currentProfile(userId as string);
 
-    if (!profile) {
-        throw new Error ("Profile not found");
-    ;}
+    if (!userId || !orgId || !profile) {
+        throw new Error ("Unauthorized");
+    };
 
     const members = await db.member.findMany({
         where: {
@@ -36,7 +36,11 @@ const SiteTeamPage = async ({
         include: {
             profile: true,
         }
-    })
+    });
+
+    const organizationId = orgId;
+    const orgMembers = await clerkClient.organizations.getOrganizationMembershipList({ organizationId });
+    const parsedOrgMembers = await JSON.parse(JSON.stringify(orgMembers));
 
     const invitations = await db.invite.findMany({
         where: {
@@ -56,7 +60,7 @@ const SiteTeamPage = async ({
                     <CardTitle>
                         <div className="flex flex-row justify-between items-center">
                             <div>Team Members</div>
-                            <InviteButton siteId={params.siteId} profileId={profile.id} />
+                            <InviteButton siteId={params.siteId} profileId={profile.id} orgMembers={parsedOrgMembers}/>
                         </div>
                     </CardTitle>
                 </CardHeader>
