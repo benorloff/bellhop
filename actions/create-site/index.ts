@@ -8,7 +8,8 @@ import { currentProfile } from "@/lib/current-profile";
 
 import { InputType, ReturnType } from "./types";
 import { CreateSite } from "./schema";
-import { MemberRole } from "@prisma/client";
+import { ACTION, ENTITY_TYPE, MemberRole } from "@prisma/client";
+import { createAuditLog } from "@/lib/create-audit-log";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -50,6 +51,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                     ]
                 }
             }
+        })
+
+        await createAuditLog({
+            entityTitle: site.name,
+            entityId: site.id,
+            entityType: ENTITY_TYPE.SITE,
+            action: ACTION.CREATE,
         })
     } catch (error) {
         console.log(error);
