@@ -7,19 +7,19 @@ import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 
 interface InviteButtonProps {
-    site: Site;
-    profile: Profile;
+    siteId: string;
+    profileId: string;
 };
 
 export const InviteButton = ({
-    site,
-    profile,
+    siteId,
+    profileId,
 }: InviteButtonProps) => {
     const { onOpen } = useModal();
 
     return (
         <Button
-            onClick={() => onOpen("siteInvite", {site, profile})}
+            onClick={() => onOpen("siteInvite", {siteId, profileId})}
         >
             <Plus className="h-4 w-4 mr-2" />
             Invite Members

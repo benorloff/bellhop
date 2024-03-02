@@ -17,17 +17,39 @@ import {
 import { FormInput } from "../form/form-input";
 import { FormSubmit } from "../form/form-submit";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+
+const FormSchema = z.object({
+    email: z.string().email({
+        message: "Please enter a valid email address."
+    }),
+});
 
 export const SiteInviteModal = () => {
-    const router = useRouter();
     const { onOpen, isOpen, onClose, type, data } = useModal();
-
     const isModalOpen = isOpen && type === "siteInvite";
+    
+    const { formState: { errors } } = useForm();
 
+    const router = useRouter();
+
+    const site = data.site;
+    const profile = data.profile;
+
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            email: "",
+        }
+    });
+    
     const { execute, fieldErrors } = useAction(createSiteInvite, {
         onSuccess: (data) => {
-            router.refresh();
             toast.success("Invitation sent!");
+            router.refresh();
             onClose();
         },
         onError: (error) => {
@@ -35,10 +57,8 @@ export const SiteInviteModal = () => {
         }
     });
 
-    const onSubmit = (formData: FormData) => {
-        const email = formData.get("email") as string;
-        const site = data.site;
-        const profile = data.profile;
+    const onSubmit = (data: z.infer<typeof FormSchema>) => {
+        const email = data.email;
 
         execute({ email, site, profile });
     }
@@ -54,19 +74,32 @@ export const SiteInviteModal = () => {
                         Add collaborators to your site.
                     </DialogDescription>
                 </DialogHeader>
-                <form action={onSubmit} className="space-y-4">
-                    <FormInput 
-                        id="email"
-                        label="Email Address"
-                        type="text"
-                        errors={fieldErrors}
-                    />
-                    <DialogFooter>
-                        <FormSubmit className="w-full">
-                            Send Invitation
-                        </FormSubmit>
-                    </DialogFooter>
-                </form>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <FormInput
+                                            id="email"
+                                            type="email"
+                                            placeholder="Email"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <DialogFooter>
+                            <FormSubmit className="w-full">
+                                Send Invitation
+                            </FormSubmit>
+                        </DialogFooter>
+                    </form>
+                </Form>
             </DialogContent>
 
         </Dialog>

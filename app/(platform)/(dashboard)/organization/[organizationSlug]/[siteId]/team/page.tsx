@@ -8,6 +8,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 
 import { MoreHorizontal } from "lucide-react";
+import { InviteButton } from "../../_components/invite-button";
+import { getSite } from "@/lib/get-site";
+import { auth } from "@clerk/nextjs";
+import { currentProfile } from "@/lib/current-profile";
 
 interface SiteTeamPageProps {
     params: {
@@ -18,6 +22,12 @@ interface SiteTeamPageProps {
 const SiteTeamPage = async ({
     params
 }: SiteTeamPageProps) => {
+    const { userId } = auth();
+    const profile = await currentProfile(userId as string);
+
+    if (!profile) {
+        throw new Error ("Profile not found");
+    ;}
 
     const members = await db.member.findMany({
         where: {
@@ -40,27 +50,15 @@ const SiteTeamPage = async ({
     return (
         <div className="flex flex-col gap-4">
             <Card>
-                <CardHeader>
-                    <CardTitle>Invite people</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    {/* This is a placeholder for the form to invite people to the site. */}
-                    <FormInput 
-                        id="email"
-                        label="Email"
-                        type="email"
-                        placeholder="bella@bellhop.com"
-                    />
-                </CardContent>
-                <CardFooter>
-                    <Button>Invite</Button>
-                </CardFooter>
-            </Card>
-            <Card>
                 <CardHeader
                     className="border-b"
                 >
-                    <CardTitle>Team Members</CardTitle>
+                    <CardTitle>
+                        <div className="flex flex-row justify-between items-center">
+                            <div>Team Members</div>
+                            <InviteButton siteId={params.siteId} profileId={profile.id} />
+                        </div>
+                    </CardTitle>
                 </CardHeader>
                 <CardContent
                     className="p-6"
@@ -121,11 +119,11 @@ const SiteTeamPage = async ({
                         </TabsContent>
                         <TabsContent value="invitations">
                             {invitations.map((invite) => (
-                                <div key={invite.id} className="flex flex-row flex-wrap gap-4 items-center mb-4 border p-4 rounded-sm">
-                                    <div className="flex flex-row gap-4 items-center grow">
-                                        <Avatar>
+                                <div key={invite.id} className="flex flex-row flex-wrap gap-4 items-center">
+                                    <Avatar>
                                             <AvatarFallback>{invite.recipientEmail[0].toUpperCase()}</AvatarFallback>
                                         </Avatar>
+                                    <div className="grow">
                                         <div>{invite.recipientEmail}</div>
                                     </div>
                                     <div>

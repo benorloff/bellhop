@@ -35,6 +35,10 @@ const SiteIdPage = async ({
 
     const profile = await currentProfile(userId as string);
 
+    if (!profile) {
+        throw new Error ("Profile not found");
+    }
+
     const site = await getSite(params.siteId);
 
     const query = new URLSearchParams({
@@ -116,7 +120,7 @@ const SiteIdPage = async ({
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <InviteButton site={site!} profile={profile!}/>
+                            <InviteButton siteId={params.siteId} profileId={profile.id}/>
                         </CardFooter>
                     </Card>
                     <Card>
