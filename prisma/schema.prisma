@@ -120,3 +120,32 @@ model Invite {
   @@index([profileId])
   @@index([siteId])
 }
+
+enum ACTION {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum ENTITY_TYPE {
+  PROFILE
+  SITE
+  MEMBER
+  TICKET
+  INVITE
+}
+
+model AuditLog {
+  id          String      @id @default(uuid())
+  orgId       String
+  action      ACTION
+  entityId    String
+  entityType  ENTITY_TYPE
+  entityTitle String
+  userId      String
+  userImage   String      @db.Text
+  userName    String      @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

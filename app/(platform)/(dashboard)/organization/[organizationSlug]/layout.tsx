@@ -1,5 +1,5 @@
 import { startCase } from "lodash";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 import { OrgControl } from "./_components/org-control";
 
@@ -13,7 +13,7 @@ export async function generateMetadata() {
 };
 
 const OrganizationLayout = ({ 
-    children 
+    children, 
 }: {
     children: React.ReactNode;
 }) => {

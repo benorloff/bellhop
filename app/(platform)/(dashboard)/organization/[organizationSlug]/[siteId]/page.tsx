@@ -76,15 +76,20 @@ const SiteIdPage = async ({
                             <CardTitle>Recent Tickets</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {tickets.results.map((ticket: any) => (
-                                <Link href={`/tickets/${ticket.id}`} key={ticket.id}>
-                                    <div className="flex flex-row gap-4 justify-between border rounded-sm bg-background hover:bg-background/90 p-4 mb-4">
-                                        <Badge variant="open">{TICKET_STATUS[ticket.status as keyof typeof TICKET_STATUS]}</Badge>
-                                        <div className="grow">{ticket.subject}</div>
-                                        <div className="shrink">{new Date(ticket.updated_at).toLocaleString()}</div>
-                                    </div>
-                                </Link>
-                            ))}
+                            {/* Render the 3 most recent tickets */}
+                            {tickets.results.map((ticket: any, index: number) => {
+                                if ( index < 3 ) {
+                                    return (
+                                        <Link href={`/tickets/${ticket.id}`} key={ticket.id}>
+                                            <div className="flex flex-row gap-4 justify-between border rounded-sm bg-background hover:bg-background/90 p-4 mb-4">
+                                                <Badge variant="open">{`${ticket.status.charAt(0).toUpperCase()}${ticket.status.slice(1)}`}</Badge>
+                                                <div className="grow">{ticket.subject}</div>
+                                                <div className="shrink">{new Date(ticket.updated_at).toLocaleString()}</div>
+                                            </div>
+                                        </Link>
+                                    )
+                                }
+                            })}     
                         </CardContent>
                     </Card>
                 </div>

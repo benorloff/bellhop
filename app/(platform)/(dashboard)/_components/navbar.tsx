@@ -5,6 +5,7 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { ThemeModeToggle } from "@/components/theme-mode-toggle";
 import { useTheme } from "next-themes";
 import { dark } from "@clerk/themes";
+import { LayoutDashboard } from "lucide-react";
 
 
 export const Navbar = () => {

@@ -8,21 +8,16 @@ export default async function SiteLayout({
 }: {
     children: React.ReactNode
     params: {
-        organizationSlug: string;
         siteId: string;
     }
 }) {
     const site = await getSite(params.siteId);
 
-    if (!site) {
-        throw new Error("Site not found");
-    }
-
-    const basePath = `/organization/${site.orgSlug}/${site.id}`
+    const basePath = `/organization/${site?.orgSlug}/${site?.id}`
 
     return (
         <>
-            <SiteHeader {...site} /> 
+            <SiteHeader {...site!} /> 
             <SiteNav basePath={basePath}/>
             {children}
         </>
