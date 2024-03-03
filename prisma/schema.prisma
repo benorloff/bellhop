@@ -76,8 +76,8 @@ model Member {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([profileId])
-  @@index([siteId])
+  @@unique([profileId, siteId], name: "profileId_siteId")
+  @@index([profileId, siteId], name: "profileId_siteId")
 }
 
 model Ticket {

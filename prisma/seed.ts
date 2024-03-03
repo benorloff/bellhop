@@ -194,16 +194,21 @@ async function main() {
     // Create an "OWNER" member for each site
     // This member will be the profile that created the site 
     sites.map(async (site) => {
-        await prisma.member.create({
-            data: {
+        await prisma.member.upsert({
+            where: {
+                profileId_siteId: {
+                    profileId: site.profileId,
+                    siteId: site.id,
+                },
+            },
+            update: {},
+            create: {
                 role: "OWNER",
                 profileId: site.profileId,
                 siteId: site.id,
             }
         })
     })
-
-    console.log({ carlos, jean, stuart }, "<-- seed profiles");
 };
 
 main()
