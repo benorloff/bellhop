@@ -188,41 +188,18 @@ async function main() {
         }
     })
 
-    const carlosSites = await prisma.site.findMany({
-        where: { profileId: carlos.id },
-    });
-    const jeanSites = await prisma.site.findMany({
-        where: { profileId: jean.id },
-    });
-    const stuartSites = await prisma.site.findMany({
-        where: { profileId: stuart.id },
-    });
+    // Retrieve all sites created above
+    const sites = await prisma.site.findMany();
 
-    carlosSites.map(async (site) => {
+    // Create an "OWNER" member for each site
+    // This member will be the profile that created the site 
+    sites.map(async (site) => {
         await prisma.member.create({
             data: {
-                profileId: carlos.id,
-                siteId: site.id,
                 role: "OWNER",
-            },
-        })
-    })
-    jeanSites.map(async (site) => {
-        await prisma.member.create({
-            data: {
-                profileId: jean.id,
+                profileId: site.profileId,
                 siteId: site.id,
-                role: "OWNER",
-            },
-        })
-    })
-    stuartSites.map(async (site) => {
-        await prisma.member.create({
-            data: {
-                profileId: stuart.id,
-                siteId: site.id,
-                role: "OWNER",
-            },
+            }
         })
     })
 
