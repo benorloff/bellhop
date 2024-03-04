@@ -40,7 +40,7 @@ export const NavItem = ({
                         <div className="flex items-center gap-x-2">
                             <Icon className={cn(
                                 "h-4 w-4",
-                                collapsed ? "mr-0" : "mr-2"
+                                collapsed ? "mr-0" : "mr-2",
                             )} />
                             {!collapsed && (
                                 <span>

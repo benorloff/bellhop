@@ -4,9 +4,11 @@ import {
     Layout,
     Laptop,
     Tag,
+    Settings,
 } from "lucide-react";
 
 import { NavItem } from "./nav-item";
+import { cn } from "@/lib/utils";
 
 export const Navigation = () => {
 

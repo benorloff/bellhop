@@ -8,6 +8,7 @@ import { NavItem } from "./nav-item";
 import { Wrapper } from "./wrapper";
 import { Toggle } from "./toggle";
 import { Navigation } from "./navigation";
+import { Footer } from "./footer";
 
 interface SidebarProps {
     storageKey?: string;
@@ -21,6 +22,7 @@ export const Sidebar = ({
         <Wrapper>
             <Toggle />
             <Navigation />
+            <Footer />
         </Wrapper>
     );
 };
