@@ -1,16 +1,19 @@
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth, currentUser, clerkClient } from "@clerk/nextjs";
 
 import { stripe } from "@/lib/stripe";
 
 export const createStripeSession = async () => {
     const { userId, orgId } = auth();
-    const user = await currentUser();
 
-    if (!userId || !orgId || !user) {
+    if ( !userId || !orgId ) {
         return {
             error: "Unauthorized",
         };
     }
+    const user = await clerkClient.users.getUser(userId);
+    const { name } = await clerkClient.organizations.getOrganization({ organizationId: orgId })
+    const stripeCustomerId = user?.privateMetadata?.stripeCustomerId! || "";
+    console.log(stripeCustomerId, "<-- stripeCustomerId from createStripeSession")
 
     let url;
 
@@ -30,6 +33,7 @@ export const createStripeSession = async () => {
             ],
             metadata: {
                 orgId,
+                orgName: name,
             },
         });
         url = stripeSession.url;

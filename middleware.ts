@@ -16,11 +16,6 @@ export default authMiddleware({
       const orgSelection = new URL("/select-org", req.url);
       return NextResponse.redirect(orgSelection);
     }
-    // Redirect users to the dashboard if they're already authenticated
-    if (auth.userId && req.nextUrl.pathname === "/") {
-      const dashboard = new URL("/dashboard", req.url);
-      return NextResponse.redirect(dashboard);
-    }
     // If the user is logged in and trying to access a protected route, allow them to access route
     if (auth.userId && !auth.isPublicRoute) {
       return NextResponse.next();

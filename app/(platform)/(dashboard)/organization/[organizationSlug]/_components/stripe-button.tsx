@@ -19,6 +19,7 @@ export const StripeButton = ({
         >
             Upgrade
         </Button>
+
     )
 
 }
