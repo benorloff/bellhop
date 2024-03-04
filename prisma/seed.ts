@@ -209,6 +209,71 @@ async function main() {
             }
         })
     })
+
+    // Create products
+    // Products have been manually created in Stripe for testing purposes
+
+    interface Product {
+        id: string;
+        number: string;
+    };
+
+    const products: Product[] = [
+        {
+            id: "prod_Pg4KygN4jddjYq",
+            number: "1",
+        },
+        {
+            id: "prod_Pg4KPdcNneRTDZ",
+            number: "2",
+        },
+        {
+            id: "prod_Pg4KXvgUwJ8pLZ",
+            number: "3",
+        },
+    ]
+
+    const product1 = await prisma.product.upsert({
+        where: {
+            id: "prod_Pg4KygN4jddjYq",
+        },
+        update: {},
+        create: {
+            id: "prod_Pg4KygN4jddjYq",
+            active: true,
+            name: "TEST PRODUCT 1",
+            description: "Description for TEST PRODUCT 1",
+            metadata: {},
+        }
+    })
+
+    const product2 = await prisma.product.upsert({
+        where: {
+            id: "prod_Pg4KPdcNneRTDZ",
+        },
+        update: {},
+        create: {
+            id: "prod_Pg4KPdcNneRTDZ",
+            active: true,
+            name: "TEST PRODUCT 2",
+            description: "Description for TEST PRODUCT 2",
+            metadata: {},
+        }
+    })
+
+    const product3 = await prisma.product.upsert({
+        where: {
+            id: "prod_Pg4KXvgUwJ8pLZ",
+        },
+        update: {},
+        create: {
+            id: "prod_Pg4KXvgUwJ8pLZ",
+            active: true,
+            name: "TEST PRODUCT 3",
+            description: "Description for TEST PRODUCT 3",
+            metadata: {},
+        }
+    })
 };
 
 main()

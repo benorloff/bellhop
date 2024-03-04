@@ -5,7 +5,7 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { ThemeModeToggle } from "@/components/theme-mode-toggle";
 import { useTheme } from "next-themes";
 import { dark } from "@clerk/themes";
-import { LayoutDashboard } from "lucide-react";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 
 export const Navbar = () => {
@@ -34,6 +34,8 @@ export const Navbar = () => {
                         baseTheme: theme === "dark" ? dark : undefined,
                     }}
                 />
+                <NotificationDropdown />
+                <ThemeModeToggle />
                 <UserButton 
                     afterSignOutUrl="/"
                     appearance={{
@@ -41,12 +43,15 @@ export const Navbar = () => {
                             avatarBox: {
                                 height: 35,
                                 width: 35,
+                            },
+                            userButtonPopoverCard: {
+                                borderRadius: "0.375rem",
                             }
+                            
                         },
                         baseTheme: theme === "dark" ? dark : undefined,
                     }}
                 />
-                <ThemeModeToggle />
             </div>
         </nav>
     )

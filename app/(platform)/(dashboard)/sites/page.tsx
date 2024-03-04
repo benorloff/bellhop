@@ -1,14 +1,15 @@
 import { Suspense } from "react";
 import { SiteList } from "../../../../components/sites/site-list";
+import { DashboardTitle } from "@/components/dashboard-title";
 
 const SitesPage = () => {
     return ( 
-        <div className="w-full">
-            <div className="text-3xl mb-8">Sites</div>
+        <>
+            <DashboardTitle title="Sites" />
             <Suspense fallback={<SiteList.Skeleton />}>
                 <SiteList />
             </Suspense>
-        </div>
+        </>
      );
 }
  

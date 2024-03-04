@@ -4,7 +4,7 @@ import {
     Layout,
     Laptop,
     Tag,
-    Settings,
+    Cpu,
 } from "lucide-react";
 
 import { NavItem } from "./nav-item";
@@ -17,6 +17,11 @@ export const Navigation = () => {
             label: "Dashboard",
             icon: Layout,
             href: "/dashboard",
+        },
+        {
+            label: "Bellhop AI",
+            icon: Cpu,
+            href: "/ai",
         },
         {
             label: "Sites",

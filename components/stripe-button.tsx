@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 
 interface StripeButtonProps {
     url: string;
+    label: string;
 };
 
 export const StripeButton = ({
     url,
+    label,
 }: StripeButtonProps) => {
     const router = useRouter();
     return (
@@ -17,7 +19,7 @@ export const StripeButton = ({
                 router.push(url)
             }
         >
-            Upgrade
+            {label}
         </Button>
 
     )

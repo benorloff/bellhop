@@ -9,6 +9,7 @@ import { Wrapper } from "./wrapper";
 import { Toggle } from "./toggle";
 import { Navigation } from "./navigation";
 import { Footer } from "./footer";
+import { useTheme } from "next-themes";
 
 interface SidebarProps {
     storageKey?: string;
@@ -17,7 +18,7 @@ interface SidebarProps {
 export const Sidebar = ({
     storageKey,
 }: SidebarProps) => {
-
+    const { theme } = useTheme();
     return (
         <Wrapper>
             <Toggle />

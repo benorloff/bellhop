@@ -13,7 +13,6 @@ export const createStripeSession = async () => {
     const user = await clerkClient.users.getUser(userId);
     const { name } = await clerkClient.organizations.getOrganization({ organizationId: orgId })
     const stripeCustomerId = user?.privateMetadata?.stripeCustomerId! || "";
-    console.log(stripeCustomerId, "<-- stripeCustomerId from createStripeSession")
 
     let url;
 

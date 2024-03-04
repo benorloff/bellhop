@@ -136,16 +136,99 @@ enum EntityType {
 }
 
 model AuditLog {
-  id          String      @id @default(uuid())
+  id          String     @id @default(uuid())
   orgId       String
   action      Action
   entityId    String
   entityType  EntityType
   entityTitle String
   userId      String
-  userImage   String      @db.Text
-  userName    String      @db.Text
+  userImage   String     @db.Text
+  userName    String     @db.Text
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          String  @id
+  active      Boolean
+  name        String  @db.Text
+  description String? @db.Text
+  image       String? @db.Text
+  metadata    Json
+
+  prices Price[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PriceType {
+  one_time
+  recurring
+}
+
+enum PriceInterval {
+  day
+  week
+  month
+  year
+}
+
+model Price {
+  id            String        @id
+  active        Boolean
+  nickname      String?       @db.Text
+  unitAmount    BigInt
+  currency      String
+  type          PriceType
+  interval      PriceInterval
+  intervalCount Int
+  metadata      Json
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  subscriptions Subscription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, id], name: "productId_priceId")
+  @@index([productId, id], name: "productId_priceId")
+}
+
+enum SubscriptionStatus {
+  active
+  canceled
+  incomplete
+  incomplete_expired
+  past_due
+  trialing
+  unpaid
+}
+
+model Subscription {
+  id                 String             @id
+  customer           String
+  orgId              String
+  status             SubscriptionStatus
+  quantity           Int
+  currency           String
+  currentPeriodEnd   DateTime
+  currentPeriodStart DateTime
+  cancelAtPeriodEnd  Boolean
+  canceledAt         DateTime?
+  endedAt            DateTime?
+  cancelAt           DateTime?
+  trialStart         DateTime?
+  trialEnd           DateTime?
+  metadata           Json
+
+  priceId String
+  price   Price  @relation(fields: [priceId], references: [id])
+
+  createdAt DateTime
   updatedAt DateTime @updatedAt
 }

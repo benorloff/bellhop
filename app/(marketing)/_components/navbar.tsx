@@ -32,7 +32,7 @@ export const Navbar = () => {
                             </Button>
                             <Button size="sm" asChild>
                                 <Link href="/sign-up">
-                                Get Bellhop
+                                Get Started
                                 </Link>
                             </Button>
                         </>

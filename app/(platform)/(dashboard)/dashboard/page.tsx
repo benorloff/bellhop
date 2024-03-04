@@ -1,3 +1,4 @@
+import { DashboardTitle } from "@/components/dashboard-title";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { currentGreeting } from "@/lib/current-greeting";
 import { currentProfile } from "@/lib/current-profile";
@@ -23,7 +24,7 @@ const DashboardPage = async () => {
 
     return ( 
         <>
-            <div className="text-3xl mb-8">{greeting}</div>
+            <DashboardTitle title={greeting} />
             <div className="flex flex-row flex-wrap gap-4">
                 {sites.map((site) => (
                     <div key={site.id} className="min-w-[300px]">

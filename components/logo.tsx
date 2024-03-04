@@ -15,11 +15,11 @@ export const Logo = () => {
                 <Image
                     src="/logo.svg"
                     alt="Logo"
-                    width={40}
-                    height={40}
+                    width={35}
+                    height={35}
                 />
                 <p className={cn(
-                    "text-lg text-neutral-700 pb-1",
+                    "text-lg pb-1",
                     headingFont.className,
                 )}>
                     Bellhop
