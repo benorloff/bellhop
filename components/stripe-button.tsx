@@ -1,25 +1,45 @@
 "use client";
 
+import { createStripeSession } from "@/actions/create-stripe-session";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useAction } from "@/hooks/use-action";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface StripeButtonProps {
     priceId: string;
     label: string;
 };
 
+
+
 export const StripeButton = ({
     priceId,
     label,
 }: StripeButtonProps) => {
-    const router = useRouter();
+
+    const { execute, isLoading } = useAction(createStripeSession, {
+        onSuccess: (data) => {
+            window.location.href = data;
+        },
+        onError: (error) => {
+            toast.error(error);
+        }
+    });
+
+    const onClick = () => {
+        execute({ priceId });
+    }
+
     return (
         <Button
-            onClick={() => 
-                router.push("/")
-            }
+            onClick={onClick}
+            disabled={isLoading}
         >
-            {label}
+            {isLoading 
+                ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                : <>{label}</>
+            }
         </Button>
 
     )

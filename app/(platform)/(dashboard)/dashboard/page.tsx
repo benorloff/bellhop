@@ -24,7 +24,7 @@ const DashboardPage = async () => {
 
     return ( 
         <>
-            <DashboardTitle title={greeting} />
+            <div className="text-3xl mb-8">{greeting}</div>
             <div className="flex flex-row flex-wrap gap-4">
                 {sites.map((site) => (
                     <div key={site.id} className="min-w-[300px]">

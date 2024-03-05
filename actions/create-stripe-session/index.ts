@@ -44,16 +44,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 cancel_url: "http://localhost:3000/settings/billing",
                 line_items: [
                     {
-                        price_data: {
-                            currency: 'usd',
-                            product_data: {
-                                name: 'Premium Subscription',
-                            },
-                            unit_amount: 19900,
-                            recurring: {
-                                interval: 'month',
-                            }
-                        },
+                        price: data.priceId,
                         quantity: 1,
                     },
                 ],
