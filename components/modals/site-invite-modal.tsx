@@ -20,7 +20,8 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
 
 const FormSchema = z.object({
     email: z.string().email({
@@ -46,8 +47,8 @@ export const SiteInviteModal = () => {
         }
     });
     
-    const { execute, fieldErrors } = useAction(createSiteInvite, {
-        onSuccess: (data) => {
+    const { execute } = useAction(createSiteInvite, {
+        onSuccess: () => {
             toast.success("Invitation sent!");
             router.refresh();
             onClose();
@@ -57,10 +58,10 @@ export const SiteInviteModal = () => {
         }
     });
 
-    const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        const email = data.email;
+    const onSubmit = (values: z.infer<typeof FormSchema>) => {
+        const email = values.email;
 
-        execute({ email, siteId, profileId });
+        execute({ email, siteId });
     }
 
     return (
@@ -83,13 +84,12 @@ export const SiteInviteModal = () => {
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <FormInput
-                                            id="email"
-                                            type="email"
-                                            placeholder="Email"
+                                        <Input 
+                                            placeholder="bella@bellhop.com"
                                             {...field}
                                         />
                                     </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />

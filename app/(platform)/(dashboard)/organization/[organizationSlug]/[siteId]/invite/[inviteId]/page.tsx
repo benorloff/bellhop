@@ -1,4 +1,4 @@
-import { auth, redirectToSignIn } from "@clerk/nextjs";
+import { auth, currentUser, redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
@@ -13,11 +13,9 @@ interface InviteIdPageProps {
 const InviteIdPage = async ({
     params
 }: InviteIdPageProps) => {
-    const { userId } = auth();
+    const user = await currentUser();
 
-    const profile = await currentProfile(userId as string);
-
-    if (!profile) {
+    if (!user) {
         return redirectToSignIn();
     }
 
@@ -34,8 +32,8 @@ const InviteIdPage = async ({
         throw new Error("Invite not found or has expired");
     }
 
-    if (invite.recipientEmail !== profile.email) {
-        throw new Error("You are not authorized to view this invite");
+    if (invite.recipientEmail !== user.emailAddresses[0].emailAddress) {
+        throw new Error("You are not the intended recipient of this invite");
     }
 
     // const existingMember = await db.site.findFirst({
@@ -56,7 +54,7 @@ const InviteIdPage = async ({
 
     const member = await db.member.create({
         data: {
-            profileId: profile.id,
+            userId: user.id,
             siteId: invite.siteId
         }
     });

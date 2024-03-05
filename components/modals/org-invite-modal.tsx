@@ -17,10 +17,10 @@ import {
 import { FormInput } from "../form/form-input";
 import { FormSubmit } from "../form/form-submit";
 
-export const InviteModal = () => {
+export const OrgInviteModal = () => {
     const { onOpen, isOpen, onClose, type, data } = useModal();
 
-    const isModalOpen = isOpen && type === "invite";
+    const isModalOpen = isOpen && type === "orgInvite";
 
     const { execute, fieldErrors } = useAction(createOrgInvite, {
         onSuccess: () => {
@@ -48,7 +48,7 @@ export const InviteModal = () => {
                         Invite Members
                     </DialogTitle>
                     <DialogDescription>
-                        Add collaborators to your site.
+                        Add team members to your organization.
                     </DialogDescription>
                 </DialogHeader>
                 <form action={onSubmit} className="space-y-4">

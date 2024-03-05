@@ -42,6 +42,8 @@ const SiteTeamPage = async ({
     const orgMembers = await clerkClient.organizations.getOrganizationMembershipList({ organizationId });
     const parsedOrgMembers = await JSON.parse(JSON.stringify(orgMembers));
 
+    console.log(parsedOrgMembers, "<-- parsedOrgMembers")
+
     const invitations = await db.invite.findMany({
         where: {
             siteId: params.siteId,
@@ -62,7 +64,7 @@ const SiteTeamPage = async ({
                     <CardTitle>
                         <div className="flex flex-row justify-between items-center">
                             <div>Team Members</div>
-                            <InviteButton siteId={params.siteId} profileId={profile.id} orgMembers={parsedOrgMembers}/>
+                            <InviteButton siteId={params.siteId}/>
                         </div>
                     </CardTitle>
                 </CardHeader>

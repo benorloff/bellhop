@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { InviteModal } from "@/components/modals/invite-modal";
+import { OrgInviteModal } from "@/components/modals/org-invite-modal";
 import { CreateTicketModal } from "@/components/modals/create-ticket-modal";
 import { SiteImageModal } from "@/components/modals/site-image-modal";
 import { SiteInviteModal } from "@/components/modals/site-invite-modal";
@@ -20,7 +20,7 @@ export const ModalProvider = () => {
 
     return (
         <>
-            <InviteModal />
+            <OrgInviteModal />
             <CreateTicketModal />
             <SiteImageModal />
             <SiteInviteModal />

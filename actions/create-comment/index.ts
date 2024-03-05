@@ -11,25 +11,32 @@ import {
     zendeskApiPassword, 
     zendeskApiUsername 
 } from "@/constants/tickets";
+import { currentUser } from "@clerk/nextjs";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
 
-    const profile = await currentProfile();
+    const user = await currentUser();
 
-    if (!profile) {
+    if (!user) {
+        return {
+            error: "Unauthorized",
+        };
+    };
+
+    const zendeskUserId = Number(String(user.privateMetadata?.zendeskUserId));
+
+    if (!zendeskUserId) {
         return {
             error: "Unauthorized",
         };
     }
 
-    const author_id = Number(String(profile.zendeskUserId));
-
     const ticketData = {
         ticket: {
             comment: {
                 body: data.body,
-                author_id: author_id,
+                author_id: zendeskUserId,
             }
         } 
     }

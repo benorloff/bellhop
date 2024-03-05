@@ -7,26 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Can this model be deleted now that Clerk
-// is storing privateMetadata? 
-model Profile {
-  id            String @id @default(uuid())
-  userId        String @unique
-  zendeskUserId BigInt @unique
-  firstName     String
-  lastName      String
-  imageUrl      String @db.Text
-  email         String @unique @db.Text
-
-  sites   Site[]
-  members Member[]
-  tickets Ticket[]
-  invites Invite[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 enum DataCenter {
   US_IOWA
   CANADA_MONTREAL
@@ -37,6 +17,7 @@ enum DataCenter {
 
 model Site {
   id         String     @id @default(uuid())
+  userId     String     @db.Text
   name       String
   url        String
   imageUrl   String?
@@ -46,17 +27,13 @@ model Site {
   orgId      String
   orgSlug    String
 
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
   members Member[]
-  tickets Ticket[]
   invites Invite[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([profileId])
+  @@index([userId])
 }
 
 enum MemberRole {
@@ -66,60 +43,32 @@ enum MemberRole {
 }
 
 model Member {
-  id   String     @id @default(uuid())
-  role MemberRole @default(COLLABORATOR)
+  userId String     @db.Text
+  role   MemberRole @default(COLLABORATOR)
 
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-  siteId String
+  siteId String @db.Text
   site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([profileId, siteId], name: "profileId_siteId")
-  @@index([profileId, siteId], name: "profileId_siteId")
-}
-
-model Ticket {
-  id              String @id @default(uuid())
-  freshdeskId     BigInt @unique
-  priority        Int
-  source          Int
-  status          Int
-  subject         String
-  type            String
-  descriptionText String
-
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-  siteId String
-  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([profileId])
+  @@index([userId])
   @@index([siteId])
+  @@id(name: "memberId", [siteId, userId])
 }
 
 model Invite {
   id             String   @id @default(uuid())
+  userId         String   @db.Text
   recipientEmail String
   expiresAt      DateTime @default(dbgenerated("NOW() + interval '48 hours'"))
 
   siteId String
   site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
 
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([profileId])
   @@index([siteId])
 }
 
@@ -130,7 +79,6 @@ enum Action {
 }
 
 enum EntityType {
-  PROFILE
   SITE
   MEMBER
   TICKET

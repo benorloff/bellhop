@@ -14,9 +14,8 @@ import { sendgridApiHost, sendgridApiKey } from "@/constants/mail";
 // https://clerk.com/docs/reference/backend-api/tag/Organization-Invitations
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-    const { userId, orgId } = auth();
-    const { email, siteId, profileId } = data;
-
+    const { userId, orgId, orgSlug } = auth();
+    const { email, siteId } = data;
 
     if ( !userId || !orgId ) {
         return {
@@ -29,9 +28,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     try {
         invite = await db.invite.create({
             data: {
+                userId: userId,
                 recipientEmail: email,
                 siteId: siteId,
-                profileId: profileId,
             }
         })
     } catch (error) {
@@ -54,7 +53,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 ],
                 dynamic_template_data: {
                     site_name: "Circle Black",
-                    url: `http://localhost:3000/organization/test-org/${siteId}/invite/${invite.id}`
+                    url: `http://localhost:3000/organization/${orgSlug}/${siteId}/invite/${invite.id}`
                 }
             }
         ],

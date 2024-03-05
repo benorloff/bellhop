@@ -5,7 +5,6 @@ import { Action, EntityType, MemberRole } from "@prisma/client";
 
 import { createSafeAction } from "@/lib/create-safe-action";
 import { createAuditLog } from "@/lib/create-audit-log";
-import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 
 import { InputType, ReturnType } from "./types";
@@ -22,14 +21,6 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     };
 
-    const profile = await currentProfile(userId);
-
-    if (!profile) {
-        return {
-            error: "Profile not found",
-        };
-    }
-
     const { name, slug, url, imageUrl, ipAddress } = data;
 
     let site;
@@ -38,17 +29,17 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         // Create the site
         site = await db.site.create({
             data: {
+                userId,
                 name,
                 slug,
                 url,
                 imageUrl,
-                profileId: profile.id,
                 orgId,
                 orgSlug,
                 ipAddress,
                 members: {
                     create: [
-                        { profileId: profile.id, role: MemberRole.OWNER}
+                        { userId, role: MemberRole.OWNER}
                     ]
                 }
             }

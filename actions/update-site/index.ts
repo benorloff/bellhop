@@ -10,13 +10,6 @@ import { UpdateSite } from "./schema";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-    const { orgId } = auth();
-
-    if ( !orgId ) {
-        return {
-            error: "Unauthorized",
-        };
-    };
 
     const { siteId, imageUrl } = data;
 
