@@ -67,4 +67,4 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     return { data: url };
 };
 
-export const createStripeCheckoutSession = createSafeAction(StripeSession, handler);
+export const createStripeSession = createSafeAction(StripeSession, handler);
