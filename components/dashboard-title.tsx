@@ -23,9 +23,8 @@ export const DashboardTitle = ({
                 let href=`/${pathNames.slice(0, index + 1).join('/')}`
                 let label= path[0].toUpperCase() + path.slice(1);
                 return (
-                    <>
+                    <div key={index}>
                         <Link 
-                            key={index}
                             href={href} 
                             className={cn(
                                 "text-3xl",
@@ -35,7 +34,7 @@ export const DashboardTitle = ({
                             {label}
                         </Link>
                         {index !== pathNames.length - 1 && <ChevronRight className="text-muted-foreground"/>}
-                    </>
+                    </div>
                 )
             })}
         </div>

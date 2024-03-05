@@ -1,8 +1,6 @@
 "use server";
 
 import { createSafeAction } from "@/lib/create-safe-action";
-import { currentProfile } from "@/lib/current-profile";
-
 import { InputType, ReturnType } from "./types";
 import { CreateComment } from "./schema";
 

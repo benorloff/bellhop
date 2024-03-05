@@ -1,7 +1,5 @@
 "use client";
 
-import { Profile } from "@prisma/client";
-
 import { useModal } from "@/hooks/use-modal-store";
 
 import { 
@@ -12,27 +10,30 @@ from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Hint } from "@/components/hint";
+import { Member } from "@prisma/client";
 
 interface SiteMembersProps {
-    profiles: Profile[];
+    siteId: string;
+    members: Member[];
 };
 
 export const SiteMembers = ({
-    profiles
+    siteId,
+    members,
 }: SiteMembersProps) => {
     const { onOpen } = useModal();
 
     return (
         <>
-            {profiles.map((profile) => (
+            {members.map((member) => (
                 <Hint
                     side="top"
-                    label={`${profile.firstName} ${profile.lastName}`}
-                    key={profile.id}
+                    label={member.userName}
+                    key={member.userId}
                 >
                     <Avatar>
-                        <AvatarImage src={profile.imageUrl} alt={profile.firstName} />
-                        <AvatarFallback>{profile.firstName[0]}{profile.lastName[0]}</AvatarFallback>
+                        <AvatarImage src={member.userImage} alt={member.userName} />
+                        <AvatarFallback>{member.userName[0]}</AvatarFallback>
                     </Avatar>
                 </Hint>
             ))}
@@ -42,7 +43,7 @@ export const SiteMembers = ({
             >
                 <Button
                     className="rounded-full w-[40px] h-[40px] p-0"
-                    onClick={() => onOpen("invite", {})}
+                    onClick={() => onOpen("siteInvite", { siteId })}
                 >
                     <Plus size={24} />
                 </Button>

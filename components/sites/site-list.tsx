@@ -5,45 +5,26 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Member, Profile } from "@prisma/client";
+import { Member } from "@prisma/client";
 import { SiteMembers } from "./site-members";
 import { SiteImage } from "./site-image";
 import { currentOrgSites } from "@/lib/current-org-sites";
-import { currentProfile } from "@/lib/current-profile";
 
 export const SiteList = async () => {
     const { userId } = auth();
-
-    const profile = await currentProfile(userId as string);
-
-    if (!profile) {
-        throw new Error("Profile not found");
-    }
 
     const sites = await db.site.findMany({
         where: {
             members: {
                 some: {
-                    profileId: profile.id
+                    userId: userId!,
                 }
             }
         }, 
         include: {
-            members: {
-                include: {
-                    profile: true,
-                },
-            },
+            members: true
         }
     })
-
-    const siteProfiles = (siteMembers: Member[]) => {
-        let profiles: Profile[] = [];
-        siteMembers.map((member: Member) => {
-            profiles.push(member.profile);
-        });
-        return profiles;
-    }
 
     return (
         <div className="flex flex-col gap-4 space-y-4">
@@ -72,7 +53,7 @@ export const SiteList = async () => {
                         </p>
                     </div>
                     <div className="flex flex-row gap-2">
-                        <SiteMembers profiles={siteProfiles(site.members)} />
+                        <SiteMembers siteId={site.id} members={site.members} />
                     </div>
                 </div>
             ))}

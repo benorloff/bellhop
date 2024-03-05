@@ -11,7 +11,6 @@ import { MoreHorizontal } from "lucide-react";
 import { InviteButton } from "../../_components/invite-button";
 import { getSite } from "@/lib/get-site";
 import { auth, clerkClient } from "@clerk/nextjs";
-import { currentProfile } from "@/lib/current-profile";
 
 interface SiteTeamPageProps {
     params: {
@@ -23,18 +22,14 @@ const SiteTeamPage = async ({
     params
 }: SiteTeamPageProps) => {
     const { userId, orgId } = auth();
-    const profile = await currentProfile(userId as string);
 
-    if (!userId || !orgId || !profile) {
+    if (!userId || !orgId ) {
         throw new Error ("Unauthorized");
     };
 
     const members = await db.member.findMany({
         where: {
             siteId: params.siteId,
-        }, 
-        include: {
-            profile: true,
         }
     });
 
@@ -47,9 +42,6 @@ const SiteTeamPage = async ({
     const invitations = await db.invite.findMany({
         where: {
             siteId: params.siteId,
-        },
-        include: {
-            profile: true,
         },
     });
 
@@ -89,14 +81,13 @@ const SiteTeamPage = async ({
                         <TabsContent value="members">
                             <div className="flex flex-col gap-4">
                                 {members.map((member) => (
-                                    <div key={member.id} className="flex flex-row flex-wrap gap-4 items-center">
+                                    <div key={member.userName} className="flex flex-row flex-wrap gap-4 items-center">
                                         <Avatar>
-                                            <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
-                                            <AvatarFallback>{member.profile.firstName[0]}{member.profile.lastName[0]}</AvatarFallback>
+                                            <AvatarImage src={member.userImage} alt={member.userName} />
+                                            <AvatarFallback>{member.userName[0]}</AvatarFallback>
                                         </Avatar>
                                         <div className="grow">
-                                            <div>{member.profile.firstName} {member.profile.lastName}</div>
-                                            <div className="text-sm">{member.profile.email}</div>
+                                            <div>{member.userName}</div>
                                         </div>
                                         <div>
                                             {member.role}

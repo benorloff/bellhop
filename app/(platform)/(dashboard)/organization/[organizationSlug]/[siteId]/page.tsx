@@ -1,7 +1,6 @@
 import { EntityType, AuditLog } from "@prisma/client";
 import { auth } from "@clerk/nextjs";
 
-import { currentProfile } from "@/lib/current-profile";
 import { getSite } from "@/lib/get-site";
 import { db } from "@/lib/db";
 
@@ -37,13 +36,6 @@ interface SiteIdPageProps {
 const SiteIdPage = async ({
     params,
 }: SiteIdPageProps) => {
-    const { userId } = auth();
-
-    const profile = await currentProfile(userId as string);
-
-    if (!profile) {
-        throw new Error ("Profile not found");
-    }
 
     const site = await getSite(params.siteId);
 
@@ -87,14 +79,14 @@ const SiteIdPage = async ({
                         <CardContent>
                             <div className="flex flex-col gap-4">
                                 {site?.members.map((member) => (
-                                    <div key={member.id} className="flex flex-row justify-between items-center gap-4">
+                                    <div key={member.userId} className="flex flex-row justify-between items-center gap-4">
                                         <Avatar>
                                             {/* Change this to next/image */}
-                                            <AvatarImage src={member.profile.imageUrl} alt={member.profile.firstName} />
-                                            <AvatarFallback>{`${member.profile.firstName[0]}${member.profile.lastName[0]}`}</AvatarFallback>
+                                            <AvatarImage src={member.userImage} alt={member.userName} />
+                                            <AvatarFallback>{member.userName[0]}</AvatarFallback>
                                         </Avatar>
                                         <div className="grow">
-                                            <div>{member.profile.firstName} {member.profile.lastName}</div>
+                                            <div>{member.userName}</div>
                                         </div>
                                         <div className="shrink">{member.role}</div>
                                     </div>

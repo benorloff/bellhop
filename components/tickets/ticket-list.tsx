@@ -10,20 +10,17 @@ import {
   zendeskApiPassword, 
   zendeskApiUsername 
 } from '@/constants/tickets';
-import { currentProfile } from '@/lib/current-profile';
 
 async function getData() {
 
-  const { userId } = auth();
+  const user = await currentUser();
 
-  const profile = await currentProfile(userId as string);
-
-  if (!profile) {
-    return redirectToSignIn();
+  if (!user) {
+    redirectToSignIn();
   }
   
   const response = await fetch(
-    `${zendeskApiHost}/users/${profile.zendeskUserId}/tickets/requested?sort_by=updated_at&sort_order=desc`, {
+    `${zendeskApiHost}/users/${user?.privateMetadata?.zendeskUserId}/tickets/requested?sort_by=updated_at&sort_order=desc`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`, 

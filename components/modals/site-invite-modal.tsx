@@ -38,7 +38,6 @@ export const SiteInviteModal = () => {
     const router = useRouter();
 
     const siteId = data?.siteId!;
-    const profileId = data?.profileId!;
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),

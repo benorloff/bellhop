@@ -15,12 +15,8 @@ export const currentOrgSites = async () => {
             orgId,
         }, 
         include: {
-            members: {
-                include: {
-                    profile: true,
-                },
-            },
-        }
+            members: true
+        },
     });
 
     return sites;

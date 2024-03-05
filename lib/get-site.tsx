@@ -14,11 +14,7 @@ export const getSite = cache(async (id: string) => {
             id
         },
         include: {
-            members: {
-                include: {
-                    profile: true,
-                },
-            }
+            members: true
         }
      })
     return site;
