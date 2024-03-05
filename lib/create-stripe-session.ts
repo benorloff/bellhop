@@ -1,18 +1,23 @@
-import { auth, currentUser, clerkClient } from "@clerk/nextjs";
+import { auth, clerkClient } from "@clerk/nextjs";
 
 import { stripe } from "@/lib/stripe";
 
-export const createStripeSession = async () => {
-    const { userId, orgId } = auth();
+interface CreateStripeSessionProps {
+    priceId: string;
+}
 
-    if ( !userId || !orgId ) {
+export const createStripeSession = async ({
+    priceId,
+}: CreateStripeSessionProps) => {
+    const { userId } = auth();
+
+    if (!userId) {
         return {
             error: "Unauthorized",
-        };
-    }
+        }
+    };
+
     const user = await clerkClient.users.getUser(userId);
-    const { name } = await clerkClient.organizations.getOrganization({ organizationId: orgId })
-    const stripeCustomerId = user?.privateMetadata?.stripeCustomerId! || "";
 
     let url;
 
@@ -26,14 +31,10 @@ export const createStripeSession = async () => {
             customer_email: user.emailAddresses[0].emailAddress,
             line_items: [
                 {
-                    price: "price_1Oq10CLA7PFYEsElMrDFUuBa",
+                    price: priceId,
                     quantity: 1,
                 }
             ],
-            metadata: {
-                orgId,
-                orgName: name,
-            },
         });
         url = stripeSession.url;
     } catch (error) {

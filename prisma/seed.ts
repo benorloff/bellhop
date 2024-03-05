@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, DataCenter } from "@prisma/client";
+import { Prisma, PrismaClient, DataCenter, PriceType, PriceInterval } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
@@ -11,8 +11,10 @@ const randomDataCenter = (enumeration: object) => {
 }
 
 async function main() {
-    // Create profiles for seed users
-    // Seed users were manually created in Clerk and Zendesk
+    /**
+     * PROFILES AND SITES
+     * Seed users were manually created in Clerk and Zendesk
+     */
     const carlos = await prisma.profile.upsert({
         where: { email: "carloshayes@domain.com" },
         update: {},
@@ -188,11 +190,18 @@ async function main() {
         }
     })
 
+    /**
+     * MEMBERS
+     * The user must be assigned as a member of the site they created
+     */
+
     // Retrieve all sites created above
     const sites = await prisma.site.findMany();
 
     // Create an "OWNER" member for each site
-    // This member will be the profile that created the site 
+    // This member will be the profile that created the site
+    let member;
+
     sites.map(async (site) => {
         await prisma.member.upsert({
             where: {
@@ -210,72 +219,67 @@ async function main() {
         })
     })
 
-    // Create products
-    // Products have been manually created in Stripe for testing purposes
+    /**
+     * PRODUCT AND PRICES
+     * Products and prices have been manually created in Stripe for testing purposes
+     */
 
+    // Define product interface
     interface Product {
         id: string;
-        number: string;
+        priceId: string;
     };
 
+    // Define products and prices with their respective Stripe IDs
     const products: Product[] = [
         {
             id: "prod_Pg4KygN4jddjYq",
-            number: "1",
+            priceId: "price_1OqiBVLA7PFYEsEl8g6wGOMU",
         },
         {
             id: "prod_Pg4KPdcNneRTDZ",
-            number: "2",
+            priceId: "price_1OqiBoLA7PFYEsElbPliiW0L",
         },
         {
             id: "prod_Pg4KXvgUwJ8pLZ",
-            number: "3",
+            priceId: "price_1OqiC8LA7PFYEsElaLFCt3YH",
         },
     ]
 
-    const product1 = await prisma.product.upsert({
-        where: {
-            id: "prod_Pg4KygN4jddjYq",
-        },
-        update: {},
-        create: {
-            id: "prod_Pg4KygN4jddjYq",
-            active: true,
-            name: "TEST PRODUCT 1",
-            description: "Description for TEST PRODUCT 1",
-            metadata: {},
-        }
-    })
-
-    const product2 = await prisma.product.upsert({
-        where: {
-            id: "prod_Pg4KPdcNneRTDZ",
-        },
-        update: {},
-        create: {
-            id: "prod_Pg4KPdcNneRTDZ",
-            active: true,
-            name: "TEST PRODUCT 2",
-            description: "Description for TEST PRODUCT 2",
-            metadata: {},
-        }
-    })
-
-    const product3 = await prisma.product.upsert({
-        where: {
-            id: "prod_Pg4KXvgUwJ8pLZ",
-        },
-        update: {},
-        create: {
-            id: "prod_Pg4KXvgUwJ8pLZ",
-            active: true,
-            name: "TEST PRODUCT 3",
-            description: "Description for TEST PRODUCT 3",
-            metadata: {},
-        }
+    // Create subscription products and prices
+    products.map(async (product: Product, index: number) => {
+        await prisma.product.upsert({
+            where: {
+                id: product.id,
+            },
+            update: {},
+            create: {
+                id: product.id,
+                active: true,
+                name: `TEST PRODUCT ${index + 1}`,
+                description: `Description for TEST PRODUCT ${index + 1}`,
+                metadata: {},
+                prices: {
+                    create: [
+                        {
+                            id: product.priceId,
+                            active: true,
+                            nickname: `Price for TEST PRODUCT ${index + 1}`,
+                            unitAmount: (index === 0) ? 19900 : (index === 1) ? 29900 : 39900,
+                            currency: "usd",
+                            type: PriceType.recurring,
+                            interval: PriceInterval.month,
+                            intervalCount: 1,
+                            metadata: {},                        
+                        },
+                    ]
+                },
+            },
+        })
     })
 };
 
+// Execute database seeding and disconnect client
 main()
     .then(async () => {
         await prisma.$disconnect();

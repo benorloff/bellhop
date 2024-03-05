@@ -4,19 +4,19 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 interface StripeButtonProps {
-    url: string;
+    priceId: string;
     label: string;
 };
 
 export const StripeButton = ({
-    url,
+    priceId,
     label,
 }: StripeButtonProps) => {
     const router = useRouter();
     return (
         <Button
             onClick={() => 
-                router.push(url)
+                router.push("/")
             }
         >
             {label}

@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Can this model be deleted now that Clerk
+// is storing privateMetadata? 
 model Profile {
   id            String @id @default(uuid())
   userId        String @unique
@@ -211,8 +213,8 @@ enum SubscriptionStatus {
 
 model Subscription {
   id                 String             @id
-  customer           String
-  orgId              String
+  customer           String             @unique
+  orgId              String             @unique
   status             SubscriptionStatus
   quantity           Int
   currency           String
@@ -231,4 +233,7 @@ model Subscription {
 
   createdAt DateTime
   updatedAt DateTime @updatedAt
+
+  @@index([customer])
+  @@index([orgId])
 }
