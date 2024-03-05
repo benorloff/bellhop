@@ -43,8 +43,10 @@ enum MemberRole {
 }
 
 model Member {
-  userId String     @db.Text
-  role   MemberRole @default(COLLABORATOR)
+  userId    String     @db.Text
+  userImage String     @db.Text
+  userName  String     @db.Text
+  role      MemberRole @default(COLLABORATOR)
 
   siteId String @db.Text
   site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
@@ -52,9 +54,9 @@ model Member {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@id(name: "memberId", [siteId, userId])
   @@index([userId])
   @@index([siteId])
-  @@id(name: "memberId", [siteId, userId])
 }
 
 model Invite {

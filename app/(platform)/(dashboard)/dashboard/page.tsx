@@ -1,14 +1,13 @@
 import { DashboardTitle } from "@/components/dashboard-title";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { currentGreeting } from "@/lib/current-greeting";
-import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 
 const DashboardPage = async () => {
 
-    const { userId, orgId } = auth();
-    const profile = await currentProfile(userId!);
+    const { userId } = auth();
+
     const greeting = await currentGreeting();
 
     const sites = await db.site.findMany({
@@ -16,7 +15,7 @@ const DashboardPage = async () => {
             members: {
                 some: 
                 {
-                    profileId: profile?.id,
+                    userId: userId!,
                 }
             }
         }
