@@ -51,6 +51,8 @@ const SiteTeamPage = async ({
         },
     });
 
+    console.log(invitations, "<-- invitations") 
+
     return (
         <div className="flex flex-col gap-4">
             <Card>
@@ -122,39 +124,42 @@ const SiteTeamPage = async ({
                             </div>
                         </TabsContent>
                         <TabsContent value="invitations">
-                            {invitations.map((invite) => (
-                                <div key={invite.id} className="flex flex-row flex-wrap gap-4 items-center">
-                                    <Avatar>
-                                        <AvatarFallback>{invite.recipientEmail[0].toUpperCase()}</AvatarFallback>
-                                    </Avatar>
-                                    <div className="grow">
-                                        <div>{invite.recipientEmail}</div>
-                                    </div>
-                                    <div>
-                                        Pending
-                                    </div>
-                                    <Popover>
-                                        <PopoverTrigger>
-                                            <Button
-                                                className="rounded-full h-10 w-10 p-1"
-                                                variant="ghost"
+                            {invitations.length !== 0 ? 
+                                (invitations.map((invite) => (
+                                    <div key={invite.id} className="flex flex-row flex-wrap gap-4 items-center">
+                                        <Avatar>
+                                            <AvatarFallback>{invite.recipientEmail[0].toUpperCase()}</AvatarFallback>
+                                        </Avatar>
+                                        <div className="grow">
+                                            <div>{invite.recipientEmail}</div>
+                                        </div>
+                                        <div>
+                                            Pending
+                                        </div>
+                                        <Popover>
+                                            <PopoverTrigger>
+                                                <Button
+                                                    className="rounded-full h-10 w-10 p-1"
+                                                    variant="ghost"
+                                                >
+                                                    <MoreHorizontal />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent
+                                                side="top"
+                                                align="end"
+                                                className="max-w-[150px]"
                                             >
-                                                <MoreHorizontal />
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent
-                                            side="top"
-                                            align="end"
-                                            className="max-w-[150px]"
-                                        >
-                                            <div className="flex flex-col gap-4">
-                                                {/* TODO: Add revoke invitatino action */}
-                                                <Button variant="destructive">Revoke</Button>
-                                            </div>
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                            ))}
+                                                <div className="flex flex-col gap-4">
+                                                    {/* TODO: Add revoke invitatino action */}
+                                                    <Button variant="destructive">Revoke</Button>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                ))) : (
+                                    <div className="text-center py-8">No pending invitations.</div>
+                                )}
                         </TabsContent>
                     </Tabs>
                 </CardContent>
