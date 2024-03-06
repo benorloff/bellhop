@@ -11,6 +11,7 @@ interface CreateAuditLogProps {
 };
 
 export const createAuditLog = async (props: CreateAuditLogProps) => {
+    let auditLog;
     try {
         const { orgId } = auth();
         const user = await currentUser();
@@ -21,7 +22,7 @@ export const createAuditLog = async (props: CreateAuditLogProps) => {
 
         const { entityId, entityType, entityTitle, action } = props;
 
-        await db.auditLog.create({
+        auditLog = await db.auditLog.create({
             data: {
                 orgId,
                 entityId,
@@ -30,10 +31,12 @@ export const createAuditLog = async (props: CreateAuditLogProps) => {
                 action,
                 userId: user.id,
                 userImage: user?.imageUrl,
-                userName: user?.firstName + " " + user?.lastName,
+                userName: `${user?.firstName} ${user?.lastName}`,
             }
         })
     } catch (error) {
         console.log("[AUDIT_LOG_ERROR]", error);
     }
+
+    return { data: auditLog };
 };

@@ -75,9 +75,14 @@ model Invite {
 }
 
 enum Action {
-  CREATE
-  UPDATE
-  DELETE
+  SITE_CREATE
+  SITE_UPDATE
+  SITE_DELETE
+  SITE_TICKET_CREATE
+  SITE_TICKET_UPDATE
+  SITE_TICKET_DELETE
+  SITE_INVITE_CREATE
+  SITE_INVITE_DELETE
 }
 
 enum EntityType {
@@ -85,6 +90,7 @@ enum EntityType {
   MEMBER
   TICKET
   INVITE
+  SUBSCRIPTION
 }
 
 model AuditLog {

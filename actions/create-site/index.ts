@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { Action, EntityType, MemberRole } from "@prisma/client";
 
 import { createSafeAction } from "@/lib/create-safe-action";
@@ -12,10 +12,11 @@ import { CreateSite } from "./schema";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-    const { userId, orgId, orgSlug } = auth();
+    const { orgId, orgSlug } = auth();
+    const user = await currentUser();
     
 
-    if ( !userId || !orgId || ! orgSlug ) {
+    if ( !user || !orgId || ! orgSlug ) {
         return {
             error: "Unauthorized",
         };
@@ -29,7 +30,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         // Create the site
         site = await db.site.create({
             data: {
-                userId,
+                userId: user.id,
                 name,
                 slug,
                 url,
@@ -39,7 +40,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 ipAddress,
                 members: {
                     create: [
-                        { userId, role: MemberRole.OWNER}
+                        { 
+                            userId: user.id,
+                            userName: `${user.firstName} ${user.lastName}`,
+                            userImage: user.imageUrl, 
+                            role: MemberRole.OWNER
+                        }
                     ]
                 }
             }

@@ -26,6 +26,7 @@ import { Hint } from "@/components/hint";
 import Image from "next/image";
 import { RecentTickets } from "@/components/tickets/recent-tickets";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 interface SiteIdPageProps {
     params: {
@@ -39,9 +40,12 @@ const SiteIdPage = async ({
 
     const site = await getSite(params.siteId);
 
+    if (!site) {
+        notFound();
+    }
+
     const activities = await db.auditLog.findMany({
         where: {
-            entityType: EntityType.SITE,
             entityId: site?.id,
         }
     });
