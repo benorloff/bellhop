@@ -37,9 +37,7 @@ export const OrgInviteModal = () => {
 
         execute({ email });
     }
-
-    console.log(data, '<-- data.orgMembers from invite-modal.tsx')
-
+    
     return (
         <Dialog open={isModalOpen} onOpenChange={onClose}>
             <DialogContent>

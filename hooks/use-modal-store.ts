@@ -1,12 +1,11 @@
-import { Site, Profile } from "@prisma/client";
+import { Site } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType = "createTicket" | "orgInvite" | "siteImage" | "siteInvite";
 
 interface ModalData {
     site?: Site;
-    sites?: Array<Site>;
-    profile?: Profile;
+    sites?: Site[];
     siteId?: string;
     profileId?: string;
     orgMembers?: Array<object>;

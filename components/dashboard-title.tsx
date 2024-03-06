@@ -14,9 +14,9 @@ export const DashboardTitle = ({
 }: DashboardTitleProps) => {
 
     const paths = usePathname();
-    console.log(paths, '<--- paths from dashboard-title.tsx')
+
     const pathNames = paths.split("/").filter(Boolean);
-    console.log(pathNames, '<--- pathNames from dashboard-title.tsx')
+
     return (
         <div className="flex flex-row gap-2 items-center mb-8">
             {pathNames.map((path, index) => {

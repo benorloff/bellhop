@@ -44,7 +44,7 @@ const FormSchema = z.object({
     subject: z.string().min(2, {
         message: "Subject must be at least 2 characters.",
     }),
-    description: z.string().min(10, {
+    description: z.string().min(2, {
         message: "Description must be at least 2 characters.",
     }),
 });
@@ -54,10 +54,8 @@ export const CreateTicketModal = () => {
     const isModalOpen = isOpen && type === "createTicket";
 
     const { formState: { errors } } = useForm();
-    
-    const router = useRouter();
 
-    const sites = data.sites;
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -68,7 +66,7 @@ export const CreateTicketModal = () => {
         }
     });
 
-    const { execute, fieldErrors } = useAction(createTicket, {
+    const { execute } = useAction(createTicket, {
         onSuccess: () => {
             toast.success("Ticket created! 🎉");
             router.refresh();
@@ -79,12 +77,16 @@ export const CreateTicketModal = () => {
         }
     });
 
-    const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        const site = sites?.find((site: Site) => site.id === data.siteId);
+    const onSubmit = (values: z.infer<typeof FormSchema>) => {
+        const site = data?.sites?.find((site: Site) => site.id === values.siteId);
         const siteName = site?.name!;
         const siteUrl = site?.url!;
+        const subject = values.subject;
+        const description = values.description;
+        const siteId = values.siteId;
 
-        execute({ ...data, siteName, siteUrl });
+
+        execute({ subject, description, siteId, siteName, siteUrl });
     };
 
     return (
@@ -110,7 +112,7 @@ export const CreateTicketModal = () => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {data.sites?.map((site) => (
+                                            {data?.sites?.map((site) => (
                                                 <SelectItem key={site.id} value={site.id}>
                                                     {site.name}
                                                 </SelectItem>
