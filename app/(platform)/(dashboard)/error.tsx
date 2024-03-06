@@ -17,7 +17,7 @@ const Error = ({
 
     return (
         <div className="flex flex-col gap-4">
-            <DashboardTitle title="Something went wrong." />
+            <div className="text-3xl mb-8">Something went wrong.</div>
             <div>
                 <Button
                     // Attempt to recover by trying to re-render the segment
