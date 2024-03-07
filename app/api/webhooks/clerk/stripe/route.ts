@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
+import { Sub } from "@radix-ui/react-dropdown-menu";
+import { SubscriptionStatus } from "@prisma/client";
 
 const relevantEvents = new Set([
     'checkout.session.completed',
@@ -35,7 +37,8 @@ export async function POST(req: Request) {
         return new NextResponse("Webhook error", { status: 400 });
     }
 
-    const session = event.data.object as Stripe.Checkout.Session;
+    console.log(event, "<-- Stripe event from webhook endpoint")
+    // const session = event.data.object as Stripe.Checkout.Session;
 
     // See example:
     // https://github.com/vercel/nextjs-subscription-payments/blob/main/app/api/webhooks/route.ts
@@ -47,7 +50,38 @@ export async function POST(req: Request) {
                     if (!checkoutSession?.metadata?.orgId) {
                         return new NextResponse("Org ID is required", { status: 400 });
                     }
-                    // TODO: Create a new subscription in the database
+                    // Log the checkout session
+                    console.log("Checkout session completed", checkoutSession);
+                    break;
+                case "customer.subscription.created":
+                    const stripeSubscription = event.data.object as Stripe.Subscription;
+                    if (!stripeSubscription?.metadata?.orgId) {
+                        return new NextResponse("Org ID is required", { status: 400 });
+                    }
+                    // Save the subscription to the database
+                    await db.subscription.create({
+                        data: {
+                            id: stripeSubscription.id,
+                            customer: stripeSubscription.customer as string,
+                            orgId: stripeSubscription.metadata.orgId,
+                            status: stripeSubscription.status as SubscriptionStatus,
+                            quantity: 1,
+                            currency: stripeSubscription.currency as string,
+                            currentPeriodEnd: new Date(stripeSubscription.current_period_end),
+                            currentPeriodStart: new Date(stripeSubscription.current_period_start),
+                            cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
+                            canceledAt: stripeSubscription.canceled_at ? new Date(stripeSubscription.canceled_at) : null,
+                            endedAt: stripeSubscription.ended_at ? new Date(stripeSubscription.ended_at) : null,
+                            cancelAt: stripeSubscription.cancel_at ? new Date(stripeSubscription.cancel_at) : null,
+                            trialStart: stripeSubscription.trial_start ? new Date(stripeSubscription.trial_start) : null,
+                            trialEnd: stripeSubscription.trial_end ? new Date(stripeSubscription.trial_end) : null,
+                            metadata: stripeSubscription.metadata as Record<string, string>,
+                            priceId: stripeSubscription.items.data[0].price.id,
+                            createdAt: new Date(stripeSubscription.created),
+                        }
+                    });
+                    // Log the subscription
+                    console.log("Subscription created", JSON.stringify(stripeSubscription));
                     break;
                 default:
                     throw new Error("Unhandled relevant event!");
