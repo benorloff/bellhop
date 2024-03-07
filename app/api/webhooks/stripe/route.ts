@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
-import { Sub } from "@radix-ui/react-dropdown-menu";
 import { SubscriptionStatus } from "@prisma/client";
 
 const relevantEvents = new Set([
@@ -37,7 +36,6 @@ export async function POST(req: Request) {
         return new NextResponse("Webhook error", { status: 400 });
     }
 
-    console.log(event, "<-- Stripe event from webhook endpoint")
     // const session = event.data.object as Stripe.Checkout.Session;
 
     // See example:
@@ -80,8 +78,6 @@ export async function POST(req: Request) {
                             createdAt: new Date(stripeSubscription.created),
                         }
                     });
-                    // Log the subscription
-                    console.log("Subscription created", JSON.stringify(stripeSubscription));
                     break;
                 default:
                     throw new Error("Unhandled relevant event!");

@@ -6,6 +6,7 @@ import {
 } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 import { Clerk } from "@clerk/backend";
+import { stripe } from "@/lib/stripe";
 
 const prisma = new PrismaClient();
 const clerk = Clerk({
@@ -206,60 +207,70 @@ async function main() {
    * Products and prices have been manually created in Stripe for testing purposes
    */
 
-  // Define product interface
-  interface Product {
-    id: string;
-    priceId: string;
+  interface stripeProduct {
+    name: string;
+    description: string;
   }
 
-  // Define products and prices with their respective Stripe IDs
-  const products: Product[] = [
+  const stripeProducts: stripeProduct[] = [
     {
-      id: "prod_Pg4KygN4jddjYq",
-      priceId: "price_1OqiBVLA7PFYEsEl8g6wGOMU",
+      name: "Standard",
+      description: "Get started with Bellhop.",
     },
     {
-      id: "prod_Pg4KPdcNneRTDZ",
-      priceId: "price_1OqiBoLA7PFYEsElbPliiW0L",
+      name: "Premium",
+      description: "Advanced features for growing teams.",
     },
     {
-      id: "prod_Pg4KXvgUwJ8pLZ",
-      priceId: "price_1OqiC8LA7PFYEsElaLFCt3YH",
+      name: "Enterprise",
+      description: "Custom solutions for large organizations.",
     },
   ];
 
-  // Create subscription products and prices
-  products.map(async (product: Product, index: number) => {
+  stripeProducts.map(async (product: stripeProduct, index: number) => {
+    // Create the product in Stripe
+    const sProd = await stripe.products.create({
+      name: product.name,
+      description: product.description,
+    });
+    // Create the price in Stripe
+    const price = await stripe.prices.create({
+      product: sProd.id,
+      unit_amount: index === 0 ? 19900 : index === 1 ? 29900 : 39900,
+      currency: "usd",
+      recurring: {
+        interval: "month",
+      },
+    });
+    // Save the products and prices to the database
     await prisma.product.upsert({
       where: {
-        id: product.id,
+        id: sProd.id,
       },
       update: {},
       create: {
-        id: product.id,
+        id: sProd.id,
         active: true,
-        name: `TEST PRODUCT ${index + 1}`,
-        description: `Description for TEST PRODUCT ${index + 1}`,
+        name: sProd.name,
+        description: sProd.description,
         metadata: {},
         prices: {
-          create: [
-            {
-              id: product.priceId,
-              active: true,
-              nickname: `Price for TEST PRODUCT ${index + 1}`,
-              unitAmount: index === 0 ? 19900 : index === 1 ? 29900 : 39900,
-              currency: "usd",
-              type: PriceType.recurring,
-              interval: PriceInterval.month,
-              intervalCount: 1,
-              metadata: {},
-            },
-          ],
+          create: {
+            id: price.id,
+            active: true,
+            nickname: `Price for ${sProd.name}`,
+            unitAmount: BigInt(Number(price.unit_amount)),
+            currency: price.currency,
+            type: price.type,
+            interval: price.recurring?.interval!,
+            intervalCount: 1,
+            metadata: {},
+          },
         },
       },
     });
   });
-}
+};
 
 // Execute database seeding and disconnect client
 main()
