@@ -47,7 +47,11 @@ const SiteIdPage = async ({
     const activities = await db.auditLog.findMany({
         where: {
             siteId: site?.id,
-        }
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+        take: 5,
     });
     
     return (

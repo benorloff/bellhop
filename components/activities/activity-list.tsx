@@ -1,6 +1,7 @@
 import { AuditLog } from "@prisma/client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "../ui/skeleton";
+import { timeElapsed } from "@/lib/utils";
 
 interface ActivityListProps {
     activities: AuditLog[];
@@ -29,7 +30,7 @@ export const ActivityList = ({
                                 <AvatarFallback>{activity.userName[0]}</AvatarFallback>
                             </Avatar>
                             <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d a ${activity.entityType.toString()}`}</div>
-                            <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
+                            <div className="shrink">{timeElapsed(activity.createdAt)}</div>
                         </div>
                     )
                 })}
@@ -46,7 +47,7 @@ export const ActivityList = ({
                         <AvatarFallback>{activity.userName[0]}</AvatarFallback>
                     </Avatar>
                     <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d a ${activity.entityType.toString()}`}</div>
-                    <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
+                    <div className="shrink">{`${timeElapsed(activity.createdAt)} ago`}</div>
                 </div>
             ))}
         </>

@@ -8,7 +8,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Member } from "@prisma/client";
 import { SiteMembers } from "./site-members";
 import { SiteImage } from "./site-image";
-import { currentOrgSites } from "@/lib/current-org-sites";
 
 export const SiteList = async () => {
     const { userId } = auth();

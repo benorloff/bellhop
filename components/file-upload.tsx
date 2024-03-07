@@ -19,11 +19,11 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
 
   if (value) {
     return (
-      <div className="h-48 relative aspect-video">
-        <Image fill src={value} alt="Upload" className="rounded-sm" />
+      <div className="relative aspect-video w-fit">
+        <Image height={200} width={300} src={value} alt="Upload" className="rounded-sm" />
         <button
           onClick={() => onChange("")}
-          className="bg-rose-500 text-white p-1 rounded-full absolute top-[-8px] right-[-8px] shadow-sm"
+          className="bg-destructive text-white p-1 rounded-full absolute top-[-8px] right-[-8px] shadow-sm"
           type="button"
         >
           <X className="w-[16px] h-[16px]" />
@@ -41,7 +41,7 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
       onUploadError={(error: Error) => {
         toast.error(error.message);
       }}
-      className="border-border"
+      className="border-border hover:bg-muted/50 cursor-pointer"
     />
   );
 };

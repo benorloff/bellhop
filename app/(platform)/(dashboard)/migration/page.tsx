@@ -13,7 +13,7 @@ import { DashboardTitle } from "@/components/dashboard-title";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -127,6 +127,7 @@ const MigrationPage = () => {
                                         onChange={field.onChange}
                                     />
                                 </FormControl>
+                                <FormDescription>Recommended size: 300 x 200.</FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
