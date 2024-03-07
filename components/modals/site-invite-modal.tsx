@@ -22,6 +22,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
 
 const FormSchema = z.object({
     email: z.string().email({
@@ -38,6 +40,7 @@ export const SiteInviteModal = () => {
     const router = useRouter();
 
     const siteId = data?.siteId!;
+    const siteName = data?.siteName!;
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -46,8 +49,9 @@ export const SiteInviteModal = () => {
         }
     });
     
-    const { execute } = useAction(createSiteInvite, {
+    const { execute, isLoading } = useAction(createSiteInvite, {
         onSuccess: () => {
+            form.reset();
             toast.success("Invitation sent!");
             router.refresh();
             onClose();
@@ -60,7 +64,7 @@ export const SiteInviteModal = () => {
     const onSubmit = (values: z.infer<typeof FormSchema>) => {
         const email = values.email;
 
-        execute({ email, siteId });
+        execute({ email, siteId, siteName });
     }
 
     return (
@@ -93,9 +97,15 @@ export const SiteInviteModal = () => {
                             )}
                         />
                         <DialogFooter>
-                            <FormSubmit className="w-full">
-                                Send Invitation
-                            </FormSubmit>
+                            <Button 
+                                type="submit" 
+                                disabled={isLoading}
+                            >
+                                {isLoading 
+                                    ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                                    : "Send Invite"
+                                }
+                            </Button>
                         </DialogFooter>
                     </form>
                 </Form>

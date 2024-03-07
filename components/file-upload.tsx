@@ -19,7 +19,7 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
 
   if (value) {
     return (
-      <div className="relative aspect-video">
+      <div className="h-48 relative aspect-video">
         <Image fill src={value} alt="Upload" className="rounded-sm" />
         <button
           onClick={() => onChange("")}
@@ -41,6 +41,7 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
       onUploadError={(error: Error) => {
         toast.error(error.message);
       }}
+      className="border-border"
     />
   );
 };

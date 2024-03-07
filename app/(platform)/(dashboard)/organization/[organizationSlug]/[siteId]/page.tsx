@@ -46,7 +46,7 @@ const SiteIdPage = async ({
 
     const activities = await db.auditLog.findMany({
         where: {
-            entityId: site?.id,
+            siteId: site?.id,
         }
     });
     

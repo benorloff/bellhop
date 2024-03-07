@@ -1,7 +1,7 @@
 "use server";
 
 import { auth, currentUser } from "@clerk/nextjs";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 import { createSafeAction } from "@/lib/create-safe-action";
 
@@ -82,10 +82,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     revalidateTag("tickets");
     // Create audit log for site creation
     auditLog = await createAuditLog({
-      entityTitle: ticket.request.subject,
-      entityId: ticket.request.id.toString(),
-      entityType: EntityType.TICKET,
-      action: Action.CREATE,
+        siteId: data.siteId,
+        entityTitle: ticket.request.subject,
+        // Convert ticket id from bigint to string
+        entityId: ticket.request.id.toString(),
+        entityType: EntityType.TICKET,
+        action: Action.CREATE,
     });
 } catch (error) {
     return {

@@ -12,7 +12,7 @@ const BillingPage = async () => {
 
     return (
         <>
-            <DashboardTitle title="Billing" />
+            <DashboardTitle />
             <PricingTable prices={prices} />
         </>
     )

@@ -1,25 +1,43 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { toast } from "sonner";
 
 import { createSite } from "@/actions/create-site";
 import { useAction } from "@/hooks/use-action";
 
-import { FormInput } from "@/components/form/form-input";
-import { FormSubmit } from "@/components/form/form-submit";
+import { CreateSite } from "@/actions/create-site/schema";
+import { DashboardTitle } from "@/components/dashboard-title";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { UploadDropzone } from "@/lib/uploadthing";
 import { FileUpload } from "@/components/file-upload";
+import { get } from "lodash";
 
 const MigrationPage = () => {
 
-    const [fileUrl, setFileUrl] = useState("");
-
     const router = useRouter();
 
-    const { execute, fieldErrors } = useAction(createSite, {
-        onSuccess: (data) => {
+    const form = useForm<z.infer<typeof CreateSite>>({
+        resolver: zodResolver(CreateSite),
+        defaultValues: {
+            name: "",
+            slug: "",
+            url: "",
+            ipAddress: "",
+            imageUrl: "",
+        }
+    });
+
+    const { execute, isLoading } = useAction(createSite, {
+        onSuccess: () => {
             toast.success("Site migration submitted!");
             router.push("/sites");
         },
@@ -28,55 +46,99 @@ const MigrationPage = () => {
         }
     });
 
-    const onSubmit = (formData: FormData) => {
-        const name = formData.get("name") as string;
-        const slug = formData.get("slug") as string;
-        const url = formData.get("url") as string; 
-        const ipAddress = formData.get("ipAddress") as string;
-        const imageUrl = fileUrl ? fileUrl : "/placeholder-browser.svg"
+    const onSubmit = (values: z.infer<typeof CreateSite>) => {
+        console.log(values, "values")
+        const name = values.name;
+        const slug = values.slug;
+        const url = values.url;
+        const ipAddress = values.ipAddress;
+        const imageUrl = values.imageUrl;
 
-        execute({ name, slug, url, imageUrl, ipAddress });
+        execute({ name, slug, url, ipAddress, imageUrl });
     }
 
     return ( 
         <div>
-            <div className="text-3xl mb-8">Migration Page</div>
-            <form action={onSubmit} className="space-y-4">
-                <div className="space-y-4">
-                    <FormInput 
-                        id="name"
-                        label="Site name"
-                        type="text"
-                        errors={fieldErrors}
+            <DashboardTitle />
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Site Name</FormLabel>
+                                <FormControl>
+                                    <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
-                    <FormInput 
-                        id="slug"
-                        label="Site slug"
-                        type="text"
-                        errors={fieldErrors}
+                    <FormField
+                        control={form.control}
+                        name="slug"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Site Slug</FormLabel>
+                                <FormControl>
+                                    <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
-                    <FormInput 
-                        id="url"
-                        label="Site URL"
-                        type="text"
-                        errors={fieldErrors}
+                    <FormField
+                        control={form.control}
+                        name="url"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Site URL</FormLabel>
+                                <FormControl>
+                                    <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
-                    <FormInput 
-                        id="ipAddress"
-                        label="IP Address"
-                        type="text"
-                        errors={fieldErrors}
+                    <FormField
+                        control={form.control}
+                        name="ipAddress"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>IP Address</FormLabel>
+                                <FormControl>
+                                    <Input {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
-                    <FileUpload 
-                        onChange={fileUrl => setFileUrl(fileUrl!)}
-                        value={fileUrl}
-                        endpoint="siteImage"
+                    <FormField
+                        control={form.control}
+                        name="imageUrl"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Image</FormLabel>
+                                <FormControl>
+                                    <FileUpload 
+                                        endpoint="siteImage"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
-                </div>
-                <FormSubmit className="w-full">
-                    Submit
-                </FormSubmit>
-            </form>
+                    <Button type="submit">
+                        {isLoading 
+                            ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                            : "Submit"
+                        }
+                    </Button>
+                </form>
+            </Form>
         </div>
      );
 }

@@ -15,7 +15,7 @@ const TicketsPage = async () => {
     return ( 
         <div>
             <div className="flex justify-between items-start">
-                <DashboardTitle title="Tickets" />
+                <DashboardTitle/>
                 <CreateTicketButton sites={sites as Site[]}/>
             </div>
             {/* <Suspense fallback={<Loading />}> */}

@@ -5,13 +5,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface DashboardTitleProps {
-    title: string;
-}
-
-export const DashboardTitle = ({
-    title,
-}: DashboardTitleProps) => {
+export const DashboardTitle = () => {
 
     const paths = usePathname();
 

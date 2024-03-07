@@ -1,16 +1,15 @@
 import { db } from "@/lib/db";
 
-import { FormInput } from "@/components/form/form-input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { MoreHorizontal } from "lucide-react";
-import { InviteButton } from "../../_components/invite-button";
 import { getSite } from "@/lib/get-site";
 import { auth, clerkClient } from "@clerk/nextjs";
+import { MoreHorizontal } from "lucide-react";
+import { InviteButton } from "../../_components/invite-button";
 
 interface SiteTeamPageProps {
     params: {
@@ -33,19 +32,25 @@ const SiteTeamPage = async ({
         }
     });
 
+    const site = await getSite(params.siteId);
+
     const organizationId = orgId;
     const orgMembers = await clerkClient.organizations.getOrganizationMembershipList({ organizationId });
     const parsedOrgMembers = await JSON.parse(JSON.stringify(orgMembers));
 
-    console.log(parsedOrgMembers, "<-- parsedOrgMembers")
-
     const invitations = await db.invite.findMany({
         where: {
             siteId: params.siteId,
+            expiresAt: {
+                gt: new Date(),
+            }
         },
+        orderBy: [
+            {
+                createdAt: "desc",
+            }
+        ]
     });
-
-    console.log(invitations, "<-- invitations") 
 
     return (
         <div className="flex flex-col gap-4">
@@ -56,7 +61,7 @@ const SiteTeamPage = async ({
                     <CardTitle>
                         <div className="flex flex-row justify-between items-center">
                             <div>Team Members</div>
-                            <InviteButton siteId={params.siteId}/>
+                            <InviteButton siteId={params.siteId} siteName={site?.name!}/>
                         </div>
                     </CardTitle>
                 </CardHeader>
@@ -117,42 +122,45 @@ const SiteTeamPage = async ({
                             </div>
                         </TabsContent>
                         <TabsContent value="invitations">
-                            {invitations.length !== 0 ? 
-                                (invitations.map((invite) => (
-                                    <div key={invite.id} className="flex flex-row flex-wrap gap-4 items-center">
-                                        <Avatar>
-                                            <AvatarFallback>{invite.recipientEmail[0].toUpperCase()}</AvatarFallback>
-                                        </Avatar>
-                                        <div className="grow">
-                                            <div>{invite.recipientEmail}</div>
-                                        </div>
-                                        <div>
-                                            Pending
-                                        </div>
-                                        <Popover>
-                                            <PopoverTrigger>
-                                                <Button
-                                                    className="rounded-full h-10 w-10 p-1"
-                                                    variant="ghost"
+                            <div className="flex flex-col gap-4">
+                                {invitations.length !== 0 ? 
+                                    (invitations.map((invite) => (
+                                        <div key={invite.id} className="flex flex-row flex-wrap gap-4 items-center">
+                                            <Avatar>
+                                                <AvatarFallback>{invite.recipientEmail[0].toUpperCase()}</AvatarFallback>
+                                            </Avatar>
+                                            <div className="grow">
+                                                <div>{invite.recipientEmail}</div>
+                                            </div>
+                                            <div>
+                                                Pending
+                                            </div>
+                                            <Popover>
+                                                <PopoverTrigger>
+                                                    <Button
+                                                        className="rounded-full h-10 w-10 p-1"
+                                                        variant="ghost"
+                                                    >
+                                                        <MoreHorizontal />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent
+                                                    side="top"
+                                                    align="end"
+                                                    className="max-w-[150px]"
                                                 >
-                                                    <MoreHorizontal />
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent
-                                                side="top"
-                                                align="end"
-                                                className="max-w-[150px]"
-                                            >
-                                                <div className="flex flex-col gap-4">
-                                                    {/* TODO: Add revoke invitatino action */}
-                                                    <Button variant="destructive">Revoke</Button>
-                                                </div>
-                                            </PopoverContent>
-                                        </Popover>
-                                    </div>
-                                ))) : (
-                                    <div className="text-center py-8">No pending invitations.</div>
-                                )}
+                                                    <div className="flex flex-col gap-4">
+                                                        {/* TODO: Add revoke invitatino action */}
+                                                        <Button variant="destructive">Revoke</Button>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    ))) : (
+                                        <div className="text-center py-8">No pending invitations.</div>
+                                    )
+                                }
+                            </div>
                         </TabsContent>
                     </Tabs>
                 </CardContent>

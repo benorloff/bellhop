@@ -7,4 +7,7 @@ export const CreateSiteInvite = z.object({
     siteId: z.string({
         required_error: "Site ID is required",
     }),
+    siteName: z.string({
+        required_error: "Site name is required",
+    }),
 });

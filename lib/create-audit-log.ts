@@ -4,6 +4,7 @@ import { Action, EntityType } from "@prisma/client";
 import { db } from "@/lib/db";
 
 interface CreateAuditLogProps {
+    siteId?: string;
     entityId: string;
     entityType: EntityType,
     entityTitle: string;
@@ -20,11 +21,12 @@ export const createAuditLog = async (props: CreateAuditLogProps) => {
             throw new Error("Unauthorized");
         }
 
-        const { entityId, entityType, entityTitle, action } = props;
+        const { siteId, entityId, entityType, entityTitle, action } = props;
 
         auditLog = await db.auditLog.create({
             data: {
                 orgId,
+                siteId: siteId || null,
                 entityId,
                 entityType,
                 entityTitle,

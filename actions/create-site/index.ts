@@ -12,6 +12,7 @@ import { CreateSite } from "./schema";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
+    console.log(data, "data")
     const { orgId, orgSlug } = auth();
     const user = await currentUser();
     

@@ -75,14 +75,9 @@ model Invite {
 }
 
 enum Action {
-  SITE_CREATE
-  SITE_UPDATE
-  SITE_DELETE
-  SITE_TICKET_CREATE
-  SITE_TICKET_UPDATE
-  SITE_TICKET_DELETE
-  SITE_INVITE_CREATE
-  SITE_INVITE_DELETE
+  CREATE
+  UPDATE
+  DELETE
 }
 
 enum EntityType {
@@ -96,6 +91,7 @@ enum EntityType {
 model AuditLog {
   id          String     @id @default(uuid())
   orgId       String
+  siteId      String?
   action      Action
   entityId    String
   entityType  EntityType

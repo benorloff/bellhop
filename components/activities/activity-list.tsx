@@ -28,7 +28,7 @@ export const ActivityList = ({
                                 <AvatarImage src={activity.userImage} alt={activity.userName} />
                                 <AvatarFallback>{activity.userName[0]}</AvatarFallback>
                             </Avatar>
-                            <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d ${activity.entityTitle}`}</div>
+                            <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d a ${activity.entityType.toString()}`}</div>
                             <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
                         </div>
                     )
@@ -45,7 +45,7 @@ export const ActivityList = ({
                         <AvatarImage src={activity.userImage} alt={activity.userName} />
                         <AvatarFallback>{activity.userName[0]}</AvatarFallback>
                     </Avatar>
-                    <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d ${activity.entityTitle}`}</div>
+                    <div className="grow">{`${activity.userName} ${activity.action.toLowerCase()}d a ${activity.entityType.toString()}`}</div>
                     <div className="shrink">{new Date(activity.createdAt).toLocaleString()}</div>
                 </div>
             ))}

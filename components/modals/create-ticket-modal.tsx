@@ -15,6 +15,7 @@ import { createTicket } from "@/actions/create-ticket";
 import { 
     Dialog, 
     DialogContent, 
+    DialogFooter, 
     DialogHeader, 
     DialogTitle 
 } from "@/components/ui/dialog";
@@ -36,6 +37,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Loader2 } from "lucide-react";
 
 const FormSchema = z.object({
     siteId: z.string().min(2, {
@@ -66,8 +68,9 @@ export const CreateTicketModal = () => {
         }
     });
 
-    const { execute } = useAction(createTicket, {
+    const { execute, isLoading } = useAction(createTicket, {
         onSuccess: () => {
+            form.reset();
             toast.success("Ticket created! 🎉");
             router.refresh();
             onClose();
@@ -153,7 +156,14 @@ export const CreateTicketModal = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Submit</Button>
+                        <DialogFooter>
+                            <Button type="submit">
+                                {isLoading 
+                                    ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                                    : "Submit Ticket"
+                                }
+                            </Button>
+                        </DialogFooter>
                     </form>
                 </Form>
             </DialogContent>

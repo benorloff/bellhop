@@ -1,11 +1,19 @@
+import { cache } from "react";
+import 'server-only';
+
 import { db } from "@/lib/db";
 
-export const getStripePrices = async () => {
-  const prices = await db.price.findMany({
-    include: {
-      product: true,
-    }
-  });
+export const preload = () => {
+    void getStripePrices();
+};
 
-  return prices;
-}
+export const getStripePrices = cache(async () => {
+
+    const prices = await db.price.findMany({
+      include: {
+          product: true,
+      }
+    })
+
+    return prices;
+});

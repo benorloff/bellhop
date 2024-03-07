@@ -2,89 +2,99 @@
 
 import { auth } from "@clerk/nextjs";
 
-import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
+import { db } from "@/lib/db";
 
-import { InputType, ReturnType } from "./types";
 import { CreateSiteInvite } from "./schema";
+import { InputType, ReturnType } from "./types";
 
 import { sendgridApiHost, sendgridApiKey } from "@/constants/mail";
 
-// Clerk Organization Invitations API Reference
-// https://clerk.com/docs/reference/backend-api/tag/Organization-Invitations
-
 const handler = async (data: InputType): Promise<ReturnType> => {
-    const { userId, orgId, orgSlug } = auth();
-    const { email, siteId } = data;
+  const { userId, orgId, orgSlug } = auth();
+  const { email, siteId, siteName } = data;
 
-    if ( !userId || !orgId ) {
-        return {
-            error: "Unauthorized",
-        };
+  if (!userId || !orgId) {
+    return {
+      error: "Unauthorized",
     };
+  }
 
-    let invite;
-
-    try {
-        invite = await db.invite.create({
-            data: {
-                userId: userId,
-                recipientEmail: email,
-                siteId: siteId,
-            }
-        })
-    } catch (error) {
-        console.log(error);
-        return {
-            error: "Failed to create invitation."
-        }
+  // Check to see if there's already an active invite for this recipient
+  const existingInvite = await db.invite.findFirst({
+    where: {
+      recipientEmail: email,
+      siteId: siteId,
+      expiresAt: {
+        gt: new Date(),
+      },
     }
+  });
 
-    const msg = {
-        from: {
-            email: "ben@circle.black"
-        },
-        personalizations: [
-            {
-                to: [
-                    {
-                        email: email
-                    }
-                ],
-                dynamic_template_data: {
-                    site_name: "Circle Black",
-                    url: `http://localhost:3000/organization/${orgSlug}/${siteId}/invite/${invite.id}`
-                }
-            }
+  if (existingInvite) {
+    return {
+      error: `There is already a pending invite for ${email}`,
+    };
+  }
+
+  let invite;
+
+  try {
+    invite = await db.invite.create({
+      data: {
+        userId: userId,
+        recipientEmail: email,
+        siteId: siteId,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Failed to create invitation.",
+    };
+  }
+
+  const msg = {
+    from: {
+      email: "ben@circle.black",
+    },
+    personalizations: [
+      {
+        to: [
+          {
+            email: email,
+          },
         ],
-        template_id: "d-46448a712cc2427b9b485f0f4bf5043d"
-    }
+        dynamic_template_data: {
+          site_name: siteName,
+          url: `http://localhost:3000/organization/${orgSlug}/${siteId}/invite/${invite.id}`,
+        },
+      },
+    ],
+    template_id: "d-46448a712cc2427b9b485f0f4bf5043d",
+  };
 
-    // TODO: Check if user already exists in the app before sending invitation
+  let mail;
 
-    let mail;
-    
-    try {
-        mail = await fetch(`${sendgridApiHost}/mail/send`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${sendgridApiKey}`,
-            },
-            body: JSON.stringify(msg),
-        })
-        // mail = await sgMail.send(msg);
+  try {
+    mail = await fetch(`${sendgridApiHost}/mail/send`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sendgridApiKey}`,
+      },
+      body: JSON.stringify(msg),
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Failed to send site invite email.",
+    };
+  }
 
-    } catch (error) {
-        console.log(error);
-        return {
-            error: "Failed to send site invite email."
-        }
-    }
+  // Add redirect/revalidate to site page here?
 
-    // Add redirect/revalidate to site page here?
-
-    return { data: invite };
+  return { data: invite };
 };
 
 export const createSiteInvite = createSafeAction(CreateSiteInvite, handler);

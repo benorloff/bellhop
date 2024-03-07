@@ -7,6 +7,7 @@ interface ModalData {
     site?: Site;
     sites?: Site[];
     siteId?: string;
+    siteName?: string;
     profileId?: string;
     orgMembers?: Array<object>;
 }
