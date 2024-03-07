@@ -1,13 +1,10 @@
+import { auth } from "@clerk/nextjs";
 import Link from "next/link";
-import Image from "next/image";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 
-import { db } from "@/lib/db";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Member } from "@prisma/client";
-import { SiteMembers } from "./site-members";
+import { db } from "@/lib/db";
 import { SiteImage } from "./site-image";
+import { SiteMembers } from "./site-members";
 
 export const SiteList = async () => {
     const { userId } = auth();
@@ -24,6 +21,14 @@ export const SiteList = async () => {
             members: true
         }
     })
+
+    if (!sites) {
+        return (
+            <div className="flex justify-center items-center bg-card border rounded-sm shadow p-8">
+                No sites yet...
+            </div>
+        )
+    };
 
     return (
         <div className="flex flex-col gap-4 space-y-4">

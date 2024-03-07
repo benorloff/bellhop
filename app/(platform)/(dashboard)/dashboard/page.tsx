@@ -2,6 +2,7 @@ import { DashboardTitle } from "@/components/dashboard-title";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { currentGreeting } from "@/lib/current-greeting";
 import { db } from "@/lib/db";
+import { checkSubscription } from "@/lib/subscription";
 import { auth } from "@clerk/nextjs";
 
 const DashboardPage = async () => {
@@ -20,6 +21,8 @@ const DashboardPage = async () => {
             }
         }
     });
+
+    console.log(await checkSubscription(), "<-- checkSubscription result")
 
     return ( 
         <>

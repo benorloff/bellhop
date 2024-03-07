@@ -1,13 +1,13 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { TicketMessage } from "@/components/tickets/ticket-message";
-import { Separator } from "@/components/ui/separator";
 import { TicketReplyPanel } from "@/components/tickets/ticket-reply-panel";
-import { 
-    zendeskApiHost, 
-    zendeskApiPassword, 
-    zendeskApiUsername 
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+    zendeskApiHost,
+    zendeskApiPassword,
+    zendeskApiUsername
 } from "@/constants/tickets";
+import { currentUser } from "@clerk/nextjs";
 
 interface TicketIdPageProps {
     params: {
@@ -64,7 +64,23 @@ export const TicketIdPage =  async ({
     params
 }: TicketIdPageProps) => {
 
+    // Get the current authenticated user
+    const user = await currentUser();
+
+    // Get the ticket from Zendesk
     const ticket = await getTicket({ params });
+    
+    // If the ticket is not found, return an error
+    if (!ticket) {
+        throw new Error('Ticket not found.')
+    }
+
+    // If the user is not the requester of the ticket, return an error
+    if (ticket.requester_id !== user?.privateMetadata.zendeskUserId) {
+        throw new Error('You are not authorized to view this ticket')
+    }
+
+    // Get the comments and users associated with this ticket
     const { comments, users } = await getTicketComments({ params });
     
     return (

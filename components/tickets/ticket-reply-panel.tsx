@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 import { toast } from "sonner";
 import Textarea from "react-textarea-autosize";
-import { CornerRightUp } from "lucide-react";
+import { CornerRightUp, Loader2 } from "lucide-react";
 
 import { useAction } from "@/hooks/use-action";
 import { createComment } from "@/actions/create-comment";
@@ -22,7 +22,7 @@ export const TicketReplyPanel = () => {
 
     const { ticketId } = useParams();
     
-    const { execute, fieldErrors } = useAction(createComment, {
+    const { execute, isLoading } = useAction(createComment, {
         onSuccess: () => {
             setBody("");
             toast.success("Reply sent! 🎉");
@@ -60,9 +60,12 @@ export const TicketReplyPanel = () => {
                         <Button
                             type="submit"
                             onClick={onSubmit}
-                            disabled={!body}
+                            disabled={!body || isLoading}
                         >
-                            <CornerRightUp size={24} />
+                            {isLoading
+                                ? <Loader2 size={24} className="animate-spin" />
+                                : <CornerRightUp size={24} />
+                            }
                         </Button>
                     </Hint>
                 </div>

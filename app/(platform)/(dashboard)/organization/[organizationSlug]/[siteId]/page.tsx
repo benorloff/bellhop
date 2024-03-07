@@ -1,32 +1,27 @@
-import { EntityType, AuditLog } from "@prisma/client";
-import { auth } from "@clerk/nextjs";
-
-import { getSite } from "@/lib/get-site";
 import { db } from "@/lib/db";
+import { getSite } from "@/lib/get-site";
 
 import { ActivityList } from "@/components/activities/activity-list";
-import { 
-    Avatar, 
-    AvatarFallback, 
-    AvatarImage 
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage
 } from "@/components/ui/avatar";
-import { 
-    Card, 
-    CardContent, 
-    CardFooter, 
-    CardHeader, 
-    CardTitle 
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
 } from "@/components/ui/card";
-import { InviteButton } from "../_components/invite-button";
 
+import { Hint } from "@/components/hint";
+import { RecentTickets } from "@/components/tickets/recent-tickets";
 import {
     dataCenters
 } from "@/constants/sites";
-import { Hint } from "@/components/hint";
 import Image from "next/image";
-import { RecentTickets } from "@/components/tickets/recent-tickets";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 interface SiteIdPageProps {
     params: {

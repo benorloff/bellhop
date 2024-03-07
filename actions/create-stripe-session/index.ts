@@ -1,6 +1,6 @@
 "use server";
 
-import { currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 
 import { db } from "@/lib/db";
 import { createSafeAction } from "@/lib/create-safe-action";
@@ -11,9 +11,10 @@ import { InputType, ReturnType } from "./types";
 import { revalidatePath } from "next/cache";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
+    const { orgId } = auth();
     const user = await currentUser();
 
-    if (!user) {
+    if (!user || !orgId ) {
         throw new Error('You must be logged in to perform this action')
     }
 
@@ -48,6 +49,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                         quantity: 1,
                     },
                 ],
+                metadata: {
+                    orgId,
+                }
             });
             url = stripeCheckoutSession.url || '';
         }
