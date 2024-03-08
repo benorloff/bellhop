@@ -51,18 +51,29 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 }
             }
         })
-
-        // Create audit log for site creation
-        await createAuditLog({
-            entityTitle: site.name,
-            entityId: site.id,
-            entityType: EntityType.SITE,
-            action: Action.CREATE,
-        })
     } catch (error) {
         console.log(error);
         return {
             error: "Failed to create site."
+        }
+    }
+
+    try {
+        await createAuditLog({
+            orgId,
+            siteId: site.id,
+            action: Action.CREATE,
+            entityId: site.id,
+            entityType: EntityType.SITE,
+            entityTitle: site.name,
+            userId: user.id,
+            userImage: user.imageUrl,
+            userName: `${user.firstName} ${user.lastName}`,
+        })
+    } catch (error) {
+        console.log(error);
+        return {
+            error: "Failed to create audit log for site creation."
         }
     }
 

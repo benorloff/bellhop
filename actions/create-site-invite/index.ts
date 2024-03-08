@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs";
+import { auth, clerkClient, currentUser } from "@clerk/nextjs";
 
 import { createSafeAction } from "@/lib/create-safe-action";
 import { db } from "@/lib/db";
@@ -9,12 +9,15 @@ import { CreateSiteInvite } from "./schema";
 import { InputType, ReturnType } from "./types";
 
 import { sendgridApiHost, sendgridApiKey } from "@/constants/mail";
+import { createAuditLog } from "@/lib/create-audit-log";
+import { Action, EntityType } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { userId, orgId, orgSlug } = auth();
+  const user = await currentUser();
+  const { orgId } = auth();
   const { email, siteId, siteName } = data;
 
-  if (!userId || !orgId) {
+  if (!user || !orgId) {
     return {
       error: "Unauthorized",
     };
@@ -37,12 +40,35 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
+  let org;
+  let orgMemberList;
+
+  try {
+    org = await clerkClient.organizations.getOrganization({
+      organizationId: orgId,
+    });
+    orgMemberList = await clerkClient.organizations.getOrganizationMembershipList({
+      organizationId: orgId,
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Failed to get organization.",
+    };
+  }
+
+  if (orgMemberList.values.length === org.maxAllowedMemberships || orgMemberList.values.length > org.maxAllowedMemberships) {
+    return {
+      error: "Organization has reached the maximum number of members.",
+    };
+  }
+
   let invite;
 
   try {
     invite = await db.invite.create({
       data: {
-        userId: userId,
+        userId: user.id,
         recipientEmail: email,
         siteId: siteId,
       },
@@ -91,6 +117,25 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: "Failed to send site invite email.",
     };
   }
+
+  try {
+    await createAuditLog({
+        orgId,
+        siteId: siteId,
+        action: Action.UPDATE,
+        entityId: invite.id,
+        entityType: EntityType.TICKET,
+        entityTitle: email,
+        userId: user.id,
+        userImage: user.imageUrl,
+        userName: `${user.firstName} ${user.lastName}`,
+    })
+} catch (error) {
+    console.log(error);
+    return {
+        error: "Failed to create audit log for site invite."
+    }
+}
 
   // Add redirect/revalidate to site page here?
 

@@ -4,33 +4,46 @@ import { Action, EntityType } from "@prisma/client";
 import { db } from "@/lib/db";
 
 interface CreateAuditLogProps {
+    orgId: string;
     siteId?: string;
+    action: Action;
     entityId: string;
     entityType: EntityType,
     entityTitle: string;
-    action: Action;
+    userId: string;
+    userImage: string;
+    userName: string;
 };
 
 export const createAuditLog = async (props: CreateAuditLogProps) => {
     let auditLog;
     try {
-        const { orgId } = auth();
         const user = await currentUser();
 
-        if (!user || !orgId) {
+        if (!user) {
             throw new Error("Unauthorized");
         }
 
-        const { siteId, entityId, entityType, entityTitle, action } = props;
+        const { 
+            orgId, 
+            siteId, 
+            action, 
+            entityId, 
+            entityType, 
+            entityTitle,
+            userId,
+            userImage,
+            userName,
+        } = props;
 
         auditLog = await db.auditLog.create({
             data: {
                 orgId,
                 siteId: siteId || null,
+                action,
                 entityId,
                 entityType,
                 entityTitle,
-                action,
                 userId: user.id,
                 userImage: user?.imageUrl,
                 userName: `${user?.firstName} ${user?.lastName}`,

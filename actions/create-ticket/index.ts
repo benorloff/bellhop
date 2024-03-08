@@ -20,9 +20,9 @@ import { Action, EntityType } from "@prisma/client";
 // https://developer.zendesk.com/api-reference/ticketing/tickets/ticket-requests/#create-request
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { userId, orgId } = auth();
+  const { orgId } = auth();
 
-  if (!userId || !orgId) {
+  if (!orgId) {
     return {
       error: "Unauthorized",
     };
@@ -80,18 +80,29 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     ticket = await response.json();
     // Purge the cache for all fetches tagged with 'tickets'
     revalidateTag("tickets");
-    // Create audit log for site creation
-    auditLog = await createAuditLog({
-        siteId: data.siteId,
-        entityTitle: ticket.request.subject,
-        // Convert ticket id from bigint to string
-        entityId: ticket.request.id.toString(),
-        entityType: EntityType.TICKET,
-        action: Action.CREATE,
-    });
 } catch (error) {
     return {
       error: "Failed to create ticket.",
+    };
+  }
+
+  try {
+    await createAuditLog({
+      orgId,
+      siteId: data.siteId,
+      action: Action.CREATE,
+      // Convert ticket id from bigint to string
+      entityId: ticket.request.id.toString(),
+      entityType: EntityType.TICKET,
+      entityTitle: ticket.request.subject,
+      userId: user.id,
+      userImage: user.imageUrl,
+      userName: `${user.firstName} ${user.lastName}`,
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Failed to create audit log for ticket creation.",
     };
   }
 

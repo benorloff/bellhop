@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { currentUser, redirectToSignIn } from "@clerk/nextjs";
+import { clerkClient, currentUser, redirectToSignIn } from "@clerk/nextjs";
 import { Member, Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 
@@ -15,57 +15,46 @@ const InviteIdPage = async ({
     const user = await currentUser();
 
     if ( !user ) {
-        redirectToSignIn();
+        return redirectToSignIn();
     }
 
-    let invite: Prisma.InviteGetPayload<{
-        include: {
-            site: true;
-        };
-    }> | null;
-
-    try {
-        invite = await db.invite.findUnique({
-            where: {
-                id: params.inviteId,
-                expiresAt: {
-                    gte: new Date()
-                },
+    // Get the invite from db
+    const invite = await db.invite.findUnique({
+        where: {
+            id: params.inviteId,
+            expiresAt: {
+                gte: new Date()
             },
-            include: {
-                site: true,
-            }
-        });
-    } catch (error) {
-        return {
-            error: "Invite not found.",
-        };
-    }
+        },
+        include: {
+            site: true,
+        }
+    });
+
 
     if ( !invite || invite.recipientEmail !== user?.emailAddresses[0].emailAddress ) {
-        return {
-            error: "You are not the intended recipient of this invitation."
-        }
+        throw new Error ("You are not the intended recipient of this invitation.")
     };
 
-    let member: Member;
 
-    try {
-        member = await db.member.create({
-            data: {
-                userId: user.id,
-                userName: `${user.firstName} ${user.lastName}`,
-                userImage: user.imageUrl,
-                siteId: invite.siteId,
-                role: "COLLABORATOR",
-            },
-        });
-    } catch (error) {
-        console.log(error);
-        return {
-            error: "Failed to create member.",
-        };
-    }
+    // Create site membership for the invited user
+    const member = await db.member.create({
+        data: {
+            userId: user.id,
+            userName: `${user.firstName} ${user.lastName}`,
+            userImage: user.imageUrl,
+            siteId: invite.siteId,
+            role: "COLLABORATOR",
+        },
+    });
+
+
+    // Add the invitee to the site's organization
+    const orgMember = await clerkClient.organizations.createOrganizationMembership({
+            organizationId: invite.site.orgId,
+            userId: user.id,
+            role: "org:guest",
+    })
 
     if (member) {
         return redirect(`/organization/${invite.site.orgSlug}/${invite.siteId}`)

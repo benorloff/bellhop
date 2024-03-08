@@ -17,10 +17,11 @@ async function getData() {
 
   if (!user) {
     redirectToSignIn();
+    return;
   }
   
   const response = await fetch(
-    `${zendeskApiHost}/users/${user?.privateMetadata?.zendeskUserId}/tickets/requested?sort_by=updated_at&sort_order=desc`, {
+    `${zendeskApiHost}/users/${user.privateMetadata?.zendeskUserId}/tickets/requested?sort_by=updated_at&sort_order=desc`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`, 
@@ -31,6 +32,7 @@ async function getData() {
   })
  
   if (!response.ok) {
+    console.log(response, '<-- response')
     throw new Error('Failed to fetch data')
   }
  

@@ -9,14 +9,17 @@ import {
     zendeskApiPassword, 
     zendeskApiUsername 
 } from "@/constants/tickets";
-import { currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
+import { createAuditLog } from "@/lib/create-audit-log";
+import { Action, EntityType } from "@prisma/client";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
 
+    const { orgId } = auth();
     const user = await currentUser();
 
-    if (!user) {
+    if (!user || !orgId) {
         return {
             error: "Unauthorized",
         };
@@ -56,6 +59,25 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         console.log(error, '<-- create comment error')
         return {
             error: "Failed to create comment."
+        }
+    }
+
+    try {
+        await createAuditLog({
+            orgId,
+            siteId: ticket.custom_fields.find(({ id }: { id: number }) => id === 23229752282907).value,
+            action: Action.UPDATE,
+            entityId: ticket.id.toString(),
+            entityType: EntityType.TICKET,
+            entityTitle: ticket.subject,
+            userId: user.id,
+            userImage: user.imageUrl,
+            userName: `${user.firstName} ${user.lastName}`,
+        })
+    } catch (error) {
+        console.log(error);
+        return {
+            error: "Failed to create audit log for ticket update."
         }
     }
     

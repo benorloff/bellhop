@@ -83,21 +83,9 @@ export async function POST(req: Request) {
         // Extract the user from the response
         const { user } = await res.json();
 
-        // Create the profile in the database
-        const profile = await db.profile.create({
-            data: {
-                userId: payload.data.id,
-                zendeskUserId: user.id,
-                firstName: payload.data.first_name,
-                lastName: payload.data.last_name,
-                imageUrl: payload.data.image_url,
-                email: payload.data.email_addresses[0].email_address,
-            },
-        });
 
         // Update the user in Clerk with ZendeskID and profileId
         const updatedUser = await clerkClient.users.updateUser(payload.data.id, {
-            externalId: profile.id,
             privateMetadata: {
                 zendeskId: user.id,
             }
@@ -106,26 +94,14 @@ export async function POST(req: Request) {
 
     // Update profile when a user is updated in Clerk
     if (eventType === "user.updated") {
-        await db.profile.update({
-            where: {
-                userId: payload.data.id,
-            },
-            data: {
-                firstName: payload.data.first_name,
-                lastName: payload.data.last_name,
-                imageUrl: payload.data.image_url,
-                email: payload.data.email_addresses[0].email_address,
-            },
-        });
+        console.log("clerk user updated")
+        // Do something
     }
 
     // Delete profile when a user is deleted in Clerk
     if (eventType === "user.deleted") {
-        await db.profile.delete({
-            where: {
-                userId: payload.data.id,
-            },
-        });
+        console.log("clerk user deleted")
+        // Do something
     }
 
     return new Response('', { status: 200 });
