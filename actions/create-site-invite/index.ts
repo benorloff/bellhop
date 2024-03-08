@@ -14,7 +14,7 @@ import { Action, EntityType } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const user = await currentUser();
-  const { orgId } = auth();
+  const { orgId, orgSlug } = auth();
   const { email, siteId, siteName } = data;
 
   if (!user || !orgId) {
@@ -124,7 +124,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         siteId: siteId,
         action: Action.UPDATE,
         entityId: invite.id,
-        entityType: EntityType.TICKET,
+        entityType: EntityType.SITE,
         entityTitle: email,
         userId: user.id,
         userImage: user.imageUrl,

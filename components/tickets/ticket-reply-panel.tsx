@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 
 import { toast } from "sonner";
@@ -17,11 +17,10 @@ import { useRouter } from "next/navigation";
 export const TicketReplyPanel = () => {
 
     const router = useRouter();
-
     const [body, setBody] = useState("");
-
     const { ticketId } = useParams();
     
+    // Handle the server action status
     const { execute, isLoading } = useAction(createComment, {
         onSuccess: () => {
             setBody("");
@@ -33,25 +32,49 @@ export const TicketReplyPanel = () => {
         }
     });
 
+    // Handle user input
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setBody(e.target.value);
     };
     
+    // Submit the form data to the server action
     const onSubmit = () => {
         const ticket_id = parseInt(ticketId as string);
         execute({ body, ticket_id });
     }; 
+
+    // Allow user to submit with Command + Enter
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const textareaElement = textareaRef.current;
+
+    useEffect(() => {
+        const listener = (e: KeyboardEvent) => {
+            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                onSubmit();
+            };
+        };
+        if (textareaElement) {
+            textareaElement.addEventListener("keydown", listener);
+        }
+        return () => {
+            if (textareaElement) {
+                textareaElement.removeEventListener("keydown", listener);
+            }
+        };
+    }, [textareaElement, onSubmit]);
     
     return (
         <div className="sticky bottom-0 w-full p-4 rounded-t-sm bg-background border">
                 <div className="flex flex-row gap-2 items-start">
-                    <Textarea 
+                    <Textarea
+                        ref={textareaRef}
                         value={body}
                         onChange={handleChange}
                         placeholder="Type your reply here..."
                         rows={1}
                         spellCheck={false}
-                        className="min-h-[40px] w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-within:outline-none sm:text-sm"
+                        disabled={isLoading}
+                        className="min-h-[40px] w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
                     />
                     <Hint
                         label={body ? "Send Reply" : "Need a message to send"}
