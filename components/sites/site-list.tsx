@@ -57,7 +57,7 @@ export const SiteList = async () => {
                         </p>
                     </div>
                     <div className="flex flex-row gap-2">
-                        <SiteMembers siteId={site.id} members={site.members} />
+                        <SiteMembers siteId={site.id} siteName={site.name} members={site.members} />
                     </div>
                 </div>
             ))}

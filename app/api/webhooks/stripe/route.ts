@@ -7,6 +7,9 @@ import { stripe } from "@/lib/stripe";
 import { SubscriptionStatus } from "@prisma/client";
 
 const relevantEvents = new Set([
+    'customer.created',
+    'customer.updated',
+    'customer.deleted',
     'checkout.session.completed',
     'customer.subscription.created',
     'customer.subscription.deleted',
@@ -36,13 +39,14 @@ export async function POST(req: Request) {
         return new NextResponse("Webhook error", { status: 400 });
     }
 
-    // const session = event.data.object as Stripe.Checkout.Session;
-
     // See example:
     // https://github.com/vercel/nextjs-subscription-payments/blob/main/app/api/webhooks/route.ts
     if (relevantEvents.has(event.type)) {
         try {
             switch (event.type) {
+                case "customer.created":
+                    // Add customer's stripe id to their user metadata
+                    break;
                 case "checkout.session.completed":
                     const checkoutSession = event.data.object as Stripe.Checkout.Session;
                     if (!checkoutSession?.metadata?.orgId) {

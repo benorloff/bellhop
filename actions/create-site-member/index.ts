@@ -1,18 +1,17 @@
+"use server";
+
+import { createSafeAction } from "@/lib/create-safe-action";
 import { db } from "@/lib/db";
+
+import { CreateSiteMember } from "./schema";
+import { InputType, ReturnType } from "./types";
 import { currentUser, redirectToSignIn } from "@clerk/nextjs";
-import { Member, Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { Member, Prisma } from "@prisma/client";
 
-interface InviteIdPageProps {
-    params: {
-        inviteId: string;
-    };
-};
-
-const InviteIdPage = async ({
-    params
-}: InviteIdPageProps) => {
+const handler = async (data: InputType): Promise<ReturnType> => {
     const user = await currentUser();
+    const { inviteId } = data;
 
     if ( !user ) {
         redirectToSignIn();
@@ -27,7 +26,7 @@ const InviteIdPage = async ({
     try {
         invite = await db.invite.findUnique({
             where: {
-                id: params.inviteId,
+                id: inviteId,
                 expiresAt: {
                     gte: new Date()
                 },
@@ -60,6 +59,7 @@ const InviteIdPage = async ({
                 role: "COLLABORATOR",
             },
         });
+        redirect(`/organization/${invite.site.orgSlug}/${invite.siteId}`)
     } catch (error) {
         console.log(error);
         return {
@@ -67,12 +67,7 @@ const InviteIdPage = async ({
         };
     }
 
-    if (member) {
-        return redirect(`/organization/${invite.site.orgSlug}/${invite.siteId}`)
-    }
-
-    return null;
-
+    return { data: {member,invite} };
 };
 
-export default InviteIdPage;
+export const createSiteMember = createSafeAction(CreateSiteMember, handler);

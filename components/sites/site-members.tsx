@@ -14,11 +14,13 @@ import { Member } from "@prisma/client";
 
 interface SiteMembersProps {
     siteId: string;
+    siteName: string;
     members: Member[];
 };
 
 export const SiteMembers = ({
     siteId,
+    siteName,
     members,
 }: SiteMembersProps) => {
     const { onOpen } = useModal();
@@ -43,7 +45,7 @@ export const SiteMembers = ({
             >
                 <Button
                     className="rounded-full w-[40px] h-[40px] p-0"
-                    onClick={() => onOpen("siteInvite", { siteId })}
+                    onClick={() => onOpen("siteInvite", { siteId, siteName })}
                 >
                     <Plus size={24} />
                 </Button>
