@@ -31,7 +31,7 @@ export const SiteImage = (
                 >
                     <Button
                         variant="ghost"
-                        onClick={() => onOpen("siteImage", { site })}
+                        onClick={() => onOpen("siteImage", { siteId: site.id })}
                     >
                         {/* TODO: Connect to update-site action */}
                         Upload image

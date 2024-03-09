@@ -19,8 +19,8 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
 
   if (value) {
     return (
-      <div className="relative aspect-video w-fit">
-        <Image height={200} width={300} src={value} alt="Upload" className="rounded-sm" />
+      <div className="relative aspect-video w-full">
+        <Image fill src={value} alt="Upload" className="rounded-sm" />
         <button
           onClick={() => onChange("")}
           className="bg-destructive text-white p-1 rounded-full absolute top-[-8px] right-[-8px] shadow-sm"
