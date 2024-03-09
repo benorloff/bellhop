@@ -20,8 +20,11 @@ import {
     dataCenters
 } from "@/constants/sites";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
+import { auth } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface SiteIdPageProps {
     params: {
@@ -33,11 +36,16 @@ const SiteIdPage = async ({
     params,
 }: SiteIdPageProps) => {
 
+    const { orgId, orgSlug } = auth();
     const site = await getSite(params.siteId);
+
+    if (!orgId) {
+        redirect("/select-org");
+    };
 
     if (!site) {
         notFound();
-    }
+    };
 
     const activities = await db.auditLog.findMany({
         where: {
@@ -46,7 +54,7 @@ const SiteIdPage = async ({
         orderBy: {
             createdAt: "desc",
         },
-        take: 5,
+        take: 3,
     });
     
     return (
@@ -55,7 +63,16 @@ const SiteIdPage = async ({
                 <div className="flex flex-col basis-full lg:basis-7/12 gap-8">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Recent Tickets</CardTitle>
+                            <CardTitle>
+                                <div className="flex flex-row items-center justify-between">
+                                    Recent Tickets
+                                    <Link href={`/organization/${orgSlug}/${params.siteId}/tickets`}>
+                                        <Button>
+                                            View All
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <Suspense fallback={<RecentTickets.Skeleton />}>
@@ -65,7 +82,16 @@ const SiteIdPage = async ({
                     </Card>
                     <Card>
                         <CardHeader>
-                            <CardTitle>Recent Activity</CardTitle>
+                            <CardTitle>
+                                <div className="flex flex-row items-center justify-between">
+                                    Recent Activity
+                                    <Link href={`/organization/${orgSlug}/${params.siteId}/activity`}>
+                                        <Button>
+                                            View All
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <Suspense fallback={<ActivityList.Skeleton />}>
@@ -77,7 +103,16 @@ const SiteIdPage = async ({
                 <div className="flex flex-col grow basis-auto gap-8">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Team</CardTitle>
+                            <CardTitle>
+                                <div className="flex flex-row items-center justify-between">
+                                    Team
+                                    <Link href={`/organization/${orgSlug}/${params.siteId}/team`}>
+                                        <Button>
+                                            Manage
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="flex flex-col gap-4">

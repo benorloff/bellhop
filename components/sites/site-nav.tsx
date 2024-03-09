@@ -51,8 +51,8 @@ export const SiteNav = ({
     ]
 
     return (
-        <NavigationMenu className="mb-8">
-            <NavigationMenuList>
+        <NavigationMenu className="border rounded-lg mb-8 p-1">
+            <NavigationMenuList className="rounded-sm">
                 {routes.map((route) => (
                     <NavigationMenuItem key={route.label}>
                         <Link href={route.href} legacyBehavior passHref>

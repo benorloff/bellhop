@@ -32,7 +32,6 @@ async function getData() {
   })
  
   if (!response.ok) {
-    console.log(response, '<-- response')
     throw new Error('Failed to fetch data')
   }
  
