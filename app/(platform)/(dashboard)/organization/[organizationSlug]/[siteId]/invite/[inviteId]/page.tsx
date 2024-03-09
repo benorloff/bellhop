@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { clerkClient, currentUser, redirectToSignIn } from "@clerk/nextjs";
-import { Member, Prisma } from "@prisma/client";
+import { Action, EntityType, Member, Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 interface InviteIdPageProps {
@@ -56,6 +56,29 @@ const InviteIdPage = async ({
             role: "org:guest",
     })
 
+    // Create the audit log
+    await db.auditLog.create({
+        data: {
+            orgId: invite.site.orgId,
+            siteId: invite.site.id,
+            action: Action.CREATE,
+            entityId: member.userId,
+            entityType: EntityType.MEMBER,
+            entityTitle: member.userName,
+            userId: user.id,
+            userImage: user.imageUrl,
+            userName: `${user.firstName} ${user.lastName}`,
+        }
+    });
+
+    // Delete the invite now that it has been used
+    await db.invite.delete({
+        where: {
+            id: invite.id
+        }
+    });
+
+    // Redirect the new member to the site page
     if (member) {
         return redirect(`/organization/${invite.site.orgSlug}/${invite.siteId}`)
     }
