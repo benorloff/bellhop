@@ -1,8 +1,6 @@
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
  
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
   publicRoutes: ["/", "/pricing", "/api/uploadthing(.*)", "/api/webhooks/(.*)"],
@@ -17,6 +15,12 @@ export default authMiddleware({
       const orgSelection = new URL("/select-org", req.url);
       return NextResponse.redirect(orgSelection);
     }
+    // Catch users who doesn't have `onboardingComplete: true` in PublicMetata
+    // Redirect them to the /onboading out to complete onboarding
+    // if (userId && !sessionClaims?.metadata?.onboardingComplete) {
+    //   const onboardingUrl = new URL('/onboarding', req.url)
+    //   return NextResponse.redirect(onboardingUrl)
+    // }
     // If the user is logged in and trying to access a protected route, allow them to access route
     if (userId && !auth.isPublicRoute) {
       return NextResponse.next();

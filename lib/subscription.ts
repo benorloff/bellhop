@@ -1,6 +1,8 @@
 import { auth } from "@clerk/nextjs"
 import { db } from "./db";
+import { redirect } from "next/navigation";
 
+// Check to seee is the current org has an active subscription
 export const checkSubscription = async () => {
     const { orgId } = auth();
 
@@ -26,4 +28,33 @@ export const checkSubscription = async () => {
 
     // Return subscription validity as boolean
     return !!isValid;
+}
+
+// Retrieve the current subscription for the current org
+export const getSubscription = async () => {
+    const { orgId } = auth();
+
+    if (!orgId) {
+        redirect("/select-org");
+    };
+
+    const subscription = await db.subscription.findUnique({
+        where: {
+            orgId,
+        },
+        include: {
+            price: {
+                include: 
+                {
+                    product: true,
+                }
+            }
+        },
+    });
+
+    return { 
+        subscription, 
+        price: subscription?.price, 
+        product: subscription?.price.product
+    };
 }

@@ -4,7 +4,6 @@ import Link from "next/link";
 const SettingsPage = () => {
     return (
         <>
-            <DashboardTitle />
             <div className="flex flex-row w-full gap-4">
                 <Link 
                     href="/settings/billing"

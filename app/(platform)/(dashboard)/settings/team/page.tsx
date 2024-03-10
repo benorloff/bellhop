@@ -5,7 +5,6 @@ const TeamPage = async () => {
 
     return (
         <>
-            <DashboardTitle />
             Some content here...
         </>
     )
