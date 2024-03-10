@@ -18,11 +18,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         throw new Error('You must be logged in to perform this action')
     }
 
+    // Get the user's stripe customer id from Clerk
     const stripeCustomerId = user.privateMetadata.stripeCustomerId as string || "";
 
     let url = '';
 
     try {
+        // Retrieve the subscription from the database
         const subscription = await db.subscription.findUnique({
             where: {
                 customer: stripeCustomerId,
@@ -51,11 +53,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 ],
                 metadata: {
                     orgId,
+                    userId: user.id,
                 }
             });
             url = stripeCheckoutSession.url || '';
         }
-    } catch {
+    } catch (error) {
+        console.log(error, "<-- error")
         throw new Error('Something went wrong!')
     }
     revalidatePath('/settings/billing');

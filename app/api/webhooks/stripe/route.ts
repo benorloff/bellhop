@@ -48,7 +48,7 @@ export async function POST(req: Request) {
         let stripePrice;
         let stripeSubscription;
         let stripeCustomer;
-        let user;
+        let subscription;
 
         try {
             switch (event.type) {
@@ -64,14 +64,50 @@ export async function POST(req: Request) {
                     break;
                 case "checkout.session.completed":
                     const checkoutSession = event.data.object as Stripe.Checkout.Session;
-                    if (!checkoutSession?.metadata?.orgId) {
+                    const orgId = checkoutSession?.metadata?.orgId;
+                    const userId = checkoutSession?.metadata?.userId;
+                    if (!orgId) {
                         return new NextResponse("Org ID is required", { status: 400 });
                     }
-                    // const user_created = await clerkClient.users.updateUserMetadata(user?.id!, {
-                    //     privateMetadata: {
-                    //         stripeCustomerId: stripeCustomer.id,
-                    //     }
-                    // });
+                    if (!userId) {
+                        return new NextResponse("User ID is required", { status: 400 });
+                    }
+                    // Add stripe customer id to user metadata in Clerk
+                    await clerkClient.users.updateUserMetadata(userId, {
+                        privateMetadata: {
+                            stripeCustomerId: checkoutSession.customer,
+                        }
+                    });
+                    const subscription = await stripe.subscriptions.update(
+                        checkoutSession.subscription as string,
+                        {
+                            metadata: {
+                                orgId,
+                            }
+                        }
+                    );
+                    // Save the subscription to the database
+                    await db.subscription.create({
+                        data: {
+                            id: checkoutSession.subscription as string,
+                            customer: checkoutSession.customer as string,
+                            orgId,
+                            status: SubscriptionStatus.active,
+                            quantity: 1,
+                            currency: checkoutSession.currency as string,
+                            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+                            currentPeriodStart: new Date(subscription.current_period_start * 1000),
+                            cancelAtPeriodEnd: subscription.cancel_at_period_end,
+                            canceledAt: subscription.canceled_at ? new Date(subscription.canceled_at * 1000) : null,
+                            endedAt: subscription.ended_at ? new Date(subscription.ended_at * 1000) : null,
+                            cancelAt: subscription.cancel_at ? new Date(subscription.cancel_at * 1000) : null,
+                            trialStart: subscription.trial_start ? new Date(subscription.trial_start * 1000) : null,
+                            trialEnd: subscription.trial_end ? new Date(subscription.trial_end * 1000) : null,
+                            metadata: subscription.metadata as Record<string, string>,
+                            priceId: subscription.items.data[0].price.id,
+                            createdAt: new Date(subscription.created * 1000),
+                        }
+                    })
                     // Console log the checkout session
                     console.log("Checkout session completed", checkoutSession);
                     break;

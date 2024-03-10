@@ -5,9 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function unitPriceToDollars(unitPrice: bigint) {
+export function unitPriceToDollars(unitPrice: number) {
   return (
-    `$${Number(BigInt(unitPrice)) / 100}`
+    `$${Number(unitPrice) / 100}`
   )
 }
 
