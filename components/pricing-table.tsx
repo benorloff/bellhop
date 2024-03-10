@@ -29,9 +29,11 @@ export const PricingTable = async ({ prices }: PricingTableProps) => {
   return (
     <div className="flex flex-row gap-4 w-full">
       {prices.map((price) => (
-        <div key={price.id} className="flex flex-col gap-2 w-40 border p-8">
-          <div>{price.product.name}</div>
-          <p className="text-3xl">{unitPriceToDollars(price.unitAmount)}</p>
+        <div key={price.id} className="flex flex-col justify-between gap-2 border p-8">
+          <div>
+            <div>{price.product.name}</div>
+            <p className="text-3xl">{unitPriceToDollars(price.unitAmount)}</p>
+          </div>
           <StripeButton priceId={price.id} label={price.id === subscription?.priceId ? "Current" : "Change Plan"} />
         </div>
       ))}
