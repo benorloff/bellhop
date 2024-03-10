@@ -1,3 +1,4 @@
+import { DashboardTitle } from "@/components/dashboard-title";
 import { TicketMessage } from "@/components/tickets/ticket-message";
 import { TicketReplyPanel } from "@/components/tickets/ticket-reply-panel";
 import { Badge } from "@/components/ui/badge";
@@ -86,6 +87,7 @@ export const TicketIdPage =  async ({
     return (
         <>
             <div>
+                <DashboardTitle title={`Ticket #${ticket?.id}`}/>
                 <div className="text-3xl pb-4">{ticket?.subject}</div>
                 <div className="flex flex-row justify-start items-center gap-4">
                     <Badge variant={ticket?.status}>

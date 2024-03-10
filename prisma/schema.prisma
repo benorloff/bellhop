@@ -134,7 +134,7 @@ model Price {
   id            String        @id
   active        Boolean
   nickname      String?       @db.Text
-  unitAmount    BigInt
+  unitAmount    Int
   currency      String
   type          PriceType
   interval      PriceInterval

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Badge } from "../ui/badge";
 
 interface CommentProps {
     id: number,
@@ -19,6 +20,7 @@ interface CommentProps {
         id: string,
         name: string,
         email: string,
+        role: string;
         photo: {
             content_url: string,
         },
@@ -42,7 +44,12 @@ export const TicketMessage = ({
                         <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <p>{user.name}</p>
+                        <div className="flex flex-row items-center gap-2">
+                            <p>{user.name}</p>
+                            {user.role !== "end-user" && (
+                                <Badge className="text-xs">{user.role.toUpperCase()}</Badge>
+                            )}
+                        </div>
                         <p className="text-sm">{user.email}</p>
                     </div>
                 </div>

@@ -5,7 +5,11 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const DashboardTitle = () => {
+interface DashboardTitleProps {
+    title?: string;
+};
+
+export const DashboardTitle = ({title}: DashboardTitleProps) => {
 
     const paths = usePathname();
 
@@ -18,15 +22,29 @@ export const DashboardTitle = () => {
                 let label= path[0].toUpperCase() + path.slice(1);
                 return (
                     <div key={index} className="flex flex-row gap-2 items-center">
-                        <Link 
-                            href={href} 
-                            className={cn(
-                                "text-3xl",
-                                index !== pathNames.length - 1 && "text-muted-foreground hover:text-primary"
-                            )}
-                        >
-                            {label}
-                        </Link>
+                        {(index === pathNames.length - 1 && title)
+                            ? (
+                                <Link 
+                                    href={href} 
+                                    className={cn(
+                                        "text-3xl",
+                                        index !== pathNames.length - 1 && "text-muted-foreground hover:text-primary"
+                                    )}
+                                >
+                                    {title}
+                                </Link>
+                            ) : (
+                                <Link 
+                                    href={href} 
+                                    className={cn(
+                                        "text-3xl",
+                                        index !== pathNames.length - 1 && "text-muted-foreground hover:text-primary"
+                                    )}
+                                >
+                                    {label}
+                                </Link>
+                            )
+                        }
                         {index !== pathNames.length - 1 && <ChevronRight className="text-muted-foreground"/>}
                     </div>
                 )

@@ -4,6 +4,7 @@ import { unitPriceToDollars } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PricingTable } from "@/components/pricing-table";
+import { stripe } from "@/lib/stripe";
 
 
 const BillingPage = async () => {
