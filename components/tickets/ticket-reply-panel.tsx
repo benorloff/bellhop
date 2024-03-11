@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 import { toast } from "sonner";
 import Textarea from "react-textarea-autosize";
-import { CornerRightUp, Loader2 } from "lucide-react";
+import { CornerRightUp, File, Loader2, Paperclip, Plus, Send } from "lucide-react";
 
 import { useAction } from "@/hooks/use-action";
 import { createComment } from "@/actions/create-comment";
@@ -66,16 +66,29 @@ export const TicketReplyPanel = () => {
     return (
         <div className="sticky bottom-0 w-full p-4 rounded-t-sm bg-background border">
                 <div className="flex flex-row gap-2 items-start">
-                    <Textarea
-                        ref={textareaRef}
-                        value={body}
-                        onChange={handleChange}
-                        placeholder="Type your reply here..."
-                        rows={1}
-                        spellCheck={false}
-                        disabled={isLoading}
-                        className="min-h-[40px] w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
-                    />
+                    <Hint
+                        label="Attach File"
+                        side="top"
+                    >
+                        <Button
+                            variant="outline"
+                            className="w-[38px] h-[38px] p-2 rounded-full text-muted-foreground"
+                        >
+                                <Plus size={16} />
+                        </Button>
+                    </Hint>
+                    <div className="w-full">
+                        <Textarea
+                            ref={textareaRef}
+                            value={body}
+                            onChange={handleChange}
+                            placeholder="Type your reply here..."
+                            rows={1}
+                            spellCheck={false}
+                            disabled={isLoading}
+                            className="w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+                        />
+                    </div>
                     <Hint
                         label={body ? "Send Reply" : "Need a message to send"}
                         side="top"
@@ -84,10 +97,11 @@ export const TicketReplyPanel = () => {
                             type="submit"
                             onClick={onSubmit}
                             disabled={!body || isLoading}
+                            className="h-[38px]"
                         >
                             {isLoading
                                 ? <Loader2 size={24} className="animate-spin" />
-                                : <CornerRightUp size={24} />
+                                : <Send size={24} />
                             }
                         </Button>
                     </Hint>
