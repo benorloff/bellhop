@@ -9,6 +9,7 @@ import Image from "next/image";
 import { StripeButton } from "../stripe-button";
 import Stripe from "stripe";
 import { Price } from "@prisma/client";
+import { Skeleton } from "../ui/skeleton";
 
 interface BillingPaymentMethodProps {
     default_payment_method: Stripe.PaymentMethod;
@@ -54,3 +55,24 @@ export const BillingPaymentMethod = ({
         </Card>
     )
 };
+
+BillingPaymentMethod.Skeleton = function SkeletonBillingPaymentMethod() {
+    return (
+        <Card className="h-full">
+            <CardHeader>
+                <CardTitle>Payment Method</CardTitle>
+                <CardDescription>Change how you pay for your plan.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="flex flex-row items-center gap-4 w-full border p-4 rounded-md">
+                    <Skeleton className="w-[75px] h-[47px]" />
+                    <div className="grow">
+                        <Skeleton className="w-32 h-6" />
+                    </div>
+                    <Skeleton className="w-20 h-10" />
+                </div>
+            </CardContent>
+        </Card>
+    )
+};
+

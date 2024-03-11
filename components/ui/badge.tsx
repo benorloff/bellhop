@@ -22,6 +22,14 @@ const badgeVariants = cva(
           "border-transparent bg-status-pending text-status-pending-foreground hover:bg-status-pending/80",
         solved:
           "border-transparent bg-status-solved text-status-solved-foreground hover:bg-status-solved/80",
+        paid:
+          "border-transparent bg-status-paid text-status-paid-foreground hover:bg-status-paid/80",
+        draft:
+          "border-transparent bg-status-draft text-status-draft-foreground hover:bg-status-draft/80",
+        void:
+          "border-transparent bg-status-void text-status-void-foreground hover:bg-status-void/80",
+        uncollectible:
+          "border-transparent bg-status-uncollectible text-status-uncollectible-foreground hover:bg-status-uncollectible/80",
       },
     },
     defaultVariants: {

@@ -55,3 +55,25 @@ export const BillingPlan = ({
         </Card>
     );
 };
+
+BillingPlan.Skeleton = function SkeletonBillingPlan() {
+    return (
+        <Card className="h-full">
+            <CardHeader>
+                <CardTitle>
+                    <Skeleton className="w-32 h-6" />
+                </CardTitle>
+                <CardDescription>
+                    <Skeleton className="w-32 h-4" />
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Skeleton className="w-full h-4" />
+            </CardContent>
+            <CardFooter className="flex flex-row items-center justify-between">
+                <Skeleton className="w-32 h-4" />
+                <Skeleton className="w-24 h-10" />
+            </CardFooter>
+        </Card>
+    )
+};

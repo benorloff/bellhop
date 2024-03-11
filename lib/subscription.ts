@@ -1,6 +1,7 @@
-import { auth } from "@clerk/nextjs"
-import { db } from "./db";
 import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs"
+import { db } from "@/lib/db";
+import 'server-only'
 
 // Check to seee is the current org has an active subscription
 export const checkSubscription = async () => {

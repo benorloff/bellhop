@@ -55,16 +55,33 @@ module.exports = {
         },
         status: {
           open: {
-            DEFAULT: colors.green[300],
-            foreground: colors.green[800],
+            DEFAULT: colors.blue[300],
+            foreground: colors.blue[800],
           },
           pending: {
             DEFAULT: colors.orange[300],
             foreground: colors.orange[800],
           },
           solved: {
+            DEFAULT: colors.green[300],
+            foreground: colors.green[800],
+          },
+          paid: {
+            DEFAULT: colors.green[300],
+            foreground: colors.green[800],
+          },
+          void: {
+            DEFAULT: colors.orange[300],
+            foreground: colors.orange[800],
+          },
+          uncollectible: {
+            DEFAULT: colors.red[300],
+            foreground: colors.red[800],
+          },
+          draft: {
             DEFAULT: colors.gray[300],
             foreground: colors.gray[800],
+          },
           }
         }
       },
@@ -90,7 +107,6 @@ module.exports = {
       fontFamily: {
         sans: ["DM Sans", "sans-serif"],
       }
-    },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate")]
 }

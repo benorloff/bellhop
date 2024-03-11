@@ -1,14 +1,17 @@
-import { BillingPaymentHistory } from "@/components/settings/billing-payment-history";
-import { BillingPaymentMethod } from "@/components/settings/billing-payment-method";
-import { BillingPlan } from "@/components/settings/billing-plan";
-import { getStripePrices } from "@/lib/get-stripe-prices";
-import { stripe } from "@/lib/stripe";
-import { getSubscription } from "@/lib/subscription";
 import Stripe from "stripe";
+
+import { getSubscription } from "@/lib/subscription";
+import { stripe } from "@/lib/stripe";
+
+import { BillingPaymentHistory } from "@/components/billing/billing-payment-history";
+import { BillingPaymentMethod } from "@/components/billing/billing-payment-method";
+import { BillingPlan } from "@/components/billing/billing-plan";
+import { Suspense } from "react";
 
 const BillingPage = async () => {
 
-    const prices = await getStripePrices();
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const { subscription, price, product } = await getSubscription();
     const stripeSubscription = await stripe.subscriptions.retrieve(
         subscription?.id!, {
@@ -31,7 +34,11 @@ const BillingPage = async () => {
                     price={price!}
                 />
             </div>
-            <BillingPaymentHistory />
+            <Suspense fallback={<BillingPaymentHistory.Skeleton />}>
+                <BillingPaymentHistory 
+                    subscription={subscription!}
+                />
+            </Suspense>
         </>
     )
 };
