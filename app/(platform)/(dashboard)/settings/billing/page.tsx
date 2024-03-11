@@ -51,7 +51,7 @@ const BillingPage = async () => {
                         <div>
                             Next billing date:{` `}{subscription?.currentPeriodEnd.toLocaleDateString()}
                         </div>
-                        <StripeButton priceId={price?.id!} label="Manage Plan"/>
+                        <StripeButton priceId={price?.id!} label="Manage Plan" flow_data="subscription_update"/>
                     </CardFooter>
                 </Card>
                 <Card className="h-full">
@@ -82,9 +82,7 @@ const BillingPage = async () => {
                                     </div>
                                 </div>
                             </div>
-                            <Button>
-                                Change
-                            </Button>
+                            <StripeButton priceId={price?.id!} label="Update" flow_data="payment_method_update"/>
                         </div>
                     </CardContent>
                 </Card>

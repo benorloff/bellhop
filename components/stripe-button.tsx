@@ -6,15 +6,19 @@ import { useAction } from "@/hooks/use-action";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { StripeSession } from "@/actions/create-stripe-session/schema";
+
 interface StripeButtonProps {
-    priceId: string;
+    customerId?: string;
+    priceId?: string;
+    flow_data?: string;
     label: string;
 };
 
-
-
 export const StripeButton = ({
+    customerId,
     priceId,
+    flow_data,
     label,
 }: StripeButtonProps) => {
 
@@ -28,7 +32,7 @@ export const StripeButton = ({
     });
 
     const onClick = () => {
-        execute({ priceId });
+        execute({ customerId, priceId, flow_data, label });
     }
 
     return (
