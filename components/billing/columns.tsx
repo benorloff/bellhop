@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, Download } from "lucide-react";
+import { ArrowUpDown, Download, DownloadCloud, DownloadCloudIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 import { redirect } from "next/navigation";

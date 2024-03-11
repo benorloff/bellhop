@@ -82,8 +82,7 @@ module.exports = {
             DEFAULT: colors.gray[300],
             foreground: colors.gray[800],
           },
-          }
-        }
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -107,6 +106,7 @@ module.exports = {
       fontFamily: {
         sans: ["DM Sans", "sans-serif"],
       }
+    },
   },
   plugins: [require("tailwindcss-animate")]
 }

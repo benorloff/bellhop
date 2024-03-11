@@ -9,7 +9,6 @@ export default function SettingsLayout({
 
     const navItems = [
         { label: "Overview", path: "" },
-        { label: "Account", path: "account"},
         { label: "Team", path: "team" },
         { label: "Billing", path: "billing" },
         { label: "Notifications", path: "notifications" },
