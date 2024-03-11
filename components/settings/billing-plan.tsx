@@ -9,6 +9,7 @@ import {
 import { unitPriceToDollars } from "@/lib/utils";
 import { Price, Product, Subscription } from "@prisma/client";
 import { StripeButton } from "../stripe-button";
+import { Skeleton } from "../ui/skeleton";
 
 interface BillingPlanProps {
     subscription: Subscription;
