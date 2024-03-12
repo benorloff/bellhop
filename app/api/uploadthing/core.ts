@@ -14,7 +14,7 @@ export const ourFileRouter = {
     siteImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 }})
         .middleware(() => handleAuth())
         .onUploadComplete(() => {}),
-    ticketFile: f(["image", "pdf"])
+    ticketFile: f(["image","pdf"])
         .middleware(() => handleAuth())
         .onUploadComplete(() => {})
 } satisfies FileRouter;

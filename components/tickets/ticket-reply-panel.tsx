@@ -13,11 +13,22 @@ import { createComment } from "@/actions/create-comment";
 import { Button } from "@/components/ui/button";
 import { Hint } from "@/components/hint";
 import { useRouter } from "next/navigation";
+import { UploadButton } from "@/lib/uploadthing";
+import { CreateComment } from "@/actions/create-comment/schema";
+
+interface FileProps {
+    name: string;
+    size: number;
+    key: string;
+    serverData?: any;
+    url: string;
+}
 
 export const TicketReplyPanel = () => {
 
     const router = useRouter();
     const [body, setBody] = useState("");
+    const [file, setFile] = useState<FileProps>();
     const { ticketId } = useParams();
     
     // Handle the server action status
@@ -40,7 +51,7 @@ export const TicketReplyPanel = () => {
     // Submit the form data to the server action
     const onSubmit = () => {
         const ticket_id = parseInt(ticketId as string);
-        execute({ body, ticket_id });
+        execute({ body, ticket_id, file });
     }; 
 
     // Allow user to submit with Command + Enter
@@ -62,6 +73,10 @@ export const TicketReplyPanel = () => {
             }
         };
     }, [textareaElement, onSubmit]);
+
+    useEffect(() => {
+        console.log(file, "<-- files");
+    }, [file]);
     
     return (
         <div className="sticky bottom-0 w-full p-4 rounded-t-sm bg-background border">
@@ -70,12 +85,26 @@ export const TicketReplyPanel = () => {
                         label="Attach File"
                         side="top"
                     >
-                        <Button
-                            variant="outline"
-                            className="w-[38px] h-[38px] p-2 rounded-full text-muted-foreground"
-                        >
-                                <Plus size={16} />
-                        </Button>
+                        <UploadButton
+                            endpoint="ticketFile"
+                            onClientUploadComplete={(res) => {
+                                setFile(res[0]);
+                                toast.success("File uploaded! 🎉");
+                            }}
+                            onUploadError={(error) => {
+                                toast.error("Error uploading file.");
+                            }}
+                            appearance={{
+                                button: "w-12 bg-background border rounded-sm p-1 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm",
+                                allowedContent: "hidden",
+                            }}
+                            content={{
+                                button({ ready, isUploading }) {
+                                    if (isUploading) return <Loader2 size={24} className="animate-spin z-50"/>;
+                                    if (ready) return <Plus size={24} className=""/>;
+                                },
+                            }}
+                        />
                     </Hint>
                     <div className="w-full">
                         <Textarea

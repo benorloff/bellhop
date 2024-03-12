@@ -13,6 +13,16 @@ import { auth, currentUser } from "@clerk/nextjs";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { Action, EntityType } from "@prisma/client";
 
+interface TicketData {
+    ticket: {
+        comment: {
+            body: string;
+            author_id: number;
+            uploads?: Array<string>;
+        }
+    }
+}
+
 
 const handler = async (data: InputType): Promise<ReturnType> => {
 
@@ -33,11 +43,43 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         };
     }
 
+    // TODO: Allow multiple files to be uploaded
+    // If is a file attached to the comment, upload it to Zendesk
+    let token;
+    
+    if (data.file) {
+        const file = data.file;
+        try {
+            const response = await fetch(`${zendeskApiHost}/uploads?filename=${file.name}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Basic ${btoa(`${zendeskApiUsername}:${zendeskApiPassword}`)}`,
+                },
+                body: JSON.stringify({
+                    upload: {
+                        content_url: file.url,
+                        file_name: file.name,
+                        size: file.size,
+                    }
+                })
+            })
+            const data = await response.json();
+            token = data.upload.token;
+        } catch (error) {
+            console.log(error, '<-- upload error')
+            return {
+                error: "Failed to upload file."
+            }
+        }
+    }
+        
     const ticketData = {
         ticket: {
             comment: {
                 body: data.body,
                 author_id: zendeskUserId,
+                uploads: [token],
             }
         } 
     }
@@ -80,9 +122,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
             error: "Failed to create audit log for ticket update."
         }
     }
-    
     return { data: ticket };
-
 };
 
 export const createComment = createSafeAction(CreateComment, handler);

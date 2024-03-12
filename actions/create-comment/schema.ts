@@ -8,4 +8,11 @@ export const CreateComment = z.object({
         invalid_type_error: "Comment must be a string",
     }),
     ticket_id: z.number(),
+    file: z.object({
+        name: z.string(),
+        size: z.number(),
+        key: z.string(),
+        serverData: z.any().optional(),
+        url: z.string(),
+    }).optional(),
 });

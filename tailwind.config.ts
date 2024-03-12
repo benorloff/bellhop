@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 
 import colors from "tailwindcss/colors";
+import { withUt } from "uploadthing/tw";
 
-module.exports = {
+export default withUt({
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -55,16 +56,20 @@ module.exports = {
         },
         status: {
           open: {
-            DEFAULT: colors.blue[300],
-            foreground: colors.blue[800],
+            DEFAULT: colors.green[300],
+            foreground: colors.green[800],
           },
           pending: {
             DEFAULT: colors.orange[300],
             foreground: colors.orange[800],
           },
           solved: {
-            DEFAULT: colors.green[300],
-            foreground: colors.green[800],
+            DEFAULT: colors.gray[300],
+            foreground: colors.gray[800],
+          },
+          closed: {
+            DEFAULT: colors.gray[300],
+            foreground: colors.gray[800],
           },
           paid: {
             DEFAULT: colors.green[300],
@@ -91,12 +96,12 @@ module.exports = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0" },
         },
       },
       animation: {
@@ -109,4 +114,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")]
-}
+});
