@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 import { toast } from "sonner";
 import Textarea from "react-textarea-autosize";
-import { CornerRightUp, File, Loader2, Paperclip, Plus, Send } from "lucide-react";
+import { CornerRightUp, File, Loader2, Paperclip, Plus, Send, X } from "lucide-react";
 
 import { useAction } from "@/hooks/use-action";
 import { createComment } from "@/actions/create-comment";
@@ -15,6 +15,7 @@ import { Hint } from "@/components/hint";
 import { useRouter } from "next/navigation";
 import { UploadButton } from "@/lib/uploadthing";
 import { CreateComment } from "@/actions/create-comment/schema";
+import { Badge } from "../ui/badge";
 
 interface FileProps {
     name: string;
@@ -106,17 +107,39 @@ export const TicketReplyPanel = () => {
                             }}
                         />
                     </Hint>
-                    <div className="w-full">
-                        <Textarea
-                            ref={textareaRef}
-                            value={body}
-                            onChange={handleChange}
-                            placeholder="Type your reply here..."
-                            rows={1}
-                            spellCheck={false}
-                            disabled={isLoading}
-                            className="w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
-                        />
+                    <div className="w-full space-y-2">
+                        <div>
+                            <Textarea
+                                ref={textareaRef}
+                                value={body}
+                                onChange={handleChange}
+                                placeholder="Type your reply here..."
+                                rows={1}
+                                spellCheck={false}
+                                disabled={isLoading}
+                                className="w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+                            />
+                        </div>
+                        {file && (
+                            <Badge
+                                className="pr-0 py-0"
+                            >
+                                <File size={16} className="mr-1" />
+                                {file.name}
+                                <Hint
+                                    label="Remove File"
+                                    side="top"
+                                >
+                                    <Button
+                                        variant="destructive"
+                                        className="h-8 w-8 top-0 right-0 rounded-full p-0 ml-2"
+                                        onClick={() => setFile(undefined)}
+                                    >
+                                        <X size={12} />
+                                    </Button>
+                                </Hint>
+                            </Badge>
+                        )}
                     </div>
                     <Hint
                         label={body ? "Send Reply" : "Need a message to send"}

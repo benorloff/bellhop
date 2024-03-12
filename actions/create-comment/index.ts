@@ -13,16 +13,6 @@ import { auth, currentUser } from "@clerk/nextjs";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { Action, EntityType } from "@prisma/client";
 
-interface TicketData {
-    ticket: {
-        comment: {
-            body: string;
-            author_id: number;
-            uploads?: Array<string>;
-        }
-    }
-}
-
 
 const handler = async (data: InputType): Promise<ReturnType> => {
 

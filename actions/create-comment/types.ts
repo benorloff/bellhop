@@ -8,7 +8,7 @@ interface Comment {
     ticket_id: number;
     author_id: number;
     body: string;
-    files?: object;
+    file?: object;
 }
 
 export type InputType = z.infer<typeof CreateComment>;
