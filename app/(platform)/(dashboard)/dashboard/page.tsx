@@ -1,11 +1,14 @@
 import { ActivityList } from "@/components/activities/activity-list";
 import { DashboardTitle } from "@/components/dashboard-title";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AvatarGroup } from "@/components/sites/avatar-group";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { currentGreeting } from "@/lib/current-greeting";
 import { db } from "@/lib/db";
 import { checkSubscription } from "@/lib/subscription";
 import { auth } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 
 const DashboardPage = async () => {
 
@@ -21,7 +24,10 @@ const DashboardPage = async () => {
                     userId: userId!,
                 }
             }
-        }, 
+        },
+        include: {
+            members: true,
+        },
         orderBy: {
             updatedAt: "desc",
         },
@@ -43,17 +49,17 @@ const DashboardPage = async () => {
                 <h3 className="text-2xl mb-4">Recently Active Sites</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {sites.map((site) => (
-                        <Card className="flex-grow">
-                            <CardHeader className="flex flex-row items-start justify-start gap-4 space-y-0">
+                        <Card key={site.id} className="flex flex-grow flex-col justify-between">
+                            <CardHeader className="flex flex-row items-center justify-start gap-4 space-y-0">
                                 <Image 
                                     src={site.imageUrl!} 
                                     alt={site.name} 
-                                    width={90} 
-                                    height={60}
+                                    width={60} 
+                                    height={40}
                                     className="rounded-md"
                                 />
                                 <div>
-                                    <CardTitle>
+                                    <CardTitle className="line-clamp-1 leading-tight">
                                         {site.name}
                                     </CardTitle>
                                     <CardDescription>
@@ -61,9 +67,17 @@ const DashboardPage = async () => {
                                     </CardDescription>
                                 </div>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="h-max">
                                 Site info
                             </CardContent>
+                            <CardFooter className="flex flex-row justify-between items-center">
+                                <AvatarGroup members={site.members} />
+                                <Link href={`/organization/${site.orgSlug}/${site.id}`}>
+                                    <Button variant="secondary">
+                                        Manage
+                                    </Button>
+                                </Link>
+                            </CardFooter>
                         </Card>
                     ))}
                 </div>
