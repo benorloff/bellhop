@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 import { toast } from "sonner";
 import Textarea from "react-textarea-autosize";
-import { CornerRightUp, File, Loader2, Paperclip, Plus, Send, X } from "lucide-react";
+import { CornerRightUp, File, Image, Loader2, Paperclip, Plus, Send, X } from "lucide-react";
 
 import { useAction } from "@/hooks/use-action";
 import { createComment } from "@/actions/create-comment";
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { UploadButton } from "@/lib/uploadthing";
 import { CreateComment } from "@/actions/create-comment/schema";
 import { Badge } from "../ui/badge";
+import { TicketAttachment } from "./ticket-attachment";
 
 interface FileProps {
     name: string;
@@ -31,6 +32,10 @@ export const TicketReplyPanel = () => {
     const [body, setBody] = useState("");
     const [file, setFile] = useState<FileProps>();
     const { ticketId } = useParams();
+    const parsedFile = {
+        name: "",
+        extension: "",
+    }
     
     // Handle the server action status
     const { execute, isLoading } = useAction(createComment, {
@@ -90,19 +95,20 @@ export const TicketReplyPanel = () => {
                             endpoint="ticketFile"
                             onClientUploadComplete={(res) => {
                                 setFile(res[0]);
-                                toast.success("File uploaded! 🎉");
+                                toast.success("File uploaded!");
                             }}
                             onUploadError={(error) => {
                                 toast.error("Error uploading file.");
                             }}
                             appearance={{
-                                button: "w-12 bg-background border rounded-sm p-1 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm",
+                                container: "h-[38px]",
+                                button: "w-12 bg-background hover:bg-accent text-foreground hover:text-accent-foreground border rounded-sm p-1 focus-within:ring-transparent disabled:opacity-50 sm:text-sm",
                                 allowedContent: "hidden",
                             }}
                             content={{
                                 button({ ready, isUploading }) {
-                                    if (isUploading) return <Loader2 size={24} className="animate-spin z-50"/>;
-                                    if (ready) return <Plus size={24} className=""/>;
+                                    if (!ready || isUploading) return <Loader2 size={24} className="animate-spin z-50"/>;
+                                    if (ready) return <Plus size={24}/>;
                                 },
                             }}
                         />
@@ -117,28 +123,17 @@ export const TicketReplyPanel = () => {
                                 rows={1}
                                 spellCheck={false}
                                 disabled={isLoading}
-                                className="w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+                                className="w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
                             />
                         </div>
                         {file && (
-                            <Badge
-                                className="pr-0 py-0"
-                            >
-                                <File size={16} className="mr-1" />
-                                {file.name}
-                                <Hint
-                                    label="Remove File"
-                                    side="top"
-                                >
-                                    <Button
-                                        variant="destructive"
-                                        className="h-8 w-8 top-0 right-0 rounded-full p-0 ml-2"
-                                        onClick={() => setFile(undefined)}
-                                    >
-                                        <X size={12} />
-                                    </Button>
-                                </Hint>
-                            </Badge>
+                            <TicketAttachment
+                                name={file.name}
+                                url={file.url}
+                                onRemove={() => setFile(undefined)}
+                                // TODO: Add file preview modal
+                                // onClick={() => onOpen("filePreview", { file })}
+                            />
                         )}
                     </div>
                     <Hint
@@ -149,7 +144,7 @@ export const TicketReplyPanel = () => {
                             type="submit"
                             onClick={onSubmit}
                             disabled={!body || isLoading}
-                            className="h-[38px]"
+                            className="h-[38px] rounded-sm"
                         >
                             {isLoading
                                 ? <Loader2 size={24} className="animate-spin" />

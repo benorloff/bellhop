@@ -24,7 +24,11 @@ interface CommentProps {
     html_body: string,
     plain_body: string,
     public: boolean,
-    attachments: string[],
+    attachments: {
+        id: number,
+        file_name: string,
+        content_url: string,
+    }[],
     audit_id: number,
     via: object,
     created_at: string,
