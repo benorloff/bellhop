@@ -1,17 +1,14 @@
 "use client";
 
-import { 
+import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog";
 import { useModal } from "@/hooks/use-modal-store";
-import { Loader2 } from "lucide-react";
 import Image from "next/image";
-import { Suspense, SyntheticEvent, use, useEffect, useState } from "react";
 
 export const ImagePreviewModal = () => {
     const { onOpen, isOpen, onClose, type, data } = useModal();

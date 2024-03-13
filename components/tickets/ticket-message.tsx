@@ -44,14 +44,24 @@ export const TicketMessage = async ({
 
     let url;
 
+    // Zendesk Uploads API returns an ArrayBufer,
+    // so we need to decode and parse it to get the image source URL
     const imagePreview = async (content_url: string) => {
+        // Fetch the content_url provided by Zendesk
         let response = await fetch(String(content_url));
+        // Handle errors
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        // Convert the response to an ArrayBuffer
         let data = await response.arrayBuffer();
+        // Convert the ArrayBuffer to a Uint8Array
         let uint8Array = new Uint8Array(data);
+        // Decode the Uint8Array to a string, then parse it to JSON
         let decoded = await JSON.parse(new TextDecoder().decode(uint8Array));
+        // Zendesk sometimes returns the content_url property directly, 
+        // but sometimes it is nested inside an upload object
+        // Check for both cases and return the content_url
         let url = decoded.content_url || decoded.upload.content_url;
         return url;
     }

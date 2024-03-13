@@ -3,6 +3,7 @@ import { DashboardTitle } from "@/components/dashboard-title";
 import { AvatarGroup } from "@/components/sites/avatar-group";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { currentGreeting } from "@/lib/current-greeting";
 import { db } from "@/lib/db";
 import { checkSubscription } from "@/lib/subscription";
@@ -67,8 +68,16 @@ const DashboardPage = async () => {
                                     </CardDescription>
                                 </div>
                             </CardHeader>
-                            <CardContent className="h-max">
-                                Site info
+                            <CardContent className="h-max space-y-4">
+                                {/* Placeholder data for site stats */}
+                                <div>
+                                    <span className="text-sm text-muted-foreground">Site visits</span>
+                                    <Progress value={33} />
+                                </div>
+                                <div>
+                                    <span className="text-sm text-muted-foreground">Bandwidth</span>
+                                    <Progress value={85} />
+                                </div>
                             </CardContent>
                             <CardFooter className="flex flex-row justify-between items-center">
                                 <AvatarGroup members={site.members} />

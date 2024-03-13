@@ -67,7 +67,7 @@ const SiteIdPage = async ({
                                 <div className="flex flex-row items-center justify-between">
                                     Recent Tickets
                                     <Link href={`/organization/${orgSlug}/${params.siteId}/tickets`}>
-                                        <Button>
+                                        <Button variant="outline">
                                             View All
                                         </Button>
                                     </Link>
@@ -86,7 +86,7 @@ const SiteIdPage = async ({
                                 <div className="flex flex-row items-center justify-between">
                                     Recent Activity
                                     <Link href={`/organization/${orgSlug}/${params.siteId}/activity`}>
-                                        <Button>
+                                        <Button variant="outline">
                                             View All
                                         </Button>
                                     </Link>
@@ -107,7 +107,7 @@ const SiteIdPage = async ({
                                 <div className="flex flex-row items-center justify-between">
                                     Team
                                     <Link href={`/organization/${orgSlug}/${params.siteId}/team`}>
-                                        <Button>
+                                        <Button variant="outline">
                                             Manage
                                         </Button>
                                     </Link>
