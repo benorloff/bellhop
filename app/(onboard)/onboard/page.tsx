@@ -1,14 +1,14 @@
 "use client";
 
-import { useOnboardStore } from "@/hooks/use-onboarding-store";
-import { OnboardingStepper } from "./_components/onboarding-stepper";
+import { useOnboardStore } from "@/hooks/use-onboard-store";
+import { OnboardStepper } from "./_components/onboard-stepper";
 import { Button } from "@/components/ui/button";
 
-const OnboardingPage = () => {
+const OnboardPage = () => {
     const { onPrevious, onNext, step } = useOnboardStore();
     return (
         <div className="flex flex-col items-center justify-center border rounded-md p-8 space-y-4 min-w-[500px]">
-            <OnboardingStepper />
+            <OnboardStepper />
             <div className="text-3xl">Onboarding</div>
             {step === 1 && (<div>Step 1</div>)}
             {step === 2 && (<div>Step 2</div>)}
@@ -30,4 +30,4 @@ const OnboardingPage = () => {
     )
 };
 
-export default OnboardingPage;
+export default OnboardPage;

@@ -44,7 +44,7 @@ export const TicketMessage = async ({
 
     let url;
 
-    // Zendesk Uploads API returns an ArrayBufer,
+    // Zendesk Uploads API returns an ArrayBuffer,
     // so we need to decode and parse it to get the image source URL
     const imagePreview = async (content_url: string) => {
         // Fetch the content_url provided by Zendesk
@@ -62,7 +62,7 @@ export const TicketMessage = async ({
         // Zendesk sometimes returns the content_url property directly, 
         // but sometimes it is nested inside an upload object
         // Check for both cases and return the content_url
-        let url = decoded.content_url || decoded.upload.content_url;
+        url = decoded.content_url || decoded.upload.content_url;
         return url;
     }
     
