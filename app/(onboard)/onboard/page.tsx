@@ -1,11 +1,13 @@
 "use client";
 
-import { useOnboardStore } from "@/hooks/use-onboard-store";
-import { OnboardStepper } from "./_components/onboard-stepper";
+import { useOnboardStore } from "@/components/providers/onboard-provider";
+import { OnboardStepper } from "@/components/onboard/onboard-stepper";
 import { Button } from "@/components/ui/button";
 
 const OnboardPage = () => {
-    const { onPrevious, onNext, step } = useOnboardStore();
+    const { step, previousStep, nextStep } = useOnboardStore(
+        (state) => state,
+    );
     return (
         <div className="flex flex-col items-center justify-center border rounded-md p-8 space-y-4 min-w-[500px]">
             <OnboardStepper />
@@ -15,13 +17,13 @@ const OnboardPage = () => {
             {step === 3 && (<div>Step 3</div>)}
             {step === 4 && (<div>Step 4</div>)}
             <Button
-                onClick={() => onPrevious()}
+                onClick={() => void previousStep()}
                 disabled={step === 1}
             >
                 Previous
             </Button>
             <Button
-                onClick={() => onNext()}
+                onClick={() => void nextStep()}
                 disabled={step === 4}
             >
                 Next

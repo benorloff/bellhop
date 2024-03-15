@@ -1,4 +1,5 @@
 import { Logo } from "@/components/logo";
+import { OnboardStoreProvider } from "@/components/providers/onboard-provider";
 
 const OnboardingLayout = ({ 
     children 
@@ -8,8 +9,10 @@ const OnboardingLayout = ({
     return (
         <div className="h-full bg-background">
             <main className="flex h-full flex-1 flex-col items-center justify-center p-8 overflow-auto space-y-4">
-                <Logo />
-                {children}
+                <OnboardStoreProvider>
+                    <Logo />
+                    {children}
+                </OnboardStoreProvider>
             </main>
         </div>
     );
