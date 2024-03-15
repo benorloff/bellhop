@@ -3,6 +3,8 @@
 import { useOnboardStore } from "@/components/providers/onboard-provider";
 import { OnboardStepper } from "@/components/onboard/onboard-stepper";
 import { Button } from "@/components/ui/button";
+import { OnboardUserInfo } from "@/components/onboard/onboard-user-info";
+import { getUser } from "@/lib/get-user";
 
 const OnboardPage = () => {
     const { step, previousStep, nextStep } = useOnboardStore(
@@ -12,7 +14,7 @@ const OnboardPage = () => {
         <div className="flex flex-col items-center justify-center border rounded-md p-8 space-y-4 min-w-[500px]">
             <OnboardStepper />
             <div className="text-3xl">Onboarding</div>
-            {step === 1 && (<div>Step 1</div>)}
+            {step === 1 && (<div className="w-full">Step 1 <OnboardUserInfo /></div>)}
             {step === 2 && (<div>Step 2</div>)}
             {step === 3 && (<div>Step 3</div>)}
             {step === 4 && (<div>Step 4</div>)}

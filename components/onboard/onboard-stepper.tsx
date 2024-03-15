@@ -6,7 +6,7 @@ import { onboardSteps } from "@/constants/onboard";
 import { OnboardStepperSeparator } from "@/components/onboard/onboard-stepper-separator";
 
 export const OnboardStepper = () => {
-    const { step, selectStep } = useOnboardStore(
+    const { selectStep } = useOnboardStore(
         (state) => state,
     );
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -19,11 +19,11 @@ export const OnboardStepper = () => {
             {onboardSteps.map((stepNumber, index) => (
                 index !== onboardSteps.length - 1 ? (
                     <>
-                        <OnboardStepperDot stepNumber={stepNumber} handleClick={handleClick}/>
-                        <OnboardStepperSeparator stepNumber={stepNumber}/>
+                        <OnboardStepperDot key={index} stepNumber={stepNumber} handleClick={handleClick}/>
+                        <OnboardStepperSeparator key={index} stepNumber={stepNumber}/>
                     </>
                 ) : (
-                    <OnboardStepperDot stepNumber={stepNumber} handleClick={handleClick}/>
+                        <OnboardStepperDot key={index} stepNumber={stepNumber} handleClick={handleClick}/>
                 )
             ))}
         </div>

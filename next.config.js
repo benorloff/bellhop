@@ -13,6 +13,10 @@ const nextConfig = {
             {
                 protocol: 'https',
                 hostname: 'circleblackhelp.zendesk.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'img.clerk.com',
             }
         ]
     },

@@ -14,7 +14,7 @@ export const OnboardStepperSeparator = ({
     );
     return (
         <Separator className={cn(
-            "h-2 flex-1",
+            "h-2 flex-1 scale-x-110",
             step > stepNumber ? "bg-primary" : "bg-secondary"
         )}/>
     )
