@@ -1,10 +1,9 @@
 import { create } from "zustand";
-import { currentUser, auth, clerkClient } from "@clerk/nextjs";
-import { Organization, User } from "@clerk/backend";
-import { redirect } from "next/navigation";
 
 export interface OnboardState {
     step: number;
+    title: string;
+    description: string;
 }
 
 export interface OnboardActions {
@@ -18,11 +17,15 @@ export type OnboardStore = OnboardState & OnboardActions;
 export const initOnboardStore = (): OnboardState => {
     return {
         step: 1,
+        title: "",
+        description: "",
     }
 }
 
 export const defaultInitState: OnboardState = {
     step: 1,
+    title: "",
+    description: "",
 }
 
 export const createOnboardStore = (

@@ -72,9 +72,9 @@ export const OnboardOrgInfo = ({
                                 <Image 
                                     src={field.value} 
                                     alt="Profile Photo" 
-                                    width={100} 
-                                    height={100} 
-                                    className="rounded-full"
+                                    width={75} 
+                                    height={75} 
+                                    className="rounded-full hover:cursor-not-allowed"
                                 />
                             </FormControl>
                             <FormMessage />
