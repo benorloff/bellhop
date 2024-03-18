@@ -2,6 +2,7 @@
 
 import { useOnboardStore } from "../providers/onboard-provider";
 import { OnboardOrgInfo } from "./onboard-org-info";
+import { OnboardSiteInfo } from "./onboard-site-info";
 import { OnboardUserInfo } from "./onboard-user-info";
 
 interface OnboardContainerProps {
@@ -31,7 +32,7 @@ export const OnboardContainer = ({
             case 2:
                 return <OnboardOrgInfo org={org} />;
             case 3:
-                return <div>Step 3</div>;
+                return <OnboardSiteInfo />;
             case 4:
                 return <div>Step 4</div>;
             default:

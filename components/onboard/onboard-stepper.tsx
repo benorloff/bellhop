@@ -21,8 +21,8 @@ export const OnboardStepper = () => {
             {onboardSteps.map((stepNumber, index) => (
                 index !== onboardSteps.length - 1 ? (
                     <Fragment key={stepNumber}>
-                        <OnboardStepperDot key={stepNumber} stepNumber={stepNumber} handleClick={handleClick}/>
-                        <OnboardStepperSeparator key={stepNumber} stepNumber={stepNumber}/>
+                        <OnboardStepperDot stepNumber={stepNumber} handleClick={handleClick}/>
+                        <OnboardStepperSeparator stepNumber={stepNumber}/>
                     </Fragment>
                 ) : (
                         <OnboardStepperDot key={stepNumber} stepNumber={stepNumber} handleClick={handleClick}/>
