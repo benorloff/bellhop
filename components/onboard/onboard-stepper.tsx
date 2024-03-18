@@ -19,11 +19,11 @@ export const OnboardStepper = () => {
             {onboardSteps.map((stepNumber, index) => (
                 index !== onboardSteps.length - 1 ? (
                     <>
-                        <OnboardStepperDot key={index} stepNumber={stepNumber} handleClick={handleClick}/>
-                        <OnboardStepperSeparator key={index} stepNumber={stepNumber}/>
+                        <OnboardStepperDot key={stepNumber} stepNumber={stepNumber} handleClick={handleClick}/>
+                        <OnboardStepperSeparator key={stepNumber} stepNumber={stepNumber}/>
                     </>
                 ) : (
-                        <OnboardStepperDot key={index} stepNumber={stepNumber} handleClick={handleClick}/>
+                        <OnboardStepperDot key={stepNumber} stepNumber={stepNumber} handleClick={handleClick}/>
                 )
             ))}
         </div>

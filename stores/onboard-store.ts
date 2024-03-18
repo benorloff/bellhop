@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import { currentUser, auth, clerkClient } from "@clerk/nextjs";
+import { Organization, User } from "@clerk/backend";
+import { redirect } from "next/navigation";
 
 export interface OnboardState {
     step: number;
@@ -14,12 +17,12 @@ export type OnboardStore = OnboardState & OnboardActions;
 
 export const initOnboardStore = (): OnboardState => {
     return {
-        step: 1
+        step: 1,
     }
 }
 
 export const defaultInitState: OnboardState = {
-    step: 1
+    step: 1,
 }
 
 export const createOnboardStore = (
@@ -29,6 +32,6 @@ export const createOnboardStore = (
         ...initState,
         nextStep: () => set((state) => ({ step: state.step + 1 })),
         previousStep: () => set((state) => ({ step: state.step - 1 })),
-        selectStep: (value) => set({ step: value })
+        selectStep: (value) => set({ step: value }),
     }))
 }

@@ -10,6 +10,17 @@ import { Input } from "../ui/input"
 import Image from "next/image"
 import { User } from "@clerk/backend"
 import { useCallback, useEffect, useState } from "react"
+import { getUser } from "@/lib/get-user"
+import { useOnboardStore } from "../providers/onboard-provider"
+
+interface OnboardUserInfoProps {
+    user: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        imageUrl: string;
+    }
+};
 
 const OnboardUser = z.object({
     firstName: z.string({
@@ -26,23 +37,17 @@ const OnboardUser = z.object({
     }),
 })
 
-export const OnboardUserInfo = () => {
-    // Change this to currentUser() from server-side
-    const { user, isLoaded } = useUser();
-    const router = useRouter();
-
-    // if (!user) {
-    //     router.push("http://localhost:3000/sign-in");
-    //     return null;
-    // }
+export const OnboardUserInfo = ({
+    user
+}: OnboardUserInfoProps ) => {
 
     const form = useForm<z.infer<typeof OnboardUser>>({
         resolver: zodResolver(OnboardUser),
         defaultValues: {
-            firstName: isLoaded && user?.firstName || "",
-            lastName: isLoaded && user?.lastName || "",
-            email: isLoaded && user?.emailAddresses[0].emailAddress || "",
-            imageUrl: isLoaded && user?.imageUrl || "",
+            firstName: user.firstName || "",
+            lastName: user.lastName || "",
+            email: user.email || "",
+            imageUrl: user.imageUrl || "",
         }
     })
 
