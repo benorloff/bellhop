@@ -1,15 +1,16 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useFormState } from "react-hook-form"
+import { useForm, useFormContext, useFormState, useWatch } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { useEffect, useState } from "react"
 import { siteIsWordPress } from "@/lib/wordpress"
 import { useDebounceCallback, useDebounceValue } from "usehooks-ts"
-import { AlertCircle, Loader2 } from "lucide-react"
+import { AlertCircle, CheckCircle, CircleEllipsis, Loader2, XCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
+import { url } from "inspector"
 
 const OnboardSite = z.object({
     name: z.string({
@@ -25,38 +26,45 @@ const OnboardSite = z.object({
 
 export const OnboardSiteInfo = () => {
 
-    const { watch } = useForm<z.infer<typeof OnboardSite>>();
-    const watchUrl = watch("url");
-
-    const [loading, setLoading] = useState<boolean>(false);
-    const [urlResult, setUrlResult] = useState<{valid: boolean, message: string}>({valid: false, message: ""});
-
-    const [debouncedValue, setValue] = useDebounceValue(watchUrl, 1000);
-
+    const { 
+        register, 
+        watch, 
+        setValue, 
+        getFieldState,
+        getValues,
+        formState: { isDirty, isValid },
+    } = useForm<z.infer<typeof OnboardSite>>();
+    
     const form = useForm<z.infer<typeof OnboardSite>>({
         resolver: zodResolver(OnboardSite),
         defaultValues: {
             name: "",
             url: "",
             imageUrl: "",
-        }
+        },
+        mode: "all",
     })
+
+    const [loading, setLoading] = useState<boolean>(false);
+    const [urlResult, setUrlResult] = useState<boolean>(false);
+    const [debouncedValue, setDebouncedValue] = useDebounceValue(getValues("url"), 1000);
+
 
     const onSubmit = (values: z.infer<typeof OnboardSite>) => {
         console.log(values, "values")
     }
 
     useEffect(() => {
-        setLoading(true);
-
-        const fetchData = async () => {
-            setUrlResult(await siteIsWordPress(debouncedValue) as {valid: boolean, message: string});
+        const checkSite = async () => {
+            setLoading(true);
+            setUrlResult(await siteIsWordPress(debouncedValue) as boolean);
+            setValue("url", debouncedValue);
             setLoading(false);
         };
-
-        fetchData();
-
-    },  [debouncedValue])
+        checkSite()
+            // .then(() => setValue("url", debouncedValue))
+            // .then(() => setLoading(false))
+    }, [debouncedValue])
 
     return (
         <Form {...form}>
@@ -77,26 +85,23 @@ export const OnboardSiteInfo = () => {
                 <FormField
                     control={form.control}
                     name="url"
-                    render={({ field: { value, onChange, ...field } }) => (
+                    render={({ field }) => (
                         <FormItem>
                             <FormLabel>Site URL</FormLabel>
                             <FormControl>
-                                <Input
-                                    onChange={event => setValue(event.target.value)}
-                                    {...field}
-                                />
+                                <div className="relative flex items-center">
+                                    {loading && <Loader2 size={16} className="absolute left-2 animate-spin" />}
+                                    
+                                    {!urlResult ? <XCircle size={16} className="absolute left-2 text-red-500"/> :
+                                    <CheckCircle size={16} className="absolute left-2 text-green-500" />}
+                                    <Input
+                                        {...register("url")}
+                                        onChange={(e) => setDebouncedValue(e.target.value)}
+                                        className="pl-8"
+                                    />
+                                </div>
                             </FormControl>
-                                {loading && <Loader2 size={16} className="animate-spin"/>}
-                                        
-                                {(!loading && debouncedValue) && 
-                                    <Alert variant={!urlResult.valid ? "destructive" : "default"}>
-                                        <AlertCircle size={16} />
-                                        <AlertTitle>{urlResult.valid ? "Great news!" : "Uh oh"}</AlertTitle>
-                                        <AlertDescription>
-                                            {urlResult?.message!}
-                                        </AlertDescription>
-                                    </Alert>
-                                }
+                            <FormMessage />
                         </FormItem>
                     )}
                 />

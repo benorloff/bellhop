@@ -1,6 +1,7 @@
 "use server"
 
 export const siteIsWordPress = async (url: string) => {
+    console.log("siteIsWordPress", url)
 
     let data;
 
@@ -10,17 +11,11 @@ export const siteIsWordPress = async (url: string) => {
         })
         const headerLinks = response.headers.get("link");
         if (headerLinks?.includes("wp-json")) {
-            data = {
-                valid: true,
-                message: "This site is using WordPress"
-            }
+            data = true;
         }
     } catch (error) {
-        data = {
-            valid: false,
-            message: "This site is not using WordPress"
-        }
+        data = false;
     }
 
-    return data;
+    return data!!;
 }
