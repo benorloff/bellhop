@@ -49,14 +49,12 @@ export const OnboardSiteInfo = () => {
     useEffect(() => {
         setLoading(true);
 
-        let result;
         const fetchData = async () => {
             setUrlResult(await siteIsWordPress(debouncedValue) as {valid: boolean, message: string});
-            console.log(urlResult, "urlResult")
+            setLoading(false);
         };
 
         fetchData();
-        setLoading(false);
 
     },  [debouncedValue])
 
