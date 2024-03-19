@@ -1,20 +1,21 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useFormContext, useFormState, useWatch } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { useEffect, useState } from "react"
 import { siteIsWordPress } from "@/lib/wordpress"
-import { useDebounceCallback, useDebounceValue } from "usehooks-ts"
+import { useDebounceValue } from "usehooks-ts"
 import { AlertCircle, CheckCircle, CircleEllipsis, Loader2, XCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
-import { url } from "inspector"
 
 const OnboardSite = z.object({
     name: z.string({
         required_error: "Site name is required",
+    }).min(2, {
+        message: "Site name must be at least 2 characters",
     }),
     url: z.string().url({
         message: "Please enter a valid URL",
@@ -28,11 +29,10 @@ export const OnboardSiteInfo = () => {
 
     const { 
         register, 
-        watch, 
         setValue, 
-        getFieldState,
         getValues,
-        formState: { isDirty, isValid },
+        setError,
+        formState: { errors, isDirty, isValid },
     } = useForm<z.infer<typeof OnboardSite>>();
     
     const form = useForm<z.infer<typeof OnboardSite>>({
@@ -42,7 +42,7 @@ export const OnboardSiteInfo = () => {
             url: "",
             imageUrl: "",
         },
-        mode: "all",
+        mode: "onChange",
     })
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -91,8 +91,7 @@ export const OnboardSiteInfo = () => {
                             <FormControl>
                                 <div className="relative flex items-center">
                                     {loading && <Loader2 size={16} className="absolute left-2 animate-spin" />}
-                                    
-                                    {!urlResult ? <XCircle size={16} className="absolute left-2 text-red-500"/> :
+                                    {(!loading && !urlResult) ? <XCircle size={16} className="absolute left-2 text-red-500"/> :
                                     <CheckCircle size={16} className="absolute left-2 text-green-500" />}
                                     <Input
                                         {...register("url")}
@@ -105,6 +104,13 @@ export const OnboardSiteInfo = () => {
                         </FormItem>
                     )}
                 />
+                {/* <Alert className=" bg-status-open text-status-open-foreground">
+                    <CheckCircle size={16} className="text-status-open-foreground" />
+                    <AlertTitle>Great news!</AlertTitle>
+                    <AlertDescription>
+                        This site appears to be built with WordPress.
+                    </AlertDescription>
+                </Alert> */}
             </form>
         </Form>
     )
