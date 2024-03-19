@@ -4,13 +4,11 @@ export const siteIsWordPress = async (url: string) => {
 
     let data;
 
-    let headerLinks;
     try {
         const response = await fetch(url, {
             method: "HEAD",
-            mode: "no-cors",
         })
-        headerLinks = response.headers.get("link");
+        const headerLinks = response.headers.get("link");
         if (headerLinks?.includes("wp-json")) {
             data = {
                 valid: true,
