@@ -1,17 +1,19 @@
 "use client"
 
-import { currentUser, useUser } from "@clerk/nextjs"
+import Image from "next/image"
+
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { Input } from "../ui/input"
-import Image from "next/image"
-import { User } from "@clerk/backend"
-import { useCallback, useEffect, useState } from "react"
-import { getUser } from "@/lib/get-user"
-import { useOnboardStore } from "../providers/onboard-provider"
 
 interface OnboardUserInfoProps {
     user: {

@@ -7,9 +7,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input"
 import { useEffect, useState } from "react"
 import { siteIsWordPress } from "@/lib/wordpress"
-import { useDebounceValue } from "usehooks-ts"
+import { useDebounceCallback, useDebounceValue } from "usehooks-ts"
 import { AlertCircle, CheckCircle, CircleEllipsis, Loader2, XCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
+import { useFormState } from "react-dom"
+import { Button } from "../ui/button"
 
 const OnboardSite = z.object({
     name: z.string({
@@ -17,23 +19,20 @@ const OnboardSite = z.object({
     }).min(2, {
         message: "Site name must be at least 2 characters",
     }),
-    url: z.string().url({
-        message: "Please enter a valid URL",
-    }),
+    // url: z.string().url({
+    //     message: "Please enter a valid URL",
+    // }),
+    url: z.string().refine(async (id) => 
+        await siteIsWordPress(id) as boolean, { 
+            message: "Uh oh! That doesn't look like a WordPress site.",
+        }
+    ),
     imageUrl: z.string().url({
         message: "Please enter a valid URL",
     }),
 })
 
 export const OnboardSiteInfo = () => {
-
-    const { 
-        register, 
-        setValue, 
-        getValues,
-        setError,
-        formState: { errors, isDirty, isValid },
-    } = useForm<z.infer<typeof OnboardSite>>();
     
     const form = useForm<z.infer<typeof OnboardSite>>({
         resolver: zodResolver(OnboardSite),
@@ -42,60 +41,78 @@ export const OnboardSiteInfo = () => {
             url: "",
             imageUrl: "",
         },
-        mode: "onChange",
+        mode: "onChange"
     })
 
-    const [loading, setLoading] = useState<boolean>(false);
-    const [urlResult, setUrlResult] = useState<boolean>(false);
-    const [debouncedValue, setDebouncedValue] = useDebounceValue(getValues("url"), 1000);
+    const { 
+        getFieldState, 
+        setValue,
+        trigger,
+        handleSubmit,
+        control,
+        formState,
+        formState: { 
+            errors, 
+            isDirty, 
+            isValid, 
+            isSubmitting, 
+            touchedFields,
+            isValidating,
+        } 
+    } = form;
 
+    const [urlValue, setUrlValue] = useState<string>("")
+    const debounced = useDebounceCallback(setUrlValue, 500)
+    
+    // Update the input value and trigger validation on debounce
+    // to avoid excessive validation requests
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        setValue("url", value, { shouldDirty: true, shouldValidate: false });
+        debounced(value);
+    }
 
+    // When the debounced value changes, trigger validation
+    useEffect(() => {
+        trigger("url")
+    }, [urlValue])
+    
     const onSubmit = (values: z.infer<typeof OnboardSite>) => {
         console.log(values, "values")
     }
 
-    useEffect(() => {
-        const checkSite = async () => {
-            setLoading(true);
-            setUrlResult(await siteIsWordPress(debouncedValue) as boolean);
-            setValue("url", debouncedValue);
-            setLoading(false);
-        };
-        checkSite()
-            // .then(() => setValue("url", debouncedValue))
-            // .then(() => setLoading(false))
-    }, [debouncedValue])
-
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="name"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Site Name</FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                                <div>
+                                    <Input {...field} />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="url"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Site URL</FormLabel>
                             <FormControl>
                                 <div className="relative flex items-center">
-                                    {loading && <Loader2 size={16} className="absolute left-2 animate-spin" />}
-                                    {(!loading && !urlResult) ? <XCircle size={16} className="absolute left-2 text-red-500"/> :
-                                    <CheckCircle size={16} className="absolute left-2 text-green-500" />}
+                                    {isValidating && <Loader2 size={16} className="absolute left-2 animate-spin" />}
+                                    {(!isValidating && getFieldState("url", formState).isDirty && getFieldState("url", formState).invalid) && <XCircle size={16} className="absolute left-2 text-red-500"/>}
+                                    {(!isValidating && getFieldState("url", formState).isDirty && !getFieldState("url", formState).invalid) && <CheckCircle size={16} className="absolute left-2 text-green-500" />}
                                     <Input
-                                        {...register("url")}
-                                        onChange={(e) => setDebouncedValue(e.target.value)}
+                                        {...field}
+                                        onChange={handleChange}
                                         className="pl-8"
                                     />
                                 </div>
@@ -104,13 +121,6 @@ export const OnboardSiteInfo = () => {
                         </FormItem>
                     )}
                 />
-                {/* <Alert className=" bg-status-open text-status-open-foreground">
-                    <CheckCircle size={16} className="text-status-open-foreground" />
-                    <AlertTitle>Great news!</AlertTitle>
-                    <AlertDescription>
-                        This site appears to be built with WordPress.
-                    </AlertDescription>
-                </Alert> */}
             </form>
         </Form>
     )
