@@ -49,6 +49,7 @@ export const OnboardSiteInfo = () => {
         setValue,
         trigger,
         handleSubmit,
+        watch,
         control,
         formState,
         formState: { 
@@ -61,6 +62,7 @@ export const OnboardSiteInfo = () => {
         } 
     } = form;
 
+    const url = watch("url")
     const [urlValue, setUrlValue] = useState<string>("")
     const debounced = useDebounceCallback(setUrlValue, 500)
     
@@ -69,12 +71,14 @@ export const OnboardSiteInfo = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setValue("url", value, { shouldDirty: true, shouldValidate: false });
-        debounced(value);
+        value !== "" && debounced(value);
     }
 
     // When the debounced value changes, trigger validation
     useEffect(() => {
-        trigger("url")
+        console.log(!!urlValue, "urlValue");
+        console.log(!!url, "url");
+        !!url && trigger("url");
     }, [urlValue])
     
     const onSubmit = (values: z.infer<typeof OnboardSite>) => {
@@ -107,6 +111,7 @@ export const OnboardSiteInfo = () => {
                             <FormLabel>Site URL</FormLabel>
                             <FormControl>
                                 <div className="relative flex items-center">
+                                    {!getFieldState("url", formState).isDirty && <CircleEllipsis size={16} className="absolute left-2" />}
                                     {isValidating && <Loader2 size={16} className="absolute left-2 animate-spin" />}
                                     {(!isValidating && getFieldState("url", formState).isDirty && getFieldState("url", formState).invalid) && <XCircle size={16} className="absolute left-2 text-red-500"/>}
                                     {(!isValidating && getFieldState("url", formState).isDirty && !getFieldState("url", formState).invalid) && <CheckCircle size={16} className="absolute left-2 text-green-500" />}
