@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { Button } from "../ui/button"
+import { useOnboardStore } from "../providers/onboard-provider"
 
 interface OnboardUserInfoProps {
     user: {
@@ -43,6 +45,14 @@ export const OnboardUserInfo = ({
     user
 }: OnboardUserInfoProps ) => {
 
+    const {
+        updateUserFirstName,
+        updateUserLastName,
+        updateUserEmail,
+        updateUserImageUrl,
+        ...rest
+    } = useOnboardStore((state) => state);
+
     const form = useForm<z.infer<typeof OnboardUser>>({
         resolver: zodResolver(OnboardUser),
         defaultValues: {
@@ -54,8 +64,13 @@ export const OnboardUserInfo = ({
     })
 
     const onSubmit = (values: z.infer<typeof OnboardUser>) => {
-        console.log(values, "values")
+        updateUserFirstName(values.firstName);
+        updateUserLastName(values.lastName);
+        updateUserEmail(values.email);
+        updateUserImageUrl(values.imageUrl);        
     }
+
+    console.log(rest, "rest")
 
     return (
         <Form {...form}>
@@ -125,6 +140,7 @@ export const OnboardUserInfo = ({
                         </FormItem>
                     )}
                 />
+                <Button type="submit">Next</Button>
             </form>
         </Form>
     )

@@ -12,6 +12,7 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card";
+import { getStripePrices } from "@/lib/get-stripe-prices";
 
 const OnboardPage = async () => {
 
@@ -56,6 +57,8 @@ const OnboardPage = async () => {
         imageUrl: organization?.imageUrl!,
     }
 
+    const prices = await getStripePrices();
+
     return (
         <div className="flex flex-col items-center justify-start gap-4 w-[500px]">
             <OnboardHeader />
@@ -69,7 +72,7 @@ const OnboardPage = async () => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <OnboardContainer user={_user} org={org} />
+                    <OnboardContainer user={_user} org={org} prices={prices}/>
                 </CardContent>
             </Card>
             <OnboardFooter />

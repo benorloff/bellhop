@@ -14,23 +14,23 @@ export const OnboardFooter = () => {
         <div 
             className={cn(
                 "fixed flex items-center justify-between bottom-0 w-full p-8 border-t bg-background",
-                step === 1 && "justify-end"
+                step.number === 1 && "justify-end"
             )}
         >
-            {step > 1 && 
+            {step.number > 1 && 
                 <Button
                     variant="ghost"
                     onClick={() => void previousStep()}
-                    disabled={step === 1}
+                    disabled={step.number === 1}
                 >
                     Previous
                 </Button>
             }
             <Button
                 onClick={() => void nextStep()}
-                disabled={step === 4}
+                disabled={step.number === 4}
             >
-                {step === onboardSteps.length ? "Finish" : "Next"}
+                {step.number === onboardSteps.length ? "Finish" : "Next"}
             </Button>
         </div>
     )

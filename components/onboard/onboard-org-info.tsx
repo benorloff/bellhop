@@ -50,19 +50,6 @@ export const OnboardOrgInfo = ({
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
                 <FormField
                     control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Organization Name</FormLabel>
-                            <FormControl>
-                                <Input {...field} disabled />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
                     name="imageUrl"
                     render={({ field }) => (
                         <FormItem>
@@ -76,6 +63,19 @@ export const OnboardOrgInfo = ({
                                     height={75} 
                                     className="rounded-full hover:cursor-not-allowed"
                                 />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Organization Name</FormLabel>
+                            <FormControl>
+                                <Input {...field} disabled />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

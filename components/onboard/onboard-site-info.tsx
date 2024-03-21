@@ -3,15 +3,19 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { useEffect, useState } from "react"
 import { siteIsWordPress } from "@/lib/wordpress"
 import { useDebounceCallback, useDebounceValue } from "usehooks-ts"
-import { AlertCircle, CheckCircle, CircleEllipsis, Loader2, XCircle } from "lucide-react"
+import { AlertCircle, AppWindow, CheckCircle, CircleDot, CircleEllipsis, Computer, Dot, DotIcon, Loader2, XCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 import { useFormState } from "react-dom"
 import { Button } from "../ui/button"
+import { FileUpload } from "../file-upload"
+
+const httpRegex = /^(http|https):/
+const completeUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/
 
 const OnboardSite = z.object({
     name: z.string({
@@ -19,10 +23,25 @@ const OnboardSite = z.object({
     }).min(2, {
         message: "Site name must be at least 2 characters",
     }),
-    // url: z.string().url({
-    //     message: "Please enter a valid URL",
-    // }),
-    url: z.string().refine(async (id) => 
+    url: z
+        .string()
+        .max(255)
+        .transform((val, ctx) => {
+            let completeUrl = val;
+            if (!httpRegex.test(completeUrl)) {
+                completeUrl = `https://${completeUrl}`;
+            }
+            if (!completeUrlRegex.test(completeUrl)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: "Please enter a valid URL",
+                });
+
+                return z.NEVER;
+            }
+            return completeUrl;
+        })
+        .refine(async (id) => 
         await siteIsWordPress(id) as boolean, { 
             message: "Uh oh! That doesn't look like a WordPress site.",
         }
@@ -41,7 +60,7 @@ export const OnboardSiteInfo = () => {
             url: "",
             imageUrl: "",
         },
-        mode: "onChange"
+        mode: "onBlur"
     })
 
     const { 
@@ -50,6 +69,7 @@ export const OnboardSiteInfo = () => {
         trigger,
         handleSubmit,
         watch,
+        register,
         control,
         formState,
         formState: { 
@@ -111,7 +131,7 @@ export const OnboardSiteInfo = () => {
                             <FormLabel>Site URL</FormLabel>
                             <FormControl>
                                 <div className="relative flex items-center">
-                                    {!getFieldState("url", formState).isDirty && <CircleEllipsis size={16} className="absolute left-2" />}
+                                    {!getFieldState("url", formState).isDirty && <AppWindow size={16} className="absolute left-2" />}
                                     {isValidating && <Loader2 size={16} className="absolute left-2 animate-spin" />}
                                     {(!isValidating && getFieldState("url", formState).isDirty && getFieldState("url", formState).invalid) && <XCircle size={16} className="absolute left-2 text-red-500"/>}
                                     {(!isValidating && getFieldState("url", formState).isDirty && !getFieldState("url", formState).invalid) && <CheckCircle size={16} className="absolute left-2 text-green-500" />}
@@ -122,6 +142,24 @@ export const OnboardSiteInfo = () => {
                                     />
                                 </div>
                             </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="imageUrl"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Image</FormLabel>
+                            <FormControl>
+                                <FileUpload 
+                                    endpoint="siteImage"
+                                    onChange={field.onChange}
+                                    value={field.value}
+                                />
+                            </FormControl>
+                            <FormDescription>Recommended size: 300 x 200.</FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}

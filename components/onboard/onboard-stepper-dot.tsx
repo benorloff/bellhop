@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { useOnboardStore } from "@/components/providers/onboard-provider";
 import { cn } from "@/lib/utils";
-import { onboardSteps } from "@/constants/onboard";
 import { CheckIcon } from "lucide-react";
 
 interface OnboardStepperDotProps {
@@ -24,16 +23,16 @@ export const OnboardStepperDot = ({
 
     return (
         <Button 
-            variant={stepNumber >= step ? "secondary" : "default"}
+            variant={stepNumber >= step.number ? "secondary" : "default"}
             className={cn(
                 "h-10 w-10 rounded-full z-10 transition-all duration-500 ease-in-out px-2 hover:bg-background-opacity-100",
-                stepNumber === step && "border-2 border-foreground",
+                stepNumber === step.number && "border-2 border-foreground",
 
             )}
             value={stepNumber}
             onClick={handleClick}
         >
-            {stepNumber < step ? <CheckIcon size={16} /> : stepNumber}
+            {stepNumber < step.number ? <CheckIcon size={16} /> : stepNumber}
         </Button>
     )
 };

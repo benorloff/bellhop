@@ -10,8 +10,6 @@ import { Suspense } from "react";
 
 const BillingPage = async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     const { subscription, price, product } = await getSubscription();
     const stripeSubscription = await stripe.subscriptions.retrieve(
         subscription?.id!, {
