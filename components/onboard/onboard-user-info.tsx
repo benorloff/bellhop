@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
 import { useOnboardStore } from "../providers/onboard-provider"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 
 interface OnboardUserInfoProps {
     user: {
@@ -64,84 +65,99 @@ export const OnboardUserInfo = ({
     })
 
     const onSubmit = (values: z.infer<typeof OnboardUser>) => {
+        // Update the store with the form values
         updateUserFirstName(values.firstName);
         updateUserLastName(values.lastName);
         updateUserEmail(values.email);
         updateUserImageUrl(values.imageUrl);        
     }
 
-    console.log(rest, "rest")
+    // Uncomment this line to inspect the store state in devtools
+    // console.log(rest, "rest")
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
-                <FormField
-                    control={form.control}
-                    name="imageUrl"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Profile Photo</FormLabel>
-                            <FormControl>
-                                {/* <Input {...field} /> */}
-                                <Image 
-                                    src={field.value} 
-                                    alt="Profile Photo" 
-                                    width={75} 
-                                    height={75} 
-                                    className="rounded-full hover:cursor-not-allowed"
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            Create Your Account
+                        </CardTitle>
+                        <CardDescription>
+                            Share some basic information about yourself so we can get your account set up.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <FormField
+                            control={form.control}
+                            name="imageUrl"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Profile Photo</FormLabel>
+                                    <FormControl>
+                                        {/* <Input {...field} /> */}
+                                        <Image 
+                                            src={field.value} 
+                                            alt="Profile Photo" 
+                                            width={75} 
+                                            height={75} 
+                                            className="rounded-full hover:cursor-not-allowed"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className="flex flex-row items-center w-full gap-4">
+                            <div className="flex-1">
+                                <FormField
+                                    control={form.control}
+                                    name="firstName"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>First Name</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} disabled />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
                                 />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div className="flex flex-row items-center w-full gap-4">
-                    <div className="flex-1">
+                            </div>
+                            <div className="flex-1">
+                                <FormField
+                                    control={form.control}
+                                    name="lastName"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Last Name</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} disabled />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
                         <FormField
                             control={form.control}
-                            name="firstName"
+                            name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>First Name</FormLabel>
+                                    <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input {...field} disabled />
+                                        <Input {...field} disabled/>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                    </div>
-                    <div className="flex-1">
-                        <FormField
-                            control={form.control}
-                            name="lastName"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Last Name</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} disabled />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                </div>
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input {...field} disabled/>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit">Next</Button>
+                        <Button type="submit">Next</Button>
+                    </CardContent>
+                </Card>
             </form>
         </Form>
+                
     )
 }

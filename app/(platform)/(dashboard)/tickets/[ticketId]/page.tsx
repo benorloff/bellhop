@@ -122,7 +122,7 @@ export const TicketIdPage =  async ({
                 : 
                 <div className="pt-8 pb-8">No comments yet.</div>
             }
-            <TicketReplyPanel />
+            <TicketReplyPanel ticketStatus={ticket.status} />
         </>
     );
 };

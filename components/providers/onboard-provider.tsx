@@ -12,7 +12,7 @@ import {
     OnboardStore,
     createOnboardStore,
     initOnboardStore,
-} from '@/stores/onboard-store';
+} from '@/stores/onboard/onboard-store';
 
 export const OnboardStoreContext = createContext<StoreApi<OnboardStore> | null>(null);
 

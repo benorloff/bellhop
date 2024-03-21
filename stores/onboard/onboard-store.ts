@@ -103,6 +103,8 @@ export const defaultInitState: OnboardState = {
     }
 }
 
+// TODO: Persist store to local storage
+// https://docs.pmnd.rs/zustand/integrations/persisting-store-data
 export const createOnboardStore = (
     initState: OnboardState = defaultInitState,
 ) => {

@@ -17,6 +17,7 @@ import { UploadButton } from "@/lib/uploadthing";
 import { CreateComment } from "@/actions/create-comment/schema";
 import { Badge } from "../ui/badge";
 import { TicketAttachment } from "./ticket-attachment";
+import { cn } from "@/lib/utils";
 
 interface FileProps {
     name: string;
@@ -26,7 +27,13 @@ interface FileProps {
     url: string;
 }
 
-export const TicketReplyPanel = () => {
+interface TicketReplyPanelProps {
+    ticketStatus: "new" | "open" | "pending" | "hold" | "solved" | "closed";
+}
+
+export const TicketReplyPanel = ({
+    ticketStatus,
+}: TicketReplyPanelProps) => {
 
     const router = useRouter();
     const [body, setBody] = useState("");
@@ -41,6 +48,7 @@ export const TicketReplyPanel = () => {
     const { execute, isLoading } = useAction(createComment, {
         onSuccess: () => {
             setBody("");
+            setFile(undefined);
             toast.success("Reply sent! 🎉");
             router.refresh();
         },
@@ -87,42 +95,45 @@ export const TicketReplyPanel = () => {
     return (
         <div className="sticky bottom-0 w-full p-4 rounded-t-sm bg-background border">
                 <div className="flex flex-row gap-2 items-start">
-                    <Hint
-                        label="Attach File"
-                        side="top"
-                    >
-                        <UploadButton
-                            endpoint="ticketFile"
-                            onClientUploadComplete={(res) => {
-                                setFile(res[0]);
-                                toast.success("File uploaded!");
-                            }}
-                            onUploadError={(error) => {
-                                toast.error("Error uploading file.");
-                            }}
-                            appearance={{
-                                container: "h-[38px]",
-                                button: "w-12 bg-background hover:bg-accent text-foreground hover:text-accent-foreground border rounded-sm p-1 focus-within:ring-transparent disabled:opacity-50 sm:text-sm",
-                                allowedContent: "hidden",
-                            }}
-                            content={{
-                                button({ ready, isUploading }) {
-                                    if (!ready || isUploading) return <Loader2 size={24} className="animate-spin z-50"/>;
-                                    if (ready) return <Plus size={24}/>;
-                                },
-                            }}
-                        />
-                    </Hint>
+                    {/* If ticket is closed, don't render the file upload button. */}
+                    {ticketStatus !== "closed" && (
+                        <Hint
+                            label="Attach File"
+                            side="top"
+                        >
+                            <UploadButton
+                                endpoint="ticketFile"
+                                onClientUploadComplete={(res) => {
+                                    setFile(res[0]);
+                                    toast.success("File uploaded!");
+                                }}
+                                onUploadError={(error) => {
+                                    toast.error("Error uploading file.");
+                                }}
+                                appearance={{
+                                    container: "h-[38px]",
+                                    button: "w-12 bg-background hover:bg-accent text-foreground hover:text-accent-foreground border rounded-sm p-1 focus-within:ring-transparent disabled:opacity-50 sm:text-sm",
+                                    allowedContent: "hidden",
+                                }}
+                                content={{
+                                    button({ ready, isUploading }) {
+                                        if (!ready || isUploading) return <Loader2 size={24} className="animate-spin z-50"/>;
+                                        if (ready) return <Plus size={24}/>;
+                                    },
+                                }}
+                            />
+                        </Hint>
+                    )}
                     <div className="w-full space-y-2">
                         <div>
                             <Textarea
                                 ref={textareaRef}
                                 value={body}
                                 onChange={handleChange}
-                                placeholder="Type your reply here..."
+                                placeholder={ ticketStatus === "closed" ? "This ticket is closed and cannot accept new replies." : "Type your reply here..."}
                                 rows={1}
                                 spellCheck={false}
-                                disabled={isLoading}
+                                disabled={ ticketStatus === "closed" || isLoading}
                                 className="w-full resize-none bg-transparent border rounded-sm py-2 px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
                             />
                         </div>
@@ -137,7 +148,7 @@ export const TicketReplyPanel = () => {
                         )}
                     </div>
                     <Hint
-                        label={body ? "Send Reply" : "Need a message to send"}
+                        label={ticketStatus === "closed" ? "Ticket closed" : body ? "Send Reply" : "Need a message to send"}
                         side="top"
                     >
                         <Button

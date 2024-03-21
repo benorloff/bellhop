@@ -62,19 +62,7 @@ const OnboardPage = async () => {
     return (
         <div className="flex flex-col items-center justify-start gap-4 w-[500px]">
             <OnboardHeader />
-            <Card>
-                <CardHeader>
-                    <CardTitle>
-                        Onboard
-                    </CardTitle>
-                    <CardDescription>
-                        Welcome to the onboarding page. This is where you will be able to onboard new users and organizations.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <OnboardContainer user={_user} org={org} prices={prices}/>
-                </CardContent>
-            </Card>
+            <OnboardContainer user={_user} org={org} prices={prices}/>
             <OnboardFooter />
         </div>
     )

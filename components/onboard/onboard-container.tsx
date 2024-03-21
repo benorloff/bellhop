@@ -28,7 +28,7 @@ export const OnboardContainer = ({
     org,
     prices,
 }: OnboardContainerProps) => {
-    const { step: {number} } = useOnboardStore(
+    const { step: { number } } = useOnboardStore(
         (state) => state,
     );
 
