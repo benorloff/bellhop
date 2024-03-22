@@ -39,15 +39,15 @@ const DashboardPage = async () => {
         where: {
             orgId: orgId!,
         },
-        take: 10,
+        orderBy: {
+            createdAt: "desc",
+        },
+        take: 5,
     });
-
-    console.log(await checkSubscription(), "<-- checkSubscription result")
 
     return ( 
         <>
             <div className="text-3xl mb-8">{greeting}</div>
-                <h3 className="text-2xl mb-4">Recently Active Sites</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {sites.map((site) => (
                         <Card key={site.id} className="flex flex-grow flex-col justify-between">

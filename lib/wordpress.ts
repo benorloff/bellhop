@@ -1,5 +1,35 @@
 "use server"
 
+export type WpApiEndpoint = 
+        "posts" 
+        | "categories" 
+        | "tags" 
+        | "pages" 
+        | "comments" 
+        | "taxonomies" 
+        | "media" 
+        | "users" 
+        | "types" 
+        | "statuses" 
+        | "settings" 
+        | "themes" 
+        | "search" 
+        | "block-types" 
+        | "blocks" 
+        | "block-renderer" 
+        | "block-directory/search" 
+        | "plugins";
+
+
+export interface WpApiRequest {
+    url: string,
+    pretty: boolean,
+    username: string,
+    password: string,
+    endpoint: WpApiEndpoint,
+    resourceId?: number,
+}
+
 export const siteIsWordPress = async (url: string) => {
     console.log("siteIsWordPress", url)
 
@@ -24,4 +54,38 @@ export const siteIsWordPress = async (url: string) => {
 
     // Return the result as a boolean
     return data!!;
+}
+
+export const wpGet = async ({
+    url,
+    pretty,
+    username,
+    password,
+    endpoint,
+    resourceId,
+}: WpApiRequest) => {
+
+    let data;
+    let headers;
+
+    let urlPath = `${url}${pretty ? '/wp-json' : '/?rest_route='}/wp/v2/${endpoint}/${resourceId ? `/${resourceId}` : ""}`
+    console.log(urlPath, "<-- urlPath")
+
+    try {
+        const response = await fetch(urlPath, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${btoa(`${username}:${password}`)}`
+            },
+            cache: "no-cache",
+        })
+        data = await response.json();
+        headers = response.headers;
+    } catch (error) {
+        console.error(error);
+        return {
+            error: "An error occurred while fetching data from the WordPress API",
+        }
+    }
+    return { data, headers };
 }

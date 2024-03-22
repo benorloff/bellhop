@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { StripeSession } from "@/actions/create-stripe-session/schema";
+import { cn } from "@/lib/utils";
 
 interface StripeButtonProps {
     customerId?: string;
@@ -39,10 +40,17 @@ export const StripeButton = ({
         <Button
             onClick={onClick}
             disabled={isLoading}
+            className="relative"
         >
+            <span
+                className={cn(
+                    isLoading ? "opacity-0" : "opacity-100",
+                )}
+            >
+                {label}
+            </span>
             {isLoading 
-                ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
-                : <>{label}</>
+                && <Loader2 className="absolute mx-auto h-4 w-4 animate-spin" /> 
             }
         </Button>
 
