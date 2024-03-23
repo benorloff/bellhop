@@ -1,7 +1,12 @@
 import { Site } from "@prisma/client";
 import { create } from "zustand";
 
-export type ModalType = "createTicket" | "orgInvite" | "siteImage" | "siteInvite" | "imagePreview";
+export type ModalType = 
+    | "createTicket" 
+    | "orgInvite" 
+    | "siteImage" 
+    | "siteInvite" 
+    | "imagePreview";
 
 interface ModalData {
     site?: Site;

@@ -49,7 +49,7 @@ export const siteIsWordPress = async (url: string) => {
             data = true;
         }
     } catch (error) {
-        data = false;
+        console.log("Error parsing response headers: ", error);
     }
 
     // Return the result as a boolean
