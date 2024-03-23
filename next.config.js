@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    experimental: {
+        esmExternals: false,
+        typedRoutes: true,
+    },
     images: {
         remotePatterns: [
             {

@@ -32,7 +32,7 @@ export interface WpApiRequest {
 
 export const siteIsWordPress = async (url: string) => {
     console.log("siteIsWordPress", url)
-
+    
     // Initialize as falsy
     let data = false;
 
