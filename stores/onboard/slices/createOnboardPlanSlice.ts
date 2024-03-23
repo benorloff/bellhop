@@ -6,20 +6,21 @@ export interface OnboardPlan {
 };
 
 export type OnboardPlanSlice = {
-    planState: OnboardPlan;
-    setPlanState: (data: OnboardPlan) => void;
+    plan: OnboardPlan;
+    setPlan: (data: OnboardPlan) => void;
 };
 
-const initState: OnboardPlan = {
+export const planInitState: OnboardPlan = {
     name: "",
     price: 0,
 }
 
 export const createOnboardPlanSlice: StateCreator<OnboardPlanSlice> = (set) => ({
-    planState: initState,
-    setPlanState: (data) => 
-        set((state) => ({ planState: { ...state.planState, ...data }}))
+    plan: planInitState,
+    setPlan: (data) => 
+        set((state) => ({ plan: { ...state.plan, ...data }}))
 });
 
+export default createOnboardPlanSlice;
 
 

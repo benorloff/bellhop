@@ -41,8 +41,14 @@ export const OnboardOrgInfo = ({
         }
     })
 
+    const {
+        updateOrgName,
+        updateOrgImageUrl
+    } = useOnboardStore((state) => state);
+
     const onSubmit = (values: z.infer<typeof OnboardOrg>) => {
-        console.log(values, "values")
+        updateOrgName(values.name);
+        updateOrgImageUrl(values.imageUrl);
     }
 
     return (

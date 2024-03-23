@@ -59,11 +59,13 @@ const OnboardPage = async () => {
 
     const prices = await getStripePrices();
 
+    // NOTE: Onboard components are client components.
+    // Do not pass sensitive information.
     return (
         <div className="flex flex-col items-center justify-start gap-4 w-[500px]">
             <OnboardHeader />
             <OnboardContainer user={_user} org={org} prices={prices}/>
-            <OnboardFooter />
+            {/* <OnboardFooter /> */}
         </div>
     )
 };

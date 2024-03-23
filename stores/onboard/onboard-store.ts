@@ -1,10 +1,9 @@
 import { create } from "zustand";
+import { StateStorage, persist, createJSONStorage } from "zustand/middleware";
 
 export interface OnboardState {
     step: {
         number: number;
-        title: string;
-        description: string;
     }
     user: {
         firstName: string;
@@ -43,6 +42,7 @@ export interface OnboardActions {
     nextStep: () => void;
     previousStep: () => void;
     selectStep: (value: number) => void;
+    logSiteState: () => void;
 }
 
 export type OnboardStore = OnboardState & OnboardActions;
@@ -51,8 +51,6 @@ export const initOnboardStore = (): OnboardState => {
     return {
         step: {
             number: 1,
-            title: "",
-            description: "",
         },
         user: {
             firstName: "",
@@ -79,8 +77,6 @@ export const initOnboardStore = (): OnboardState => {
 export const defaultInitState: OnboardState = {
     step: {
         number: 1,
-        title: "",
-        description: "",
     },
     user: {
         firstName: "",
@@ -105,10 +101,11 @@ export const defaultInitState: OnboardState = {
 
 // TODO: Persist store to local storage
 // https://docs.pmnd.rs/zustand/integrations/persisting-store-data
+// TODO: Convert to slices
 export const createOnboardStore = (
     initState: OnboardState = defaultInitState,
 ) => {
-    return create<OnboardStore>((set) => ({
+    return create<OnboardStore>((set, get) => ({
         ...initState,
         updateUserFirstName: (value) => set((state) => ({ 
             user: { 
@@ -194,5 +191,8 @@ export const createOnboardStore = (
                 number: value 
             }
         })),
+        logSiteState: () => {
+            console.log(get().site, "site state from store")
+        }
     }))
 }

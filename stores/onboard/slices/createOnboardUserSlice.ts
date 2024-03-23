@@ -8,11 +8,11 @@ export interface OnboardUser {
 };
 
 export type OnboardUserSlice = {
-    userState: OnboardUser;
-    setUserState: (data: OnboardUser) => void;
+    user: OnboardUser;
+    setUser: (data: OnboardUser) => void;
 };
 
-const initState: OnboardUser = {
+export const userInitState: OnboardUser = {
     firstName: "",
     lastName: "",
     email: "",
@@ -20,10 +20,10 @@ const initState: OnboardUser = {
 }
 
 export const createOnboardUserSlice: StateCreator<OnboardUserSlice> = (set) => ({
-    userState: initState,
-    setUserState: (data) => 
-        set((state) => ({ userState: { ...state.userState, ...data }}))
+    user: userInitState,
+    setUser: (data) => 
+        set((state) => ({ user: { ...state.user, ...data }}))
 });
 
-
+export default createOnboardUserSlice;
 

@@ -6,20 +6,22 @@ export interface OnboardOrg {
 };
 
 export type OnboardOrgSlice = {
-    orgState: OnboardOrg;
-    setOrgState: (data: OnboardOrg) => void;
+    org: OnboardOrg;
+    setOrg: (data: OnboardOrg) => void;
 };
 
-const initState: OnboardOrg = {
+export const orgInitState: OnboardOrg = {
     name: "",
     imageUrl: "",
 }
 
 export const createOnboardOrgSlice: StateCreator<OnboardOrgSlice> = (set) => ({
-    orgState: initState,
-    setOrgState: (data) => 
-        set((state) => ({ orgState: { ...state.orgState, ...data }}))
+    org: orgInitState,
+    setOrg: (data) => 
+        set((state) => ({ org: { ...state.org, ...data }}))
 });
+
+export default createOnboardOrgSlice;
 
 
 

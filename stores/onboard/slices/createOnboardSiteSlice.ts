@@ -7,21 +7,22 @@ export interface OnboardSite {
 };
 
 export type OnboardSiteSlice = {
-    siteState: OnboardSite;
-    setSiteState: (data: OnboardSite) => void;
+    site: OnboardSite;
+    setSite: (data: OnboardSite) => void;
 };
 
-const initState: OnboardSite = {
+export const siteInitState: OnboardSite = {
     name: "",
     url: "",
     imageUrl: "",
 }
 
 export const createOnboardSiteSlice: StateCreator<OnboardSiteSlice> = (set) => ({
-    siteState: initState,
-    setSiteState: (data) => 
-        set((state) => ({ siteState: { ...state.siteState, ...data }}))
+    site: siteInitState,
+    setSite: (data) => 
+        set((state) => ({ site: { ...state.site, ...data }}))
 });
 
+export default createOnboardSiteSlice;
 
 

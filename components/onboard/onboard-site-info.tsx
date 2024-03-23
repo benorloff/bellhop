@@ -1,20 +1,28 @@
 "use client"
 
+import { useEffect, useState } from "react"
+
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useDebounceCallback } from "usehooks-ts"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { Input } from "../ui/input"
-import { useEffect, useState } from "react"
+
 import { siteIsWordPress } from "@/lib/wordpress"
-import { useDebounceCallback, useDebounceValue } from "usehooks-ts"
-import { AlertCircle, AppWindow, AxeIcon, CheckCircle, CircleDot, CircleEllipsis, Computer, Dot, DotIcon, Loader2, XCircle } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
-import { useFormState } from "react-dom"
+
+import { AppWindow, CheckCircle, Loader2, XCircle } from "lucide-react"
+import { FileUpload } from "@/components/file-upload"
+import { Input } from "@/components/ui/input"
+import { 
+    Form, 
+    FormControl, 
+    FormDescription, 
+    FormField, 
+    FormItem, 
+    FormLabel, 
+    FormMessage 
+} from "@/components/ui/form"
+import { useOnboardStore } from "../providers/onboard-provider"
 import { Button } from "../ui/button"
-import { FileUpload } from "../file-upload"
-import { set } from "lodash"
-import { de } from "@faker-js/faker"
 
 const httpRegex = /^(http|https):/
 const completeUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/
@@ -73,12 +81,12 @@ export const OnboardSiteInfo = () => {
         mode: "onChange"
     })
 
+    // Extract the revelant props from useForm()
     const { 
         getFieldState, 
         setValue,
         trigger,
         handleSubmit,
-        watch,
         clearErrors,
         control,
         formState,
@@ -87,41 +95,54 @@ export const OnboardSiteInfo = () => {
         } 
     } = form;
 
-    const url = watch("url")
     const [urlValue, setUrlValue] = useState<string>("")
-    const [isDebounced, setIsDebounced] = useState<boolean>(false)
     const [isTyping, setIsTyping] = useState<boolean>(false)
     
+    // Debounce URL value with 500ms delay 
     const debounced = useDebounceCallback(setUrlValue, 500)
     
     // Update the input value and trigger validation on debounce
     // to avoid excessive validation requests
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Extract the value from the target element
         const { value } = e.target;
+        // Update the rendered value immediately, 
+        // but don't trigger validation yet
         setValue("url", value, { shouldDirty: true, shouldValidate: false });
         setIsTyping(true);
-        setIsDebounced(false);
         debounced(value);
     }
 
-    // When the debounced value changes, trigger validation
+    // When the debounced urlValue changes, trigger validation
     useEffect(() => {
         // Don't trigger validation if the field is empty
         // Instead, clear any existing field errors
         urlValue ? trigger("url") : clearErrors("url");
         // When the urlValue changes, we know the user has stopped typing
-        // due to debounce. Update state accordingly.
+        // due to debounce delay. Update state accordingly.
         setIsTyping(false);
-        setIsDebounced(true);
     }, [urlValue])
+
+    const {
+        updateSiteName,
+        updateSiteUrl,
+        updateSiteImageUrl,
+        logSiteState,
+        nextStep,
+    } = useOnboardStore((state) => state);
     
     const onSubmit = (values: z.infer<typeof OnboardSite>) => {
         console.log(values, "values")
+        updateSiteName(values.name);
+        updateSiteUrl(values.url);
+        updateSiteImageUrl(values.imageUrl);
+        logSiteState();
+        nextStep();
     }
 
+    // URL field states
     const urlIsDirty = getFieldState("url", formState).isDirty
     const urlInvalid = getFieldState("url", formState).invalid
-    const urlIsTouched = getFieldState("url", formState).isTouched
 
     return (
         <Form {...form}>
@@ -190,6 +211,7 @@ export const OnboardSiteInfo = () => {
                         </FormItem>
                     )}
                 />
+                <Button type="submit">Next</Button>
             </form>
         </Form>
     )
