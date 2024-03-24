@@ -16,7 +16,9 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "../ui/button"
 import { useOnboardStore } from "../providers/onboard-provider"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { OnboardContainer } from "./onboard-container"
+import { OnboardFooter } from "./onboard-footer"
 
 interface OnboardUserInfoProps {
     user: {
@@ -51,6 +53,7 @@ export const OnboardUserInfo = ({
         updateUserLastName,
         updateUserEmail,
         updateUserImageUrl,
+        nextStep,
         ...rest
     } = useOnboardStore((state) => state);
 
@@ -69,7 +72,8 @@ export const OnboardUserInfo = ({
         updateUserFirstName(values.firstName);
         updateUserLastName(values.lastName);
         updateUserEmail(values.email);
-        updateUserImageUrl(values.imageUrl);        
+        updateUserImageUrl(values.imageUrl);  
+        nextStep();      
     }
 
     // Uncomment this line to inspect the store state in devtools
@@ -153,11 +157,12 @@ export const OnboardUserInfo = ({
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Next</Button>
                     </CardContent>
+                    <CardFooter className="justify-end">
+                        <Button type="submit">Next</Button>
+                    </CardFooter>
                 </Card>
             </form>
-        </Form>
-                
+        </Form>         
     )
 }

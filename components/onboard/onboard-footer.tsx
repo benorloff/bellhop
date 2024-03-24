@@ -13,7 +13,7 @@ export const OnboardFooter = () => {
     return (
         <div 
             className={cn(
-                "fixed flex items-center justify-between bottom-0 w-full p-8 border-t bg-background",
+                "absolute flex items-center justify-between bottom-0 left-0 w-full p-8 border-t bg-background",
                 step.number === 1 && "justify-end"
             )}
         >

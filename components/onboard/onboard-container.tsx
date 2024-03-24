@@ -6,8 +6,11 @@ import { OnboardOrgInfo } from "./onboard-org-info";
 import { OnboardPlanInfo } from "./onboard-plan-info";
 import { OnboardSiteInfo } from "./onboard-site-info";
 import { OnboardUserInfo } from "./onboard-user-info";
+import { OnboardFooter } from "./onboard-footer";
+import { cn } from "@/lib/utils";
 
 interface OnboardContainerProps {
+    className?: string;
     user: {
         firstName: string;
         lastName: string;
@@ -24,6 +27,7 @@ interface OnboardContainerProps {
 };
 
 export const OnboardContainer = ({
+    className,
     user,
     org,
     prices,
@@ -32,16 +36,17 @@ export const OnboardContainer = ({
         (state) => state,
     );
 
-        switch (number) {
-            case 1:
-                return <OnboardUserInfo user={user} />;
-            case 2:
-                return <OnboardOrgInfo org={org} />;
-            case 3:
-                return <OnboardSiteInfo />;
-            case 4:
-                return <OnboardPlanInfo prices={prices}/>;
-            default:
-                return <div>Uh oh, no step.</div>;
-        }
+    return (
+        <div
+            className={cn(
+                "w-[500px]",
+                className
+            )}
+        >
+            {number === 1 && <OnboardUserInfo user={user} />}
+            {number === 2 && <OnboardOrgInfo org={org} />}
+            {number === 3 && <OnboardSiteInfo />}
+            {number === 4 && <OnboardPlanInfo prices={prices} />}
+        </div>
+    )
 }

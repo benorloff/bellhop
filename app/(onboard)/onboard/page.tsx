@@ -62,11 +62,7 @@ const OnboardPage = async () => {
     // NOTE: Onboard components are client components.
     // Do not pass sensitive information.
     return (
-        <div className="flex flex-col items-center justify-start gap-4 w-[500px]">
-            <OnboardHeader />
-            <OnboardContainer user={_user} org={org} prices={prices}/>
-            {/* <OnboardFooter /> */}
-        </div>
+        <OnboardContainer user={_user} org={org} prices={prices} />
     )
 };
 

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form"
 import { useOnboardStore } from "../providers/onboard-provider"
 import { Button } from "../ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
 
 const httpRegex = /^(http|https):/
 const completeUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/
@@ -147,71 +148,81 @@ export const OnboardSiteInfo = () => {
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
-                <FormField
-                    control={control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Site Name</FormLabel>
-                            <FormControl>
-                                <div>
-                                    <Input {...field} />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={control}
-                    name="url"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Site URL</FormLabel>
-                            <FormControl>
-                                <div className="relative flex items-center">
-                                    { ( !urlIsDirty && !isTyping ) && 
-                                        <AppWindow size={16} className="absolute left-2" />
-                                    }
-                                    { ( isValidating || isTyping ) && 
-                                        <Loader2 size={16} className="absolute left-2 animate-spin" />
-                                    }
-                                    { ( !isValidating && urlIsDirty && urlInvalid && !isTyping ) && 
-                                        <XCircle size={16} className="absolute left-2 text-red-500"/>
-                                    }
-                                    { ( !isValidating && urlIsDirty && !urlInvalid && !isTyping ) && 
-                                        <CheckCircle size={16} className="absolute left-2 text-green-500" />
-                                    }
-                                    <Input
-                                        {...field}
-                                        onChange={handleChange}
-                                        className="pl-8"
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage className="border border-red-500 p-4 rounded-md bg-destructive/50 text-destructive-foreground" />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="imageUrl"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Image</FormLabel>
-                            <FormControl>
-                                <FileUpload 
-                                    endpoint="siteImage"
-                                    onChange={field.onChange}
-                                    value={field.value}
-                                />
-                            </FormControl>
-                            <FormDescription>Recommended size: 300 x 200.</FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button type="submit">Next</Button>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Your Website</CardTitle>
+                        <CardDescription>Tell us about the website you will be moving to Bellhop.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <FormField
+                            control={control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Site Name</FormLabel>
+                                    <FormControl>
+                                        <div>
+                                            <Input {...field} />
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={control}
+                            name="url"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Site URL</FormLabel>
+                                    <FormControl>
+                                        <div className="relative flex items-center">
+                                            { ( !urlIsDirty && !isTyping ) && 
+                                                <AppWindow size={16} className="absolute left-2" />
+                                            }
+                                            { ( isValidating || isTyping ) && 
+                                                <Loader2 size={16} className="absolute left-2 animate-spin" />
+                                            }
+                                            { ( !isValidating && urlIsDirty && urlInvalid && !isTyping ) && 
+                                                <XCircle size={16} className="absolute left-2 text-red-500"/>
+                                            }
+                                            { ( !isValidating && urlIsDirty && !urlInvalid && !isTyping ) && 
+                                                <CheckCircle size={16} className="absolute left-2 text-green-500" />
+                                            }
+                                            <Input
+                                                {...field}
+                                                onChange={handleChange}
+                                                className="pl-8"
+                                            />
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage className="border border-red-500 p-4 rounded-md bg-destructive/50 text-destructive-foreground" />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="imageUrl"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Image</FormLabel>
+                                    <FormControl>
+                                        <FileUpload 
+                                            endpoint="siteImage"
+                                            onChange={field.onChange}
+                                            value={field.value}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>Recommended size: 300 x 200.</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </CardContent>
+                    <CardFooter className="justify-end">
+                        <Button type="submit">Next</Button>
+                    </CardFooter>
+                </Card>
             </form>
         </Form>
     )

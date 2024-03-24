@@ -81,6 +81,7 @@ export const wpGet = async ({
         })
         data = await response.json();
         headers = response.headers;
+        console.log(headers, '<-- headers')
     } catch (error) {
         console.error(error);
         return {
