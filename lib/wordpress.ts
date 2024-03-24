@@ -1,5 +1,7 @@
 "use server"
 
+import WPAPI from "wpapi";
+
 export type WpApiEndpoint = 
         "posts" 
         | "categories" 
