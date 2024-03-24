@@ -1,7 +1,5 @@
 "use server"
 
-import WPAPI from "wpapi";
-
 export type WpApiEndpoint = 
         "posts" 
         | "categories" 
@@ -33,7 +31,7 @@ export interface WpApiRequest {
 }
 
 export const siteIsWordPress = async (url: string) => {
-    console.log("siteIsWordPress", url)
+    console.log("siteIsWordPress", url) 
     
     // Initialize as falsy
     let data = false;

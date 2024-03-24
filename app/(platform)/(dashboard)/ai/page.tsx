@@ -1,9 +1,27 @@
 "use client"
 
-import { SiteInfo } from "@/components/ai/site-info";
-import { DashboardTitle } from "@/components/dashboard-title"
-import { SiteSelect } from "@/components/sites/site-select";
+import { useState } from "react";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import WPAPI from "wpapi";
+import { z } from "zod";
+import { 
+    WP_REST_API_Attachments, 
+    WP_REST_API_Pages, 
+    WP_REST_API_Posts
+} from "wp-types";
+
+import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
+import { DashboardTitle } from "@/components/dashboard-title";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { 
+    Card, 
+    CardContent, 
+    CardHeader, 
+    CardTitle 
+} from "@/components/ui/card";
 import {
     Form,
     FormControl,
@@ -11,20 +29,7 @@ import {
     FormItem,
     FormLabel,
     FormMessage
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { db } from "@/lib/db";
-import { WpApiEndpoint, wpGet } from "@/lib/wordpress";
-import { auth } from "@clerk/nextjs";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { set } from "lodash";
-import { EyeIcon } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import WPAPI from "wpapi";
-import { WP_REST_API_Post } from "wp-types";
-import { z } from "zod";
+} from "@/components/ui/form";
 
 const httpRegex = /^(http|https):/
 const completeUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/
@@ -59,12 +64,14 @@ const FormSchema = z.object({
 const AIPage =  () => {
 
     const [credentials, setCredentials] = useState<z.infer<typeof FormSchema>>()
-    const [wpPosts, setWpPosts] = useState<any>({data: []})
+    const [wpPosts, setWpPosts] = useState<WP_REST_API_Posts>([])
+    const [wpPages, setWpPages] = useState<WP_REST_API_Pages>([])
+    const [wpMedia, setWpMedia] = useState<WP_REST_API_Attachments>([])
 
-    // For testing purposes only
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
+            // For testing purposes only
             url: "demozone.flywheelsites.com",
             username: "test",
             appPassword: "PQaG iA4n bmZT zTVi IZB6 sj4R",
@@ -76,7 +83,14 @@ const AIPage =  () => {
         const wp = new WPAPI({ endpoint: `${values.url}/wp-json`})
         wp.posts().get()
             .then((res) => setWpPosts(res))
-        console.log(wpPosts, "<-- wpPosts state")
+            .catch((err) => console.error(err))
+        wp.pages().get()
+            .then((res) => setWpPages(res))
+            .catch((err) => console.error(err))
+        wp.media().get()
+            .then((res) => setWpMedia(res))
+            .catch((err) => console.error(err))
+
         form.reset();
     }
 
@@ -125,10 +139,9 @@ const AIPage =  () => {
                         )}
                     />
                     <Button type="submit">Submit</Button>
-                    {(credentials?.url && credentials?.username && credentials?.appPassword) && (<p>Access Granted</p>)}
                 </form>
             </Form>
-            <div className="text-2xl py-4">Posts</div>
+            {/* <div className="text-2xl py-4">Posts</div>
             <p>Total Posts: {wpPosts.length}</p>
             {wpPosts.length > 0 && (
                 wpPosts.map((post: WP_REST_API_Post) => (
@@ -140,7 +153,61 @@ const AIPage =  () => {
                     </div>
             
                 ))
-            )}
+            )} */}
+            <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                        Posts
+                    </CardTitle>
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                    <div className="text-2xl font-bold">{wpPosts?.length || "0"}</div>
+                    <p className="text-xs text-muted-foreground">
+                        +20.1% from last month
+                    </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                        Pages
+                    </CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                    <div className="text-2xl font-bold">{wpPages?.length || "0"}</div>
+                    <p className="text-xs text-muted-foreground">
+                        +180.1% from last month
+                    </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Media</CardTitle>
+                    <CreditCard className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                    <div className="text-2xl font-bold">{wpMedia?.length || "0"}</div>
+                    <p className="text-xs text-muted-foreground">
+                        +19% from last month
+                    </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Active Now</CardTitle>
+                    <Activity className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                    <div className="text-2xl font-bold">+573</div>
+                    <p className="text-xs text-muted-foreground">
+                        +201 since last hour
+                    </p>
+                    </CardContent>
+                </Card>
+            </div>
         </>
     )
 };

@@ -10,7 +10,10 @@ import { z } from "zod"
 import { siteIsWordPress } from "@/lib/wordpress"
 
 import { AppWindow, CheckCircle, Loader2, XCircle } from "lucide-react"
+
+import { useOnboardStore } from "@/components/providers/onboard-provider"
 import { FileUpload } from "@/components/file-upload"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { 
     Form, 
@@ -21,9 +24,14 @@ import {
     FormLabel, 
     FormMessage 
 } from "@/components/ui/form"
-import { useOnboardStore } from "../providers/onboard-provider"
-import { Button } from "../ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { 
+    Card, 
+    CardContent, 
+    CardDescription, 
+    CardFooter, 
+    CardHeader, 
+    CardTitle 
+} from "@/components/ui/card"
 
 const httpRegex = /^(http|https):/
 const completeUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/
@@ -63,8 +71,7 @@ const OnboardSite = z.object({
         .refine(async (completeUrl) => 
             completeUrl && await siteIsWordPress(completeUrl) as boolean, { 
                 message: "Uh oh! That doesn't look like a WordPress site.",
-            }
-        ),
+            }),
     imageUrl: z.string().url({
         message: "Please enter a valid URL",
     }),
@@ -82,7 +89,7 @@ export const OnboardSiteInfo = () => {
         mode: "onChange"
     })
 
-    // Extract the revelant props from useForm()
+    // Expose the revelant props from useForm()
     const { 
         getFieldState, 
         setValue,
@@ -133,7 +140,6 @@ export const OnboardSiteInfo = () => {
     } = useOnboardStore((state) => state);
     
     const onSubmit = (values: z.infer<typeof OnboardSite>) => {
-        console.log(values, "values")
         updateSiteName(values.name);
         updateSiteUrl(values.url);
         updateSiteImageUrl(values.imageUrl);
