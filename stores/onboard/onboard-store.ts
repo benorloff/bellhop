@@ -42,7 +42,6 @@ export interface OnboardActions {
     nextStep: () => void;
     previousStep: () => void;
     selectStep: (value: number) => void;
-    logSiteState: () => void;
 }
 
 export type OnboardStore = OnboardState & OnboardActions;
@@ -193,9 +192,6 @@ export const createOnboardStore = (
                         number: value 
                     }
                 })),
-                logSiteState: () => {
-                    console.log(get().site, "site state from store")
-                }
         }),
         {
             name: "bellhop-onboard",

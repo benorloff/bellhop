@@ -25,7 +25,7 @@ export const OnboardStepperDot = ({
         <Button 
             variant={stepNumber >= step.number ? "secondary" : "default"}
             className={cn(
-                "h-10 w-10 rounded-full z-10 transition-all duration-500 ease-in-out px-2 hover:bg-background-opacity-100",
+                "h-8 w-8 rounded-full z-10 transition-all duration-500 ease-in-out px-2 hover:bg-background-opacity-100",
                 stepNumber === step.number && "border-2 border-foreground",
 
             )}

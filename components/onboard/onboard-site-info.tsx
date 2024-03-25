@@ -39,8 +39,8 @@ const completeUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a
 const OnboardSite = z.object({
     name: z.string({
         required_error: "Site name is required",
-    }).min(2, {
-        message: "Site name must be at least 2 characters",
+    }).min(1, {
+        message: "Site name is required",
     }),
     url: z
         .string()
@@ -78,24 +78,28 @@ const OnboardSite = z.object({
 })
 
 export const OnboardSiteInfo = () => {
+
+    // Check if the user has onboard state in local storage
+    const storage = JSON.parse(localStorage.getItem("bellhop-onboard") || "")
     
     const form = useForm<z.infer<typeof OnboardSite>>({
         resolver: zodResolver(OnboardSite),
         defaultValues: {
-            name: "",
-            url: "",
-            imageUrl: "",
+            name: storage.state.site.name || "",
+            url: storage.state.site.url || "",
+            imageUrl: storage.state.site.imageUrl || "",
         },
         mode: "onChange"
     })
 
-    // Expose the revelant props from useForm()
+    // Expose the relevant props from useForm()
     const { 
         getFieldState, 
         setValue,
         trigger,
         handleSubmit,
         clearErrors,
+        unregister,
         control,
         formState,
         formState: { 
@@ -111,14 +115,22 @@ export const OnboardSiteInfo = () => {
     
     // Update the input value and trigger validation on debounce
     // to avoid excessive validation requests
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: keyof z.infer<typeof OnboardSite>) => {
         // Extract the value from the target element
         const { value } = e.target;
         // Update the rendered value immediately, 
         // but don't trigger validation yet
-        setValue("url", value, { shouldDirty: true, shouldValidate: false });
-        setIsTyping(true);
-        debounced(value);
+        if (fieldName === "url") {
+            setValue("url", value, { shouldDirty: true, shouldValidate: false });
+            setIsTyping(true);
+            debounced(value);
+        }
+        if (fieldName === "name") {
+            // Unregister the URL field to prevent validation
+            // while the user is typing the site name
+            unregister("url")
+            setValue("name", value, { shouldDirty: true, shouldValidate: true });
+        }
     }
 
     // When the debounced urlValue changes, trigger validation
@@ -135,7 +147,6 @@ export const OnboardSiteInfo = () => {
         updateSiteName,
         updateSiteUrl,
         updateSiteImageUrl,
-        logSiteState,
         nextStep,
     } = useOnboardStore((state) => state);
     
@@ -143,7 +154,6 @@ export const OnboardSiteInfo = () => {
         updateSiteName(values.name);
         updateSiteUrl(values.url);
         updateSiteImageUrl(values.imageUrl);
-        logSiteState();
         nextStep();
     }
 
@@ -153,13 +163,13 @@ export const OnboardSiteInfo = () => {
 
     return (
         <Form {...form}>
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                 <Card>
                     <CardHeader>
                         <CardTitle>Your Website</CardTitle>
                         <CardDescription>Tell us about the website you will be moving to Bellhop.</CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-4">
                         <FormField
                             control={control}
                             name="name"
@@ -168,7 +178,10 @@ export const OnboardSiteInfo = () => {
                                     <FormLabel>Site Name</FormLabel>
                                     <FormControl>
                                         <div>
-                                            <Input {...field} />
+                                            <Input 
+                                                {...field} 
+                                                onChange={(e) => handleChange(e, field.name)}
+                                            />
                                         </div>
                                     </FormControl>
                                     <FormMessage />
@@ -197,7 +210,7 @@ export const OnboardSiteInfo = () => {
                                             }
                                             <Input
                                                 {...field}
-                                                onChange={handleChange}
+                                                onChange={(e) => handleChange(e, field.name)}
                                                 className="pl-8"
                                             />
                                         </div>
