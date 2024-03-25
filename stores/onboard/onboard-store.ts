@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { StateStorage, persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 export interface OnboardState {
     step: {
@@ -105,94 +105,100 @@ export const defaultInitState: OnboardState = {
 export const createOnboardStore = (
     initState: OnboardState = defaultInitState,
 ) => {
-    return create<OnboardStore>((set, get) => ({
-        ...initState,
-        updateUserFirstName: (value) => set((state) => ({ 
-            user: { 
-                ...state.user,
-                firstName: value 
-            }
-        })),
-        updateUserLastName: (value) => set((state) => ({ 
-            user: { 
-                ...state.user,
-                lastName: value 
-            }
-        })),
-        updateUserEmail: (value) => set((state) => ({ 
-            user: { 
-                ...state.user,
-                email: value 
-            }
-        })),
-        updateUserImageUrl: (value) => set((state) => ({ 
-            user: { 
-                ...state.user,
-                imageUrl: value 
-            }
-        })),
-        updateOrgName: (value) => set((state) => ({ 
-            org: { 
-                ...state.org,
-                name: value 
-            }
-        })),
-        updateOrgImageUrl: (value) => set((state) => ({ 
-            org: { 
-                ...state.org,
-                imageUrl: value 
-            }
-        })),
-        updateSiteName: (value) => set((state) => ({ 
-            site: { 
-                ...state.site,
-                name: value 
-            }
-        })),
-        updateSiteUrl: (value) => set((state) => ({ 
-            site: { 
-                ...state.site,
-                url: value 
-            }
-        })),
-        updateSiteImageUrl: (value) => set((state) => ({ 
-            site: { 
-                ...state.site,
-                imageUrl: value 
-            }
-        })),
-        updatePlanName: (value) => set((state) => ({ 
-            plan: { 
-                ...state.plan,
-                name: value 
-            }
-        })),
-        updatePlanPrice: (value) => set((state) => ({ 
-            plan: { 
-                ...state.plan,
-                price: value 
-            }
-        })),
-        nextStep: () => set((state) => ({ 
-            step: { 
-                ...state.step,
-                number: state.step.number + 1,
-             } 
-        })),
-        previousStep: () => set((state) => ({ 
-            step: { 
-                ...state.step,
-                number: state.step.number - 1,
-             } 
-        })),
-        selectStep: (value) => set((state) => ({ 
-            step: { 
-                ...state.step,
-                number: value 
-            }
-        })),
-        logSiteState: () => {
-            console.log(get().site, "site state from store")
+    return create<OnboardStore>()(
+        persist(
+            (set, get) => ({
+                ...initState,
+                updateUserFirstName: (value) => set((state) => ({ 
+                    user: { 
+                        ...state.user,
+                        firstName: value 
+                    }
+                })),
+                updateUserLastName: (value) => set((state) => ({ 
+                    user: { 
+                        ...state.user,
+                        lastName: value 
+                    }
+                })),
+                updateUserEmail: (value) => set((state) => ({ 
+                    user: { 
+                        ...state.user,
+                        email: value 
+                    }
+                })),
+                updateUserImageUrl: (value) => set((state) => ({ 
+                    user: { 
+                        ...state.user,
+                        imageUrl: value 
+                    }
+                })),
+                updateOrgName: (value) => set((state) => ({ 
+                    org: { 
+                        ...state.org,
+                        name: value 
+                    }
+                })),
+                updateOrgImageUrl: (value) => set((state) => ({ 
+                    org: { 
+                        ...state.org,
+                        imageUrl: value 
+                    }
+                })),
+                updateSiteName: (value) => set((state) => ({ 
+                    site: { 
+                        ...state.site,
+                        name: value 
+                    }
+                })),
+                updateSiteUrl: (value) => set((state) => ({ 
+                    site: { 
+                        ...state.site,
+                        url: value 
+                    }
+                })),
+                updateSiteImageUrl: (value) => set((state) => ({ 
+                    site: { 
+                        ...state.site,
+                        imageUrl: value 
+                    }
+                })),
+                updatePlanName: (value) => set((state) => ({ 
+                    plan: { 
+                        ...state.plan,
+                        name: value 
+                    }
+                })),
+                updatePlanPrice: (value) => set((state) => ({ 
+                    plan: { 
+                        ...state.plan,
+                        price: value 
+                    }
+                })),
+                nextStep: () => set((state) => ({ 
+                    step: { 
+                        ...state.step,
+                        number: state.step.number + 1,
+                    } 
+                })),
+                previousStep: () => set((state) => ({ 
+                    step: { 
+                        ...state.step,
+                        number: state.step.number - 1,
+                    } 
+                })),
+                selectStep: (value) => set((state) => ({ 
+                    step: { 
+                        ...state.step,
+                        number: value 
+                    }
+                })),
+                logSiteState: () => {
+                    console.log(get().site, "site state from store")
+                }
+        }),
+        {
+            name: "bellhop-onboard",
         }
-    }))
+    ));
 }

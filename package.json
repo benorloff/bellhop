@@ -67,6 +67,7 @@
     "@prisma/client": "^5.10.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.2",
+    "@types/jest": "^29.5.12",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.24",
     "@types/react": "^18",

@@ -8,11 +8,17 @@ import WPAPI from "wpapi";
 import { z } from "zod";
 import { 
     WP_REST_API_Attachments, 
+    WP_REST_API_Categories, 
+    WP_REST_API_Comments, 
     WP_REST_API_Pages, 
-    WP_REST_API_Posts
+    WP_REST_API_Posts,
+    WP_REST_API_Tags,
+    WP_REST_API_Taxonomies,
+    WP_REST_API_Taxonomy,
+    WP_REST_API_Users
 } from "wp-types";
 
-import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
+import { Activity, BookOpen, CreditCard, DollarSign, File, Image, LayoutList, ListTree, MessageCircle, Newspaper, Speech, Tags, User, Users, Users2 } from "lucide-react";
 import { DashboardTitle } from "@/components/dashboard-title";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,7 +72,12 @@ const AIPage =  () => {
     const [credentials, setCredentials] = useState<z.infer<typeof FormSchema>>()
     const [wpPosts, setWpPosts] = useState<WP_REST_API_Posts>([])
     const [wpPages, setWpPages] = useState<WP_REST_API_Pages>([])
+    const [wpComments, setWpComments] = useState<WP_REST_API_Comments>([])
+    const [wpUsers, setWpUsers] = useState<WP_REST_API_Users>([])
     const [wpMedia, setWpMedia] = useState<WP_REST_API_Attachments>([])
+    const [wpCategories, setWpCategories] = useState<WP_REST_API_Categories>([])
+    const [wpTags, setWpTags] = useState<WP_REST_API_Tags>([])
+    const [wpTaxonomies, setWpTaxonomies] = useState<WP_REST_API_Taxonomy[]>([])
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -89,6 +100,21 @@ const AIPage =  () => {
             .catch((err) => console.error(err))
         wp.media().get()
             .then((res) => setWpMedia(res))
+            .catch((err) => console.error(err))
+        wp.comments().get()
+            .then((res) => setWpComments(res))
+            .catch((err) => console.error(err))
+        wp.users().get()
+            .then((res) => setWpUsers(res))
+            .catch((err) => console.error(err))
+        wp.categories().get()
+            .then((res) => setWpCategories(res))
+            .catch((err) => console.error(err))
+        wp.tags().get()
+            .then((res) => setWpTags(res))
+            .catch((err) => console.error(err))
+        wp.taxonomies().get()
+            .then((res) => setWpTaxonomies(res))
             .catch((err) => console.error(err))
 
         form.reset();
@@ -141,72 +167,80 @@ const AIPage =  () => {
                     <Button type="submit">Submit</Button>
                 </form>
             </Form>
-            {/* <div className="text-2xl py-4">Posts</div>
-            <p>Total Posts: {wpPosts.length}</p>
-            {wpPosts.length > 0 && (
-                wpPosts.map((post: WP_REST_API_Post) => (
-                    <div key={post.id} className="py-4">
-                        <p>Title: {post.title.rendered}</p>
-                        <p>Date: {new Date(post.date).toLocaleString()}</p>
-                        <p>URL: {post.link}</p>
-                        <Button>Select</Button>
+
+            <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 py-8">
+                <div className="flex flex-row gap-4 items-center border rounded-lg p-4">
+                    <div className="border rounded-lg p-4">
+                        <BookOpen size={24} />
                     </div>
-            
-                ))
-            )} */}
-            <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                        Posts
-                    </CardTitle>
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                    <div className="text-2xl font-bold">{wpPosts?.length || "0"}</div>
-                    <p className="text-xs text-muted-foreground">
-                        +20.1% from last month
-                    </p>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                        Pages
-                    </CardTitle>
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                    <div className="text-2xl font-bold">{wpPages?.length || "0"}</div>
-                    <p className="text-xs text-muted-foreground">
-                        +180.1% from last month
-                    </p>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Media</CardTitle>
-                    <CreditCard className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                    <div className="text-2xl font-bold">{wpMedia?.length || "0"}</div>
-                    <p className="text-xs text-muted-foreground">
-                        +19% from last month
-                    </p>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-                    <Activity className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
-                        +201 since last hour
-                    </p>
-                    </CardContent>
-                </Card>
+                    <div>
+                        <div className="text-muted-foreground">Pages</div>
+                        <p className="text-2xl">{wpPages?.length || "0"}</p>
+                    </div>
+                </div>
+                <div className="flex flex-row gap-4 items-center border rounded-lg p-4">
+                    <div className="border rounded-lg p-4">
+                        <Newspaper size={24} />
+                    </div>
+                    <div>
+                        <div className="text-muted-foreground">Posts</div>
+                        <p className="text-2xl">{wpPosts?.length || "0"}</p>
+                    </div>
+                </div>
+                <div className="flex flex-row gap-4 items-center border rounded-lg p-4">
+                    <div className="border rounded-lg p-4">
+                        <Users2 size={24} />
+                    </div>
+                    <div>
+                        <div className="text-muted-foreground">Users</div>
+                        <p className="text-2xl">{wpUsers?.length || "0"}</p>
+                    </div>
+                </div>
+                <div className="flex flex-row gap-4 items-center border rounded-lg p-4">
+                    <div className="border rounded-lg p-4">
+                        <MessageCircle size={24} />
+                    </div>
+                    <div>
+                        <div className="text-muted-foreground">Comments</div>
+                        <p className="text-2xl">{wpComments?.length || "0"}</p>
+                    </div>
+                </div>
+                <div className="flex flex-row gap-4 items-center border rounded-lg p-4">
+                    <div className="border rounded-lg p-4">
+                        <Image size={24} />
+                    </div>
+                    <div>
+                        <div className="text-muted-foreground">Attachments</div>
+                        <p className="text-2xl">{wpMedia?.length || "0"}</p>
+                    </div>
+                </div>
+                <div className="flex flex-row gap-4 items-center border rounded-lg p-4">
+                    <div className="border rounded-lg p-4">
+                        <LayoutList size={24} />
+                    </div>
+                    <div>
+                        <div className="text-muted-foreground">Categories</div>
+                        <p className="text-2xl">{wpCategories?.length || "0"}</p>
+                    </div>
+                </div>
+                <div className="flex flex-row gap-4 items-center border rounded-lg p-4">
+                    <div className="border rounded-lg p-4">
+                        <Tags size={24} />
+                    </div>
+                    <div>
+                        <div className="text-muted-foreground">Tags</div>
+                        <p className="text-2xl">{wpTags?.length || "0"}</p>
+                    </div>
+                </div>
+                <div className="flex flex-row gap-4 items-center border rounded-lg p-4">
+                    <div className="border rounded-lg p-4">
+                        <ListTree size={24} />
+                    </div>
+                    <div>
+                        <div className="text-muted-foreground">Taxonomies</div>
+                        <p className="text-2xl">{wpTaxonomies?.length || "0"}</p>
+                    </div>
+                </div>
             </div>
         </>
     )
