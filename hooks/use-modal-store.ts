@@ -1,4 +1,4 @@
-import { Site } from "@prisma/client";
+import { AuditLog, Site } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType = 
@@ -6,7 +6,8 @@ export type ModalType =
     | "orgInvite" 
     | "siteImage" 
     | "siteInvite" 
-    | "imagePreview";
+    | "imagePreview"
+    | "auditLogDetail"
 
 interface ModalData {
     site?: Site;
@@ -19,6 +20,7 @@ interface ModalData {
         name: string,
         url: string,
     };
+    auditLog?: AuditLog;
 }
 
 interface ModalStore {
