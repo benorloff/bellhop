@@ -16,8 +16,8 @@ export default authMiddleware({
       return NextResponse.redirect(orgSelection);
     }
     // Catch users who doesn't have `onboardingComplete: true` in PublicMetata
-    // Redirect them to the /onboading out to complete onboarding
-    // if (userId && !sessionClaims?.metadata?.onboardingComplete && req.nextUrl.pathname !== "/onboard") {
+    // Redirect them to the /onboarding out to complete onboarding
+    // if (userId && orgId && !sessionClaims?.metadata?.onboardingComplete && !auth.isPublicRoute) {
     //   const onboardingUrl = new URL('/onboard', req.url)
     //   return NextResponse.redirect(onboardingUrl)
     // }

@@ -69,6 +69,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                             quantity: 1,
                         },
                     ],
+                    subscription_data: {
+                        trial_period_days: 14,
+                    },
                     metadata: {
                         orgId,
                         userId: user.id,

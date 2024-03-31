@@ -98,15 +98,13 @@ export const defaultInitState: OnboardState = {
     }
 }
 
-// TODO: Persist store to local storage
-// https://docs.pmnd.rs/zustand/integrations/persisting-store-data
 // TODO: Convert to slices
 export const createOnboardStore = (
     initState: OnboardState = defaultInitState,
 ) => {
     return create<OnboardStore>()(
         persist(
-            (set, get) => ({
+            (set) => ({
                 ...initState,
                 updateUserFirstName: (value) => set((state) => ({ 
                     user: { 

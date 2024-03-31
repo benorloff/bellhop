@@ -37,17 +37,21 @@ const httpRegex = /^(http|https):/
 const completeUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/
 
 const OnboardSite = z.object({
-    name: z.string({
-        required_error: "Site name is required",
-    }).min(1, {
+    name: z.string().min(1, {
         message: "Site name is required",
     }),
     url: z
         .string()
-        .max(255)
+        .min(1, {
+            message: "URL is required"
+        })
+        .max(255, {
+            message: "URL must be less than 255 characters"
+        })
         .transform((val, ctx) => {
             let completeUrl = val;
-            // If the URL doesn't start with http:// or https:// add https://
+            // Prepend https:// if the URL 
+            // doesn't start with http:// or https:// 
             if (!httpRegex.test(completeUrl)) {
                 completeUrl = `https://${completeUrl}`;
             }
@@ -61,7 +65,6 @@ const OnboardSite = z.object({
                     fatal: true,
                     message: "Please enter a valid URL",
                 });
-
                 return z.NEVER;
             }
             return completeUrl;
@@ -69,7 +72,7 @@ const OnboardSite = z.object({
         // This refinement checks if the URL is a WordPress site
         // It only runs if the URL is valid
         .refine(async (completeUrl) => 
-            completeUrl && await siteIsWordPress(completeUrl) as boolean, { 
+            completeUrl && await siteIsWordPress(completeUrl), { 
                 message: "Uh oh! That doesn't look like a WordPress site.",
             }),
     imageUrl: z.string().url({
@@ -115,7 +118,10 @@ export const OnboardSiteInfo = () => {
     
     // Update the input value and trigger validation on debounce
     // to avoid excessive validation requests
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: keyof z.infer<typeof OnboardSite>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        fieldName: keyof z.infer<typeof OnboardSite>
+    ) => {
         // Extract the value from the target element
         const { value } = e.target;
         // Update the rendered value immediately, 

@@ -1,59 +1,139 @@
 import { Button } from "@/components/ui/button";
-import { Medal } from "lucide-react";
+import { Database, Medal } from "lucide-react";
 import Link from "next/link";
 import localFont from "next/font/local";
 import { Poppins } from "next/font/google";
-import { cn } from "@/lib/utils";
-
-const headingFont = localFont({
-    src: "../../public/fonts/font.woff2"
-});
-
-const textFont = Poppins({
-    subsets: ["latin"],
-    weight: [
-        "100",
-        "200",
-        "300",
-        "400",
-        "500",
-        "600",
-        "700",
-        "800",
-        "900"
-    ]
-})
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import { TestimonialCarousel } from "@/components/marketing/testimonial-carousel";
+import { FeatureCarousel } from "@/components/marketing/feature-carousel";
 
 const MarketingPage = () => {
     return (
-        <div className="flex items-center justify-center flex-col">
-            <div className={cn(
-                "flex items-center justify-center flex-col",
-                headingFont.className,
-            )}>
-                <div className="mb-4 flex items-center border shadow-sm p-4 bg-amber-100 text-amber-700 rounded-full uppercase">
-                    <Medal className="h-6 w-6 mr-2" />
-                    Bellhop
+        <>
+            <div className="flex flex-col gap-8 py-32 justify-center items-center">
+                    <div className="w-full space-y-6 max-w-3xl text-center">
+                        <div className="flex flex-row w-fit border rounded-full justify-center items-center pl-2 pr-4 py-2 mx-auto space-x-2">
+                            <Badge variant="secondary">Coming Soon</Badge>
+                            <span className="text-sm">Lorem ipsum dolor sit amet.</span>
+                        </div>
+                        <div className="text-8xl">
+                            Lorem ipsum dolor sit amet.
+                        </div>
+                        <div className="text-muted-foreground">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                        </div>
+                        <div className="flex flex-row justify-center items-center gap-4">
+                            <Input
+                                className="max-w-xs"
+                                placeholder="Enter your email"
+                                type="email"
+                            />
+                            <Button>Join the Waitlist</Button>
+                        </div>
+                    </div>
+            </div>
+            <div className="flex flex-col gap-8 py-32 justify-center items-center text-center">
+                <div className="max-w-3xl space-y-4">
+                    <div className="uppercase font-bold">
+                        Pre-heading
+                    </div>
+                    <div className="text-6xl">
+                        Lorem ipsum dolor sit amet.
+                    </div>
+                    <div className="text-muted-foreground">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                    </div>
                 </div>
-                <h1 className="text-3xl md:text-6xl text-center text-neutral-800 mb-6">
-                    Bellhop simplifies
-                </h1>
-                <div className="text-3xl md:text-6xl bg-gradient-to-r from-fuchsia-600 to-pink-600 text-white px-4 p-2 rounded-md pb-4 w-fit">
-                    WordPress hosting.
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 w-full text-left">
+                    <div className="flex flex-col gap-4 border rounded-lg p-8">
+                        <Database size={48} />
+                        <div className="text-3xl">
+                            Lorem ipsum.
+                        </div>
+                        <div className="text-muted-foreground">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-4 border rounded-lg p-8">
+                        <Database size={48} />
+                        <div className="text-3xl">
+                            Lorem ipsum.
+                        </div>
+                        <div className="text-muted-foreground">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-4 border rounded-lg p-8">
+                        <Database size={48} />
+                        <div className="text-3xl">
+                            Lorem ipsum.
+                        </div>
+                        <div className="text-muted-foreground">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-4 border rounded-lg p-8">
+                        <Database size={48} />
+                        <div className="text-3xl">
+                            Lorem ipsum.
+                        </div>
+                        <div className="text-muted-foreground">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-4 border rounded-lg p-8">
+                        <Database size={48} />
+                        <div className="text-3xl">
+                            Lorem ipsum.
+                        </div>
+                        <div className="text-muted-foreground">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-4 border rounded-lg p-8">
+                        <Database size={48} />
+                        <div className="text-3xl">
+                            Lorem ipsum.
+                        </div>
+                        <div className="text-muted-foreground">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div className={cn(
-                "text-sm md:text-xl text-neutral-400 mt-4 max-w-xs md:max-w-2xl text-center mx-auto",
-                textFont.className,
-                )}>
-                Collaborate, manage your website, and reach new productivity peaks. From high rises to the home office, the way your team works is unique — accomplish it all with Bellhop.
+            <div className="flex flex-row flex-wrap py-32 justify-center items-center text-center space-y-8">
+                <div className="flex flex-col gap-4 w-full lg:w-1/2 text-left pr-6">
+                    <div className="uppercase font-bold">
+                        Pre-heading
+                    </div>
+                    <div className="text-6xl">
+                        Lorem ipsum dolor sit amet.
+                    </div>
+                    <div>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pharetra et ultrices neque ornare aenean. Donec ac odio tempor orci dapibus ultrices in iaculis nunc.
+                    </div>
+                </div>
+                <div className="w-full min-h-max lg:w-1/2 pl-6">
+                    <Image
+                        src="/placeholder-browser.svg"
+                        width={800}
+                        height={600}
+                        alt="Placeholder"
+                    />
+                </div>
             </div>
-            <Button className="mt-6" size="lg" asChild>
-                <Link href="/sign-up">
-                    Get Bellhop for free
-                </Link>
-            </Button>
-        </div>
+            <div className="flex flex-col gap-8 py-32 justify-center items-center">
+                Lorem ipsum.
+            </div>
+            <div className="w-full py-32">
+                <FeatureCarousel />
+            </div>
+            <div className="w-full bg-secondary p-20 rounded-lg">
+                <TestimonialCarousel />
+            </div>
+        </>
     )
 };
 

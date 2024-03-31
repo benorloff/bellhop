@@ -11,7 +11,7 @@ const OnboardingLayout = ({
         <OnboardStoreProvider>
             <main>
                 <OnboardHeader />
-                <section className="relative w-full h-screen flex flex-col items-center justify-center overflow-auto p-8 space-y-4">
+                <section className="relative w-full h-screen flex flex-col items-center justify-center overflow-auto p-8 space-y-4 bg-background">
                     {children}
                 </section>
             </main>
