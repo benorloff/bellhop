@@ -3,7 +3,9 @@ export const Section = ({
 }: {
     children: React.ReactNode
 }) => {
-    <div className="flex flex-col gap-8 py-32">
-        {children}
-    </div>
+    return (
+        <div className="flex flex-col gap-8 py-32 justify-center items-center text-center">
+                {children}
+        </div>
+    );
 }

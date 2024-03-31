@@ -8,37 +8,37 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { TestimonialCarousel } from "@/components/marketing/testimonial-carousel";
 import { FeatureCarousel } from "@/components/marketing/feature-carousel";
+import { Section } from "@/components/marketing/section";
+import { Overline } from "@/components/marketing/overline";
 
 const MarketingPage = () => {
     return (
         <>
-            <div className="flex flex-col gap-8 py-32 justify-center items-center">
-                    <div className="w-full space-y-6 max-w-3xl text-center">
-                        <div className="flex flex-row w-fit border rounded-full justify-center items-center pl-2 pr-4 py-2 mx-auto space-x-2">
-                            <Badge variant="secondary">Coming Soon</Badge>
-                            <span className="text-sm">Lorem ipsum dolor sit amet.</span>
-                        </div>
-                        <div className="text-8xl">
-                            Lorem ipsum dolor sit amet.
-                        </div>
-                        <div className="text-muted-foreground">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
-                        </div>
-                        <div className="flex flex-row justify-center items-center gap-4">
-                            <Input
-                                className="max-w-xs"
-                                placeholder="Enter your email"
-                                type="email"
-                            />
-                            <Button>Join the Waitlist</Button>
-                        </div>
+            <Section>
+                <div className="w-full space-y-6 max-w-3xl text-center">
+                    <div className="flex flex-row w-fit border rounded-full justify-center items-center pl-2 pr-4 py-2 mx-auto space-x-2">
+                        <Badge variant="secondary">Coming Soon</Badge>
+                        <span className="text-sm">Lorem ipsum dolor sit amet.</span>
                     </div>
-            </div>
-            <div className="flex flex-col gap-8 py-32 justify-center items-center text-center">
+                    <div className="text-8xl">
+                        Lorem ipsum dolor sit amet.
+                    </div>
+                    <div className="text-muted-foreground">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                    </div>
+                    <div className="flex flex-row justify-center items-center gap-4">
+                        <Input
+                            className="max-w-xs"
+                            placeholder="Enter your email"
+                            type="email"
+                        />
+                        <Button>Join the Waitlist</Button>
+                    </div>
+                </div>
+            </Section>
+            <Section>
                 <div className="max-w-3xl space-y-4">
-                    <div className="uppercase font-bold">
-                        Pre-heading
-                    </div>
+                    <Overline title="Pre-heading" />
                     <div className="text-6xl">
                         Lorem ipsum dolor sit amet.
                     </div>
@@ -102,12 +102,10 @@ const MarketingPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </Section>
             <div className="flex flex-row flex-wrap py-32 justify-center items-center text-center space-y-8">
                 <div className="flex flex-col gap-4 w-full lg:w-1/2 text-left pr-6">
-                    <div className="uppercase font-bold">
-                        Pre-heading
-                    </div>
+                    <Overline title="Pre-heading" />
                     <div className="text-6xl">
                         Lorem ipsum dolor sit amet.
                     </div>

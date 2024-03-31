@@ -13,8 +13,8 @@ export const Navbar = () => {
     const { isSignedIn } = useUser();
     const { theme } = useTheme();
     return (
-        <div id="header-wrapper" className="sticky z-100 top-4 mr-4 ml-4 bg-neutral-100/75 dark:bg-neutral-100/5 backdrop-blur-lg dark:backdrop-brightness-50 flex items-center rounded-full">
-            <div className="md:max-w-screen-2xl w-full flex-1 relative z-100">
+        <div id="header-wrapper" className="sticky z-100 top-4 mx-auto bg-neutral-100/75 dark:bg-neutral-100/5 backdrop-blur-lg dark:backdrop-brightness-50 flex items-center rounded-full max-w-screen-2xl">
+            <div className="md:max-w-screen-2xl w-full flex-1 relative">
                 <div id="header-container" className="w-full flex-col pl-7 pr-5 flex mx-auto rounded-full">
                     <div id="header-content-wrapper" className="flex flex-1 relative justify-between items-center py-4">
                         <Logo />

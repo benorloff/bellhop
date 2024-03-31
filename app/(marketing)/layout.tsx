@@ -7,9 +7,9 @@ const MarketingLayout = ({
     children: React.ReactNode
 }) => {
     return (
-        <div className="bg-background">
+        <div className="w-full bg-background">
             <Navbar />
-            <main className="flex-1 p-8 overflow-auto">
+            <main className="max-w-screen-2xl mx-auto p-8 overflow-auto">
                 {children}
             </main>
             <Footer />

@@ -25,14 +25,14 @@ const Feature = (props: { number: number, title: string, description: string }) 
             <div className="grid md:grid-cols-2 grid-cols-1 items-start gap-8">
                 <div className="grid grid-cols-1 items-start gap-8">
                     <div className="space-y-4">
-                        <div className="font-semibold pl-4 pr-32 border-l border-l-primary">Lorem ipsum.</div>
+                        <div className="font-semibold pl-4 pr-32">Lorem ipsum.</div>
                         <div className="text-muted-foreground pl-4 pr-32 ">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </div>
                     </div>
                     <div className="space-y-4">
-                        <div className="font-semibold pl-4 pr-32 border-l border-l-primary">Lorem ipsum.</div>
+                        <div className="font-semibold pl-4 pr-32">Lorem ipsum.</div>
                         <div className="text-muted-foreground pl-4 pr-32">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -58,14 +58,19 @@ export const FeatureCarousel = () => {
 
     let observerOptions = {
         rootMargin: '0px',
-        threshold: 0.5
+        threshold: 1.0
     }
     
     let featureTrack: HTMLElement | null = null;
+    let featureEl: HTMLElement | null = null;
+    let featureElWidth: number = 0;
+
     
     if (typeof document !== 'undefined') {
-        featureTrack = document.getElementById("FeatureCarouselTrack")!
         const observer = new IntersectionObserver(observerCallback, observerOptions); 
+        featureTrack = document.getElementById("FeatureCarouselTrack")!
+        featureEl = document.getElementById('Feature')!
+        featureElWidth = featureEl?.getBoundingClientRect().width!;
         document.querySelectorAll('#Feature').forEach((i) => {
                 if (i) {
                     observer.observe(i)
@@ -87,10 +92,9 @@ export const FeatureCarousel = () => {
     }
 
     useEffect(() => {
-        let featureEl = document.getElementById('Feature')
-        let width = featureEl?.getBoundingClientRect().width!;
-        let n = ( activeFeature - 1 ) * width;
-        featureTrack?.scrollTo( n , 0 )
+        let n = ( activeFeature - 1 ) * featureElWidth;
+        console.log(n, 'scroll to n')
+        featureTrack?.scrollTo( { left: n , top: 0, behavior: 'smooth' } )
     }, [activeFeature])
 
     return (
