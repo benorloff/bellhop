@@ -2,8 +2,11 @@
 
 import { cn } from "@/lib/utils"
 import Image from "next/image"
-import React, { forwardRef, useEffect, useRef, useState } from "react"
+import React, { ChangeEvent, forwardRef, useEffect, useRef, useState } from "react"
 import { useIntersectionObserver } from "usehooks-ts"
+import { FeatureCarouselNavIndicator } from "./feature-carousel-nav-indicator"
+import { de } from "@faker-js/faker"
+import useDebounce from "@/hooks/use-debounce"
 
 // const DynamicFeature = dynamic(() => import('./feature'), { ssr: false })
 
@@ -55,77 +58,74 @@ const Feature = (props: { number: number, title: string, description: string }) 
 export const FeatureCarousel = () => {
     
     const [activeFeature, setActiveFeature] = useState(1)
+    const [scrollProgress, setScrollProgress] = useState(0)
 
-    let observerOptions = {
-        rootMargin: '0px',
-        threshold: 1.0
-    }
-    
     let featureTrack: HTMLElement | null = null;
-    let featureEl: HTMLElement | null = null;
-    let featureElWidth: number = 0;
+    let featureTrackScrollWidth: number = 0;
+    let featureTrackScrollLeft: number = 0;
 
-    
     if (typeof document !== 'undefined') {
-        const observer = new IntersectionObserver(observerCallback, observerOptions); 
-        featureTrack = document.getElementById("FeatureCarouselTrack")!
-        featureEl = document.getElementById('Feature')!
-        featureElWidth = featureEl?.getBoundingClientRect().width!;
-        document.querySelectorAll('#Feature').forEach((i) => {
-                if (i) {
-                    observer.observe(i)
-                }
-            })
-    };
-
-    function observerCallback(entries: IntersectionObserverEntry[], observer: IntersectionObserver) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                let key = entry.target.getAttribute('data-key')
-                setActiveFeature(parseInt(key!))
-            }
-        })
+        featureTrack = document.getElementById("FeatureCarouselTrack");
+        featureTrackScrollWidth = featureTrack?.scrollWidth as number;
+        featureTrackScrollLeft = featureTrack?.scrollLeft as number;
     }
 
-    const handleClick = (e: any, id: number) => {
-        setActiveFeature(id)
+    const onTrackScroll = (e: any) => {
+        let progress = ( featureTrackScrollLeft / featureTrackScrollWidth );
+        setScrollProgress(progress);
     }
+
+    featureTrack?.addEventListener('scroll', onTrackScroll);
 
     useEffect(() => {
-        let n = ( activeFeature - 1 ) * featureElWidth;
-        console.log(n, 'scroll to n')
+        console.log(scrollProgress, 'scrollProgress')
+        switch (true) {
+            case scrollProgress >= 0 && scrollProgress < 0.25:
+                setActiveFeature(1);
+                break;
+            case scrollProgress >= 0.25 && scrollProgress < 0.5:
+                setActiveFeature(2);
+                break;
+            case scrollProgress >= 0.5 && scrollProgress < 0.75:
+                setActiveFeature(3);
+                break;
+            case scrollProgress >= 0.75 && scrollProgress <= 1:
+                setActiveFeature(4);
+                break;
+        }
+    }, [scrollProgress])
+
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        let id = parseInt(e.currentTarget.id);
+        let n = ( ( id - 1 ) / 4 ) * featureTrackScrollWidth;
         featureTrack?.scrollTo( { left: n , top: 0, behavior: 'smooth' } )
-    }, [activeFeature])
+    }
 
     return (
         <div id="FeatureCarouselContainer" className="space-y-8">
             <div id="FeatureCarouselTrack" className="flex flex-row snap-x snap-mandatory overflow-x-scroll [scrollbar-width:none] overscroll-x-contain py-8 gap-32">
                 <Feature 
-                    key={1} 
                     number={1} 
-                    title="Unlimited Updates" 
+                    title="Feature 1" 
                     description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
                 />
                 <Feature 
-                    key={2} 
                     number={2} 
-                    title="Automated with AI" 
+                    title="Feature 2" 
                     description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
                 />
                 <Feature 
-                    key={3} 
                     number={3} 
-                    title="Maximum Security" 
+                    title="Feature 3" 
                     description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
                 />
                 <Feature 
-                    key={4} 
                     number={4} 
-                    title="Blazing Fast" 
+                    title="Feature 4" 
                     description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
                 />
             </div>
-            <div className="grid grid-cols-4 w-full text-center border-collapse">
+            <div className="relative grid grid-cols-4 w-full text-center border-collapse">
                 <div 
                     id="1" 
                     role="button" 
@@ -133,7 +133,7 @@ export const FeatureCarousel = () => {
                         "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
                         activeFeature === 1 && "border-t border-solid border-t-primary text-foreground"
                     )}
-                    onClick={(e) => handleClick(e, parseInt(e.currentTarget.id))}
+                    onClick={(e) => handleClick(e)}
                 >
                     Feature 1
                 </div>
@@ -144,7 +144,7 @@ export const FeatureCarousel = () => {
                         "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
                         activeFeature === 2 && "border-t border-solid border-t-primary text-foreground"
                     )}
-                    onClick={(e) => handleClick(e, parseInt(e.currentTarget.id))}
+                    onClick={(e) => handleClick(e)}
                 >
                     Feature 2
                 </div>
@@ -155,7 +155,7 @@ export const FeatureCarousel = () => {
                         "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
                         activeFeature === 3 && "border-t border-solid border-t-primary text-foreground"
                     )}
-                    onClick={(e) => handleClick(e, parseInt(e.currentTarget.id))}
+                    onClick={(e) => handleClick(e)}
                 >
                     Feature 3
                 </div>
@@ -166,7 +166,7 @@ export const FeatureCarousel = () => {
                         "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
                         activeFeature === 4 && "border-t border-solid border-t-primary text-foreground"
                     )}
-                    onClick={(e) => handleClick(e, parseInt(e.currentTarget.id))}
+                    onClick={(e) => handleClick(e)}
                 >
                     Feature 4
                 </div>
