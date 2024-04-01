@@ -3,9 +3,11 @@
 import { cn } from "@/lib/utils"
 import React, { useEffect, useState } from "react"
 import { Feature } from "./feature"
+import { useDebounceValue } from "usehooks-ts"
 
 export const FeatureCarousel = () => {
     
+    const [activeFeature, setActiveFeature] = useDebounceValue(1, 100)
     const [scrollProgress, setScrollProgress] = useState(0)
 
     let featureTrack: HTMLElement | null = null;
@@ -25,10 +27,27 @@ export const FeatureCarousel = () => {
         setScrollProgress(progress);
     }
 
+    useEffect(() => {
+        switch (true) {
+            case scrollProgress < 25:
+                setActiveFeature(1);
+                break;
+            case scrollProgress >= 25 && scrollProgress < 50:
+                setActiveFeature(2);
+                break;
+            case scrollProgress >= 50 && scrollProgress < 75:
+                setActiveFeature(3);
+                break;
+            case scrollProgress >= 75:
+                setActiveFeature(4);
+                break;
+        }
+    }, [scrollProgress])
+
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         let id = parseInt(e.currentTarget.id);
         let n: number = 0;
-        n = ( ( id - 1 ) ) * featureElClientWidth;
+        n = ( id - 1 ) * featureElClientWidth;
         
         featureTrack?.scrollTo( { left: n , top: 0, behavior: 'smooth' } )
     }
@@ -67,6 +86,7 @@ export const FeatureCarousel = () => {
                     role="button" 
                     className={cn(
                         "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
+                        activeFeature === 1 && "text-primary"
                     )}
                     onClick={(e) => handleClick(e)}
                 >
@@ -77,6 +97,7 @@ export const FeatureCarousel = () => {
                     role="button" 
                     className={cn(
                         "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
+                        activeFeature === 2 && "text-primary"
                     )}
                     onClick={(e) => handleClick(e)}
                 >
@@ -87,6 +108,7 @@ export const FeatureCarousel = () => {
                     role="button" 
                     className={cn(
                         "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
+                        activeFeature === 3 && "text-primary"
                     )}
                     onClick={(e) => handleClick(e)}
                 >
@@ -97,6 +119,7 @@ export const FeatureCarousel = () => {
                     role="button" 
                     className={cn(
                         "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
+                        activeFeature === 4 && "text-primary"
                     )}
                     onClick={(e) => handleClick(e)}
                 >

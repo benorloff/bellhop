@@ -1,11 +1,20 @@
+import { cn } from "@/lib/utils"
+
 export const Section = ({ 
-    children 
+    fullHeight,
+    children,
 }: {
+    fullHeight?: boolean,
     children: React.ReactNode
 }) => {
     return (
-        <div className="flex flex-col gap-8 py-32 justify-center items-center text-center">
+        <section 
+            className={cn(
+                "m-auto h-screen py-16",
+                fullHeight ? "h-screen" : "h-full"
+            )}
+        >
                 {children}
-        </div>
+        </section>
     );
 }
