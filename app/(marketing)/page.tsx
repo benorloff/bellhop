@@ -12,8 +12,11 @@ import { Section } from "@/components/marketing/section";
 import { Overline } from "@/components/marketing/overline";
 import { FeatureCard } from "@/components/marketing/feature-card";
 import { SectionHeading } from "@/components/marketing/section-heading";
+import { useModal } from "@/hooks/use-modal-store";
+import { WaitlistButton } from "@/components/marketing/waitlist-button";
 
 const MarketingPage = () => {
+
     return (
         <>
             <Section fullHeight={true}>
@@ -34,7 +37,7 @@ const MarketingPage = () => {
                             placeholder="Enter your email"
                             type="email"
                         />
-                        <Button>Join the Waitlist</Button>
+                        <WaitlistButton />
                     </div>
                 </div>
             </Section>

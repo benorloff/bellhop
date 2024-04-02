@@ -8,6 +8,7 @@ export type ModalType =
     | "siteInvite" 
     | "imagePreview"
     | "auditLogDetail"
+    | "waitlist"
 
 interface ModalData {
     site?: Site;
@@ -21,6 +22,7 @@ interface ModalData {
         url: string,
     };
     auditLog?: AuditLog;
+    email?: string;
 }
 
 interface ModalStore {
