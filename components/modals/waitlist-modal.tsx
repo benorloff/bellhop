@@ -2,20 +2,13 @@
 
 import { useState } from "react"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
 
-import { Signup, Waitlist } from "@/actions/create-waitlist-signup/types"
-import { createWaitlistSignup } from "@/actions/create-waitlist-signup"
 import { useModal } from "@/hooks/use-modal-store"
-import { useAction } from "@/hooks/use-action"
-import { cn } from "@/lib/utils"
 
+import { WaitlistForm } from "@/components/marketing/waitlist-form"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Hint } from "@/components/hint"
 import { 
     Dialog, 
@@ -26,61 +19,25 @@ import {
     DialogTitle 
 } from "@/components/ui/dialog"
 import { 
-    Form, 
-    FormControl, 
-    FormField, 
-    FormItem, 
-    FormLabel, 
-    FormMessage 
-} from "@/components/ui/form"
-import { 
     Check, 
     Clipboard, 
     Linkedin, 
-    Loader2, 
     Mail, 
     MessageCircle, 
     Twitter 
 } from "lucide-react"
 
-const WaitlistSchema = z.object({
-    email: z.string().email({
-        message: "Please enter a valid email address.",
-    }),
-})
 
 export const WaitlistModal = () => {
+
+    const [linkCopied, setLinkCopied] = useState<boolean>(false);
+    const [isCheckingStatus, setIsCheckingStatus] = useState<boolean>(false);
+
     const { isOpen, onClose, type, data } = useModal();
     const isModalOpen = isOpen && type === "waitlist";
 
-    const [linkCopied, setLinkCopied] = useState<boolean>(false);
-    const [signup, setSignup] = useState<Signup | null>(null);
-    const [waitlist, setWaitlist] = useState<Waitlist | null>(null);
-    const [isCheckingStatus, setIsCheckingStatus] = useState<boolean>(false);
-
-    const form = useForm<z.infer<typeof WaitlistSchema>>({
-        resolver: zodResolver(WaitlistSchema),
-        defaultValues: {
-            email: "",
-        }
-    })
-
-    const { execute, isLoading } = useAction(createWaitlistSignup, {
-        onSuccess: (data) => {
-            form.reset();
-            setSignup(data.signup);
-            setWaitlist(data.waitlist);
-            !isCheckingStatus && toast.success("You've joined the waitlist! 🎉");
-        },
-        onError: (error) => {
-            toast.error(error);
-        }
-    });
-
-    const onSubmit = (values: z.infer<typeof WaitlistSchema>) => {
-        const email = values.email;
-        execute({ email });
-    }
+    const signup = data.signup || undefined;
+    const waitlist = data.waitlist || undefined;
 
     const handleCopy = () => {
         try {
@@ -110,13 +67,13 @@ export const WaitlistModal = () => {
                 window.open("https://twitter.com/intent/tweet?text=" + {/* messageConstructor */}, "_blank")
                 break;
             case "linkedin":
-                window.open("https://www.linkedin.com/sharing/share-offsite/?url=" + signup?.referral_link + "&summary=" + /* MESSAGE GOES HERE */ + "&source=Waitlist", "_blank")
+                window.open("https://www.linkedin.com/sharing/share-offsite/?url=" + data.signup?.referral_link + "&summary=" + /* MESSAGE GOES HERE */ + "&source=Waitlist", "_blank")
                 break;
             case "text":
-                window.open("sms:?body=" + /* MESSAGE GOES HERE */ + " " + signup?.referral_link)
+                window.open("sms:?body=" + /* MESSAGE GOES HERE */ + " " + data.signup?.referral_link)
                 break;
             case "email":
-                window.open("mailto:?body=" + /* MESSAGE GOES HERE */ + "&subject=" + waitlist?.waitlist_name)
+                window.open("mailto:?body=" + /* MESSAGE GOES HERE */ + "&subject=" + data.waitlist?.waitlist_name)
                 break;
         }
     }
@@ -126,7 +83,7 @@ export const WaitlistModal = () => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className="text-4xl">
-                        {signup ? "You're In Line!" : isCheckingStatus ? "Check Your Status" : "Get Early Access"}
+                        {signup ? <div>You're In Line!<span className="ml-4">🎉</span></div> : isCheckingStatus ? "Check Your Status" : "Get Early Access"}
                     </DialogTitle>
                     <DialogDescription>
                         {!signup && !isCheckingStatus && (
@@ -135,79 +92,48 @@ export const WaitlistModal = () => {
                     </DialogDescription>
                 </DialogHeader>
                 {!signup ? (
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                            <div className="flex flex-row gap-2 items-end">
-                                <div className="flex-1">
-                                    <FormField
-                                        control={form.control}
-                                        name="email"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Email</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="you@getbell.co" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                    <>
+                        <WaitlistForm 
+                            showFieldLabels={true} 
+                            isCheckingStatus={isCheckingStatus} 
+                        />
+                        <DialogFooter className="text-xs !justify-start text-muted-foreground">
+                            {isCheckingStatus ? (
+                                <div>
+                                    <p>
+                                        Haven't signed up?
+                                        <span 
+                                            role="button" 
+                                            className="text-primary pl-1"
+                                            onClick={handleCheckStatus}
+                                        >
+                                            Join the waitlist.
+                                        </span>
+                                    </p>
                                 </div>
-                                <Button 
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className="relative"
-                                >
-                                    <span
-                                        className={cn(
-                                            isLoading ? "opacity-0" : "opacity-100",
-                                        )}
-                                    >
-                                        {!isCheckingStatus ? "Join the Waitlist" : "Check Status"}
-                                    </span>
-                                    {isLoading 
-                                        && <Loader2 className="absolute mx-auto h-4 w-4 animate-spin" /> 
-                                    }
-                                </Button>
-                            </div>
-                            <DialogFooter className="text-xs !justify-start text-muted-foreground">
-                                {isCheckingStatus ? (
-                                    <div>
-                                        <p>
-                                            Haven't signed up?
-                                            <span 
-                                                role="button" 
-                                                className="text-primary pl-1"
-                                                onClick={handleCheckStatus}
-                                            >
-                                                Join the waitlist.
-                                            </span>
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <p>
-                                            Already signed up?
-                                            <span 
-                                                role="button" 
-                                                className="text-primary pl-1"
-                                                onClick={handleCheckStatus}
-                                            >
-                                                Check your status.
-                                            </span>
-                                        </p>
-                                    </div>
-                                )}
-                            </DialogFooter>
-                        </form>
-                    </Form>
+                            ) : (
+                                <div>
+                                    <p>
+                                        Already signed up?
+                                        <span 
+                                            role="button" 
+                                            className="text-primary pl-1"
+                                            onClick={handleCheckStatus}
+                                        >
+                                            Check your status.
+                                        </span>
+                                    </p>
+                                </div>
+                            )}
+                        </DialogFooter>
+                    </>
                 ) : (
                     <>
                         <div className="space-y-4">
                             <div className="text-xl">
-                                You're number {signup.priority} on the waitlist! 🎉
+                                You're number {signup.priority} on the waitlist!
                             </div>
-                            <div>
+                            <div className="text-muted-foreground">
                                 We sent an email to {signup.email} to confirm your spot in line. We'll let you know when it's your turn to join Bellhop.
                             </div>
                             <Separator />
@@ -231,22 +157,22 @@ export const WaitlistModal = () => {
                             <p>Share and refer your friends to move up in line!</p>
                             <div className="flex flex-row gap-2 justify-start items-center">
                                 <Hint label="Twitter/X">
-                                    <Button size="icon">
+                                    <Button size="icon" asChild>
                                         <Twitter />
                                     </Button>
                                 </Hint>
                                 <Hint label="LinkedIn">
-                                    <Button size="icon">
+                                    <Button size="icon" asChild>
                                         <Linkedin />
                                     </Button>
                                 </Hint>
                                 <Hint label="Text">
-                                    <Button size="icon">
+                                    <Button size="icon" asChild>
                                         <MessageCircle />
                                     </Button>
                                 </Hint>
                                 <Hint label="Email">
-                                    <Button size="icon">
+                                    <Button size="icon" asChild>
                                         <Mail />
                                     </Button>
                                 </Hint>

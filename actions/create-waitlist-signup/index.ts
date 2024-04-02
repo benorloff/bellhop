@@ -1,15 +1,15 @@
+"use server"
+
 import { createSafeAction } from "@/lib/create-safe-action";
 import { InputType, ReturnType } from "./types";
 import { CreateWaitlistSignup } from "./schema";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
 
-    console.log("data from handler: ", data)
-
     const reqBody = {
         email: data.email,
         waitlist_id: 15158,
-        // referral_link: "https://getbell.co/?ref_id=REFTOKEN",
+        referral_link: data.referral_link,
     }
 
     let signup;

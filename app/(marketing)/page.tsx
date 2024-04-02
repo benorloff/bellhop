@@ -1,16 +1,15 @@
 import Image from "next/image";
 
+import { FullScreenHeroSection } from "@/components/marketing/full-screen-hero-section";
 import { TestimonialCarousel } from "@/components/marketing/testimonial-carousel";
 import { FeatureCarousel } from "@/components/marketing/feature-carousel";
-import { WaitlistButton } from "@/components/marketing/waitlist-button";
 import { SectionHeading } from "@/components/marketing/section-heading";
+import { WaitlistForm } from "@/components/marketing/waitlist-form";
 import { FeatureCard } from "@/components/marketing/feature-card";
 import { Section } from "@/components/marketing/section";
-import { Input } from "@/components/ui/input";
+import { Boxes } from "@/components/ui/background-boxes";
 import { Badge } from "@/components/ui/badge";
 import { Database } from "lucide-react";
-import { Boxes } from "@/components/ui/background-boxes";
-import { FullScreenHeroSection } from "@/components/marketing/full-screen-hero-section";
 
 const MarketingPage = () => {
 
@@ -18,24 +17,17 @@ const MarketingPage = () => {
         <>
             <FullScreenHeroSection>
                 <Boxes />
-                <div className="relative z-20 flex flex-row w-fit border rounded-full justify-center items-center pl-2 pr-4 py-2 mx-auto space-x-2 bg-background">
+                <div className="relative z-5 flex flex-row w-fit border rounded-full justify-center items-center pl-2 pr-4 py-2 mx-auto space-x-2 bg-background">
                     <Badge variant="secondary">Coming Soon</Badge>
                     <span className="text-sm">Lorem ipsum dolor sit amet.</span>
                 </div>
-                <div className="text-8xl relative z-20 ">
+                <div className="text-8xl relative z-5 ">
                     Lorem ipsum dolor sit amet.
                 </div>
-                <div className="text-muted-foreground relative z-20 ">
+                <div className="text-muted-foreground relative z-5 ">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
                 </div>
-                <div className=" relative z-20 flex w-full flex-row justify-center items-center gap-4">
-                    <Input
-                        className="max-w-xs"
-                        placeholder="Enter your email"
-                        type="email"
-                    />
-                    <WaitlistButton />
-                </div>
+                    <WaitlistForm />
             </FullScreenHeroSection>
             <Section>
                 <SectionHeading

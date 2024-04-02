@@ -5,5 +5,6 @@ import { z } from "zod";
 export const CreateWaitlistSignup = z.object({
     email: z.string().email({
         message: "Please enter a valid email address."
-    })
+    }),
+    referral_link: z.string()
 });

@@ -1,3 +1,4 @@
+import { Signup, Waitlist } from "@/actions/create-waitlist-signup/types";
 import { AuditLog, Site } from "@prisma/client";
 import { create } from "zustand";
 
@@ -23,6 +24,8 @@ interface ModalData {
     };
     auditLog?: AuditLog;
     email?: string;
+    signup?: Signup;
+    waitlist?: Waitlist;
 }
 
 interface ModalStore {
