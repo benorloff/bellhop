@@ -9,7 +9,7 @@ const MarketingLayout = ({
     return (
         <>
             <Navbar />
-            <main className="max-w-screen-xl mx-auto overflow-auto px-8">
+            <main className="mx-auto overflow-auto">
                 {children}
             </main>
             <Footer />

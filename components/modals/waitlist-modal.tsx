@@ -1,23 +1,47 @@
 "use client"
 
-import { useForm } from "react-hook-form"
-import { Button } from "../ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { z } from "zod"
+import { useState } from "react"
+
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Input } from "../ui/input"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+
+import { Signup, Waitlist } from "@/actions/create-waitlist-signup/types"
+import { createWaitlistSignup } from "@/actions/create-waitlist-signup"
 import { useModal } from "@/hooks/use-modal-store"
 import { useAction } from "@/hooks/use-action"
-import { createWaitlistSignup } from "@/actions/create-waitlist-signup"
-import { toast } from "sonner"
-import { useState } from "react"
-import { Signup, Waitlist } from "@/actions/create-waitlist-signup/types"
-import { Check, Clipboard, Linkedin, Loader2, Mail, MessageCircle, Slack, Twitter, X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import { Separator } from "../ui/separator"
-import { Hint } from "../hint"
+
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Hint } from "@/components/hint"
+import { 
+    Dialog, 
+    DialogContent, 
+    DialogDescription, 
+    DialogFooter, 
+    DialogHeader, 
+    DialogTitle 
+} from "@/components/ui/dialog"
+import { 
+    Form, 
+    FormControl, 
+    FormField, 
+    FormItem, 
+    FormLabel, 
+    FormMessage 
+} from "@/components/ui/form"
+import { 
+    Check, 
+    Clipboard, 
+    Linkedin, 
+    Loader2, 
+    Mail, 
+    MessageCircle, 
+    Twitter 
+} from "lucide-react"
 
 const WaitlistSchema = z.object({
     email: z.string().email({
@@ -72,7 +96,7 @@ export const WaitlistModal = () => {
     }
 
     const handleCheckStatus = () => {
-        setIsCheckingStatus(!isCheckingStatus);
+        setIsCheckingStatus(isCheckingStatus => !isCheckingStatus);
         return;
     }
 
@@ -106,7 +130,7 @@ export const WaitlistModal = () => {
                     </DialogTitle>
                     <DialogDescription>
                         {!signup && !isCheckingStatus && (
-                            "We're working hard to make sure everyone gets access to Bellhop. In order to deliver an amazing experience, we can only let in a limited number of people at a time.
+                            "We're working hard to make sure everyone gets access to Bellhop. In order to deliver an amazing experience, we can only let in a limited number of people at a time."
                         )} 
                     </DialogDescription>
                 </DialogHeader>

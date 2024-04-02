@@ -1,53 +1,49 @@
-import { Button } from "@/components/ui/button";
-import { Database, Medal } from "lucide-react";
-import Link from "next/link";
-import localFont from "next/font/local";
-import { Poppins } from "next/font/google";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+
 import { TestimonialCarousel } from "@/components/marketing/testimonial-carousel";
 import { FeatureCarousel } from "@/components/marketing/feature-carousel";
-import { Section } from "@/components/marketing/section";
-import { Overline } from "@/components/marketing/overline";
-import { FeatureCard } from "@/components/marketing/feature-card";
-import { SectionHeading } from "@/components/marketing/section-heading";
-import { useModal } from "@/hooks/use-modal-store";
 import { WaitlistButton } from "@/components/marketing/waitlist-button";
+import { SectionHeading } from "@/components/marketing/section-heading";
+import { FeatureCard } from "@/components/marketing/feature-card";
+import { Section } from "@/components/marketing/section";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Database } from "lucide-react";
+import { Boxes } from "@/components/ui/background-boxes";
+import { FullScreenHeroSection } from "@/components/marketing/full-screen-hero-section";
 
 const MarketingPage = () => {
 
     return (
         <>
-            <Section fullHeight={true}>
-                <div className="flex flex-col max-w-3xl h-full m-auto gap-8 justify-center items-center text-center">
-                    <div className="flex flex-row w-fit border rounded-full justify-center items-center pl-2 pr-4 py-2 mx-auto space-x-2">
-                        <Badge variant="secondary">Coming Soon</Badge>
-                        <span className="text-sm">Lorem ipsum dolor sit amet.</span>
-                    </div>
-                    <div className="text-8xl">
-                        Lorem ipsum dolor sit amet.
-                    </div>
-                    <div className="text-muted-foreground">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
-                    </div>
-                    <div className="flex w-full flex-row justify-center items-center gap-4">
-                        <Input
-                            className="max-w-xs"
-                            placeholder="Enter your email"
-                            type="email"
-                        />
-                        <WaitlistButton />
-                    </div>
+            <FullScreenHeroSection>
+                <Boxes />
+                <div className="relative z-20 flex flex-row w-fit border rounded-full justify-center items-center pl-2 pr-4 py-2 mx-auto space-x-2 bg-background">
+                    <Badge variant="secondary">Coming Soon</Badge>
+                    <span className="text-sm">Lorem ipsum dolor sit amet.</span>
                 </div>
-            </Section>
+                <div className="text-8xl relative z-20 ">
+                    Lorem ipsum dolor sit amet.
+                </div>
+                <div className="text-muted-foreground relative z-20 ">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
+                </div>
+                <div className=" relative z-20 flex w-full flex-row justify-center items-center gap-4">
+                    <Input
+                        className="max-w-xs"
+                        placeholder="Enter your email"
+                        type="email"
+                    />
+                    <WaitlistButton />
+                </div>
+            </FullScreenHeroSection>
             <Section>
                 <SectionHeading
                     overline="Overline"
                     headline="Lorem ipsum dolor sit amet."
                     subheading="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                 />
-                <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 w-full text-left">
+                <div className="max-w-screen-xl mx-auto px-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 w-full text-left">
                     {Array.from({ length: 6 }).map((_, i) => (
                         <FeatureCard 
                             key={i}
@@ -64,7 +60,7 @@ const MarketingPage = () => {
                 </div>
             </Section>
             <Section>
-                <div className="flex flex-row flex-wrap justify-center items-center text-center space-y-8">
+                <div className="max-w-screen-xl mx-auto px-4 flex flex-row flex-wrap justify-center items-center text-center space-y-8">
                     <div className="flex flex-col gap-4 w-full lg:w-1/2 pr-6">
                         <SectionHeading
                             overline="Overline"
@@ -86,11 +82,11 @@ const MarketingPage = () => {
             <Section>
                 <FeatureCarousel />
             </Section>
-            <Section>
-                <div className="w-full bg-secondary p-20 rounded-lg">
+            <section className="m-auto py-16 h-full">
+                <div className="max-w-screen-xl mx-auto bg-secondary p-20 rounded-lg">
                     <TestimonialCarousel />
                 </div>
-            </Section>
+            </section>
         </>
     )
 };

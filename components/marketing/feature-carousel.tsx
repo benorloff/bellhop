@@ -53,7 +53,7 @@ export const FeatureCarousel = () => {
     }
 
     return (
-        <div id="FeatureCarouselContainer" className="space-y-8">
+        <div id="FeatureCarouselContainer" className="max-w-screen-xl mx-auto px-4 space-y-8">
             <div id="FeatureCarouselTrack" onScroll={onTrackScroll} className="flex flex-row snap-x snap-mandatory overflow-x-scroll [scrollbar-width:none] overscroll-x-contain py-8">
                 <Feature 
                     number={1} 

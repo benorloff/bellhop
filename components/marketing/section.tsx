@@ -10,7 +10,7 @@ export const Section = ({
     return (
         <section 
             className={cn(
-                "m-auto h-screen py-16",
+                "m-auto py-16",
                 fullHeight ? "h-screen" : "h-full"
             )}
         >
