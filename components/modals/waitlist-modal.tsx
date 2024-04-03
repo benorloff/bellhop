@@ -67,13 +67,13 @@ export const WaitlistModal = () => {
                 window.open("https://twitter.com/intent/tweet?text=" + {/* messageConstructor */}, "_blank")
                 break;
             case "linkedin":
-                window.open("https://www.linkedin.com/sharing/share-offsite/?url=" + data.signup?.referral_link + "&summary=" + /* MESSAGE GOES HERE */ + "&source=Waitlist", "_blank")
+                window.open("https://www.linkedin.com/sharing/share-offsite/?url=" + signup?.referral_link + "&summary=" + /* MESSAGE GOES HERE */ + "&source=Waitlist", "_blank")
                 break;
             case "text":
-                window.open("sms:?body=" + /* MESSAGE GOES HERE */ + " " + data.signup?.referral_link)
+                window.open("sms:?body=" + /* MESSAGE GOES HERE */ + " " + signup?.referral_link)
                 break;
             case "email":
-                window.open("mailto:?body=" + /* MESSAGE GOES HERE */ + "&subject=" + data.waitlist?.waitlist_name)
+                window.open("mailto:?body=" + /* MESSAGE GOES HERE */ + "&subject=" + waitlist?.waitlist_name)
                 break;
         }
     }
