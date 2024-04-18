@@ -14,9 +14,9 @@ export const Navbar = () => {
     const { isSignedIn } = useUser();
     const { theme } = useTheme();
     return (
-        <div id="header-wrapper" className="fixed w-full z-10 top-4">
-            <div className="max-w-screen-xl mx-auto">
-                <div id="header-container" className="w-full bg-neutral-100/75 dark:bg-neutral-100/5 backdrop-blur-lg dark:backdrop-brightness-50 rounded-full pl-7 pr-5">
+        <div id="header-wrapper" className="fixed w-full z-10">
+            <div className="max-w-screen-2xl mx-auto">
+                <div id="header-container" className="w-full bg-neutral-100/75 dark:bg-neutral-100/5 backdrop-blur-lg dark:backdrop-brightness-50 px-12">
                     <div id="header-content-wrapper" className="flex flex-1 justify-between items-center py-4">
                         <Logo />
                         <div className="space-x-4 md:block md:w-auto flex items-center justify-end w-full">

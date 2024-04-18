@@ -127,7 +127,7 @@ export const OnboardSiteInfo = () => {
         // Update the rendered value immediately, 
         // but don't trigger validation yet
         if (fieldName === "url") {
-            setValue("url", value, { shouldDirty: true, shouldValidate: false });
+            setValue(fieldName, value, { shouldDirty: true, shouldValidate: false });
             setIsTyping(true);
             debounced(value);
         }
@@ -135,7 +135,7 @@ export const OnboardSiteInfo = () => {
             // Unregister the URL field to prevent validation
             // while the user is typing the site name
             unregister("url")
-            setValue("name", value, { shouldDirty: true, shouldValidate: true });
+            setValue(fieldName, value, { shouldDirty: true, shouldValidate: true });
         }
     }
 

@@ -9,21 +9,28 @@ import { FeatureCard } from "@/components/marketing/feature-card";
 import { Section } from "@/components/marketing/section";
 import { Boxes } from "@/components/ui/background-boxes";
 import { Badge } from "@/components/ui/badge";
-import { Database } from "lucide-react";
+import { Brain, Database, Globe2, Infinity, ScanEye, Zap } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { FeatureAccordion } from "@/components/marketing/feature-accordion";
 
 const MarketingPage = () => {
 
     return (
         <>
+        {/* the rest of your code */}
             <FullScreenHeroSection>
-                <Boxes />
+                {/* <Boxes /> */}
                 <div className="relative z-5 flex flex-row w-fit border rounded-full justify-center items-center pl-2 pr-4 py-2 mx-auto space-x-2 bg-background">
                     <Badge variant="secondary">Coming Soon</Badge>
                     <span className="text-sm">Lorem ipsum dolor sit amet.</span>
                 </div>
-                <div className="text-8xl relative z-5 ">
-                    Lorem ipsum dolor sit amet.
-                </div>
+                <h1 className="text-8xl relative z-5 ">
+                    You deserve a
+                    <span className="font-bold text-transparent bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text ">
+                        {` better `}
+                    </span>
+                    WordPress experience.
+                </h1>
                 <div className="text-muted-foreground relative z-5 ">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisl purus in mollis nunc.
                 </div>
@@ -35,20 +42,72 @@ const MarketingPage = () => {
                     headline="Lorem ipsum dolor sit amet."
                     subheading="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                 />
-                <div className="max-w-screen-xl mx-auto px-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 w-full text-left">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                        <FeatureCard 
-                            key={i}
-                            title="Lorem ipsum." 
-                            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
-                            icon={
-                                <Database 
-                                    size={48} 
-                                    className="group-hover:text-orange-500 transition-colors ease-in-out"
-                                />
-                            }
-                        />
-                    ))}
+                <div className="max-w-screen-xl mx-auto px-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 w-full text-left">
+                    <FeatureCard 
+                        title="Unlimited updates." 
+                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+                        icon={
+                            <Infinity 
+                                size={36} 
+                                className="group-hover:text-orange-500 transition-colors ease-in-out"
+                            />
+                        }
+                    />
+                    <FeatureCard 
+                        title="Global availability." 
+                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+                        icon={
+                            <Globe2 
+                                size={36} 
+                                className="group-hover:text-orange-500 transition-colors ease-in-out"
+                            />
+                        }
+                    />
+                    <FeatureCard 
+                        title="Proactive monitoring." 
+                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+                        icon={
+                            <ScanEye 
+                                size={36} 
+                                className="group-hover:text-orange-500 transition-colors ease-in-out"
+                            />
+                        }
+                    />
+                    <FeatureCard 
+                        title="AI enabled." 
+                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+                        icon={
+                            <Brain 
+                                size={36} 
+                                className="group-hover:text-orange-500 transition-colors ease-in-out"
+                            />
+                        }
+                    />
+                    <FeatureCard 
+                        title="Blazing fast." 
+                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+                        icon={
+                            <Zap 
+                                size={36} 
+                                className="group-hover:text-orange-500 transition-colors ease-in-out"
+                            />
+                        }
+                    />
+                    <FeatureCard 
+                        title="Expert support." 
+                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+                        icon={
+                            <Database 
+                                size={36} 
+                                className="group-hover:text-orange-500 transition-colors ease-in-out"
+                            />
+                        }
+                    />
+                </div>
+            </Section>
+            <Section>
+                <div className="max-w-screen-xl m-auto px-4">
+                    <FeatureAccordion />
                 </div>
             </Section>
             <Section>

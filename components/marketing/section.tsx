@@ -10,11 +10,11 @@ export const Section = ({
     return (
         <section 
             className={cn(
-                "m-auto py-16",
+                "relative m-auto py-16 px-8",
                 fullHeight ? "h-screen" : "h-full"
             )}
-        >
-                {children}
+        >  
+            {children}
         </section>
     );
 }

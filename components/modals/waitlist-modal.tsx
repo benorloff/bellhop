@@ -157,22 +157,22 @@ export const WaitlistModal = () => {
                             <p>Share and refer your friends to move up in line!</p>
                             <div className="flex flex-row gap-2 justify-start items-center">
                                 <Hint label="Twitter/X">
-                                    <Button size="icon" asChild>
+                                    <Button size="icon">
                                         <Twitter />
                                     </Button>
                                 </Hint>
                                 <Hint label="LinkedIn">
-                                    <Button size="icon" asChild>
+                                    <Button size="icon">
                                         <Linkedin />
                                     </Button>
                                 </Hint>
                                 <Hint label="Text">
-                                    <Button size="icon" asChild>
+                                    <Button size="icon">
                                         <MessageCircle />
                                     </Button>
                                 </Hint>
                                 <Hint label="Email">
-                                    <Button size="icon" asChild>
+                                    <Button size="icon">
                                         <Mail />
                                     </Button>
                                 </Hint>

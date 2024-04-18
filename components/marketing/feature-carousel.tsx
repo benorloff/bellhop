@@ -1,13 +1,14 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import React, { useEffect, useState } from "react"
-import { Feature } from "./feature"
 import { useDebounceValue } from "usehooks-ts"
+import { cn } from "@/lib/utils"
+import { Feature } from "./feature"
+
 
 export const FeatureCarousel = () => {
     
-    const [activeFeature, setActiveFeature] = useDebounceValue(1, 100)
+    const [activeFeature, setActiveFeature] = useDebounceValue(1, 50)
     const [scrollProgress, setScrollProgress] = useState(0)
 
     let featureTrack: HTMLElement | null = null;
@@ -41,11 +42,15 @@ export const FeatureCarousel = () => {
             case scrollProgress >= 75:
                 setActiveFeature(4);
                 break;
+            default:
+                setActiveFeature(1);
+                break;
         }
     }, [scrollProgress])
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        let id = parseInt(e.currentTarget.id);
+        console.log(e, '<== e clicked')
+        let id = parseInt(e.currentTarget.dataset.id as string);
         let n: number = 0;
         n = ( id - 1 ) * featureElClientWidth;
         
@@ -53,78 +58,45 @@ export const FeatureCarousel = () => {
     }
 
     return (
-        <div id="FeatureCarouselContainer" className="max-w-screen-xl mx-auto px-4 space-y-8">
-            <div id="FeatureCarouselTrack" onScroll={onTrackScroll} className="flex flex-row snap-x snap-mandatory overflow-x-scroll [scrollbar-width:none] overscroll-x-contain py-8">
-                <Feature 
-                    number={1} 
-                    title="Feature 1" 
-                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
-                />
-                <Feature 
-                    number={2} 
-                    title="Feature 2" 
-                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
-                />
-                <Feature 
-                    number={3} 
-                    title="Feature 3" 
-                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
-                />
-                <Feature 
-                    number={4} 
-                    title="Feature 4" 
-                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
-                />
+        <div 
+            id="FeatureCarouselContainer" 
+            className="max-w-screen-xl mx-auto px-4 space-y-8"
+        >
+            <div 
+                id="FeatureCarouselTrack" 
+                onScroll={onTrackScroll} 
+                className="flex flex-row snap-x snap-mandatory overflow-x-scroll [scrollbar-width:none] overscroll-x-contain py-8"
+            >
+                {Array.from({ length: 4 }).map((_, i) => (
+                    <Feature 
+                        key={i + 1}
+                        number={i + 1} 
+                        title={`Feature ${i + 1}`} 
+                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." 
+                    />
+                ))}
             </div>
-            <div className="relative grid grid-cols-4 w-full text-center border-collapse overflow-clip">
+            <div 
+                className="relative grid grid-cols-4 w-full text-center border-collapse overflow-clip"
+            >
                 <div 
                     className="absolute top-0 w-1/4 h-[1px] bg-primary ease-linear"
                     style={{ left: `${scrollProgress}%` }} 
                 />
-                <div 
-                    id="1" 
-                    role="button" 
-                    className={cn(
-                        "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
-                        activeFeature === 1 && "text-primary"
-                    )}
-                    onClick={(e) => handleClick(e)}
-                >
-                    Feature 1
-                </div>
-                <div 
-                    id="2" 
-                    role="button" 
-                    className={cn(
-                        "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
-                        activeFeature === 2 && "text-primary"
-                    )}
-                    onClick={(e) => handleClick(e)}
-                >
-                    Feature 2
-                </div>
-                <div 
-                    id="3" 
-                    role="button" 
-                    className={cn(
-                        "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
-                        activeFeature === 3 && "text-primary"
-                    )}
-                    onClick={(e) => handleClick(e)}
-                >
-                    Feature 3
-                </div>
-                <div 
-                    id="4" 
-                    role="button" 
-                    className={cn(
-                        "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
-                        activeFeature === 4 && "text-primary"
-                    )}
-                    onClick={(e) => handleClick(e)}
-                >
-                    Feature 4
-                </div>
+                {Array.from({ length: 4 }).map((_, i) => (
+                    <div 
+                        key={i + 1}
+                        data-id={i + 1}
+                        role="button"
+                        className={cn(
+                            "border-t border-dashed border-muted py-8 px-2 text-muted-foreground",
+                            activeFeature === (i + 1) && "text-primary"
+                        )}
+                        onClick={(e) => handleClick(e)}
+                    >
+                        Feature {i + 1}
+                    </div>
+                ))}
             </div>
         </div>
     )

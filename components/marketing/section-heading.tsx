@@ -16,7 +16,7 @@ export const SectionHeading = ({
 }: SectionHeadingProps) => {
     return (
         <div className={cn(
-            "max-w-3xl space-y-4 text-center m-auto mb-16",
+            "relative max-w-3xl space-y-4 text-center m-auto mb-16 z-1",
             align ? `text-${align}` : "text-center"
             )}
         >

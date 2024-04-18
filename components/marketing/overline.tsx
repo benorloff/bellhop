@@ -4,7 +4,7 @@ export const Overline = ({
     title: string,
 }) => {
     return (
-        <div className="uppercase font-bold">
+        <div className="uppercase font-extralight">
             {title}
         </div>
     )
