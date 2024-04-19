@@ -11,50 +11,52 @@ export const FeatureAccordion = () => {
     const [active, setActive] = useState<number | null>(1);
 
     return (
-        <div className="grid lg:grid-cols-4 grid-cols-1 gap-4">
-            <div className="relative col-span-3">
-                <div className="h-full w-full bg-muted"></div>
-                <div 
-                    className={cn(
-                        "absolute top-0 left-0 m-auto transition-opacity duration-300 ease-in-out",
-                        active === 1 ? "opacity-100" : "opacity-0"
-                    )} 
-                >
+        <div className="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-4 gap-4 h-full">
+            <div className="relative lg:col-span-3 bg-muted">
+                <div className={cn(
+                    "h-full w-full",
+                    active === 1 ? "opacity-100" : "opacity-0"
+                )}>
                     <Image
                         src="/logo.svg"
                         alt="placeholder"
                         width={400}
                         height={300}
+                        className={cn(
+                            "absolute top-0 left-0 m-auto transition-opacity duration-300 ease-in-out",
+                        )}
                     />
                 </div>
-                <div 
-                    className={cn(
-                        "absolute top-0 left-0 transition-opacity duration-300 ease-in-out",
-                        active === 2 ? "opacity-100" : "opacity-0"
-                    )} 
-                >
+                <div className={cn(
+                    "h-full w-full",
+                    active === 2 ? "opacity-100" : "opacity-0"
+                )}>
                     <Image
                         src="/next.svg"
                         alt="placeholder"
                         width={400}
                         height={300}
+                        className={cn(
+                            "absolute top-0 left-0 m-auto transition-opacity duration-300 ease-in-out",
+                        )}
                     />
                 </div>
-                <div 
-                    className={cn(
-                        "absolute top-0 left-0 transition-opacity duration-300 ease-in-out",
-                        active === 3 ? "opacity-100" : "opacity-0"
-                    )} 
-                >
+                <div className={cn(
+                    "h-full w-full",
+                    active === 3 ? "opacity-100" : "opacity-0"
+                )}>
                     <Image
                         src="/vercel.svg"
                         alt="placeholder"
                         width={400}
                         height={300}
+                        className={cn(
+                            "absolute top-0 left-0 m-auto transition-opacity duration-300 ease-in-out",
+                        )}
                     />
                 </div>
             </div>
-            <div className="col-span-1 space-y-8">
+            <div className="relative lg:col-span-1 h-full space-y-8">
                 <div className="space-y-2">
                     <Overline title="Features" />
                     <h2 className="text-4xl">

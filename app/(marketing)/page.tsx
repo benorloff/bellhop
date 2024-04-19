@@ -7,10 +7,8 @@ import { SectionHeading } from "@/components/marketing/section-heading";
 import { WaitlistForm } from "@/components/marketing/waitlist-form";
 import { FeatureCard } from "@/components/marketing/feature-card";
 import { Section } from "@/components/marketing/section";
-import { Boxes } from "@/components/ui/background-boxes";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Database, Globe2, Infinity, ScanEye, Zap } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { FeatureAccordion } from "@/components/marketing/feature-accordion";
 
 const MarketingPage = () => {
